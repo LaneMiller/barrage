@@ -5,3 +5,7 @@ export function updatePlayerPos(pos) {
 export function updatePlayerWalking(bool) {
   return {type: 'UPDATE_PLAYER_WALKING', payload: {walking: bool} }
 }
+
+export function damagePlayer(int) {
+  return {type: 'DAMAGE_PLAYER', payload: int}
+}

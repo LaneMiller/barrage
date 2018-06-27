@@ -31,8 +31,11 @@ class Player extends React.Component {
 
   movementLogic = () => {
     let { x, y, rotation, walking } = this.props.positioning
+    const oldX = this.props.positioning.x,
+          oldY = this.props.positioning.y
     const { top, bottom, left, right } = this.props.levelBounds
 
+    //determine direction rotation and speed
     if (this.keyState['w'] || this.keyState['ArrowUp']) {
       this.props.dispatch(updatePlayerWalking(true))
       rotation = 180;
@@ -67,6 +70,21 @@ class Player extends React.Component {
         x = right;
       } else {
         x += 4;
+      }
+    }
+    // determine diagonal rotations
+    if (x !== oldX && y !== oldY) {
+      if (x > oldX && y < oldY) {
+        rotation = 225;
+      }
+      if (x > oldX && y > oldY) {
+        rotation = 315;
+      }
+      if (x < oldX && y < oldY) {
+        rotation = 135;
+      }
+      if (x < oldX && y > oldY) {
+        rotation = 45;
       }
     }
 
@@ -107,8 +125,11 @@ class Player extends React.Component {
     const player = this.renderPlayer()
 
     return (
-      <div className="player" style={spriteStyle}>
-        {player}
+      <div>
+        <xSmall id="player-health">{this.props.health}</xSmall>
+        <div className="player" style={spriteStyle}>
+          {player}
+        </div>
       </div>
     )
   }

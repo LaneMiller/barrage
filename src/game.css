@@ -23,6 +23,12 @@
   image-rendering: pixelated;
 }
 
+#player-health {
+  position: absolute;
+  margin-left: -14px;
+  margin-top: -10px;
+}
+
 .enemy {
   position: absolute;
   background-color: red;
