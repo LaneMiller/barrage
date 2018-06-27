@@ -1,0 +1,24 @@
+.game {
+  width: auto;
+  height: 1080px;
+  background: hsl(216, 45%, 77%);
+  overflow-x: hidden;
+}
+
+.game > img {
+  position: relative;
+  top: 500px;
+  transform: scale(7);
+  image-rendering: pixelated;
+}
+
+.level {
+  transform: scale(4);
+}
+
+.player {
+  position: absolute;
+  height: 24px;
+  width: 17px;
+  image-rendering: pixelated;
+}
