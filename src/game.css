@@ -22,3 +22,8 @@
   width: 17px;
   image-rendering: pixelated;
 }
+
+.enemy {
+  position: absolute;
+  background-color: red;
+}

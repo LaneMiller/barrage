@@ -8,8 +8,10 @@
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-game-kit": "^1.0.6",
+    "react-redux": "^5.0.7",
     "react-scripts": "1.1.4",
-    "react-spritesheet": "^1.0.1"
+    "react-spritesheet": "^1.0.1",
+    "redux": "^4.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
