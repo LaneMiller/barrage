@@ -1,19 +1,9 @@
 import React, { Component } from 'react';
 import Level from './Level'
 import '../game.css'
+import { SpriteSheet } from 'react-spritesheet'
 
 class Game extends Component {
-  // state = {
-  //   level: {
-  //     bounds: [],
-  //     exits: [],
-  //     enemies: [],
-  //   },
-  //   player: {
-  //     health: 100,
-  //   }
-  // }
-
   render() {
     return (
       <div className='game'>

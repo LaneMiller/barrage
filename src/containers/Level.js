@@ -5,9 +5,14 @@ import { connect } from 'react-redux';
 
 class Level extends Component {
   renderEnemies = () => {
-    return this.props.enemies.map( enemy => (
-      <Enemy {...enemy} />
-    ))
+    const map = [];
+    for ( let key in this.props.enemies) {
+      map.push(<Enemy key={key} {...this.props.enemies[key]} />)
+    }
+    return map
+    // return this.props.enemies.map( enemy => (
+    //   <Enemy {...enemy} />
+    // ))
   }
 
   render() {

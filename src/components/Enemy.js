@@ -1,19 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { damagePlayer } from '../actions'
+import { damagePlayer, updateEnemyPos } from '../actions'
 
 class Enemy extends Component {
   componentDidMount() {
-    this.interval = setInterval(this.checkCollision, 100)
+    this.interval = setInterval(this.enemyCycle, 100)
   }
 
   componentWillUnmount() {
     clearInterval(this.interval)
   }
 
+  enemyCycle = () => {
+    this.checkCollision()
+    this.movementLogic()
+  }
+
   checkCollision = () => {
-    const { height, width } = this.props.positioning;
-    const { x, y } = this.props;
+    const { height, width, x, y } = this.props;
     const xBounds = ((x + width/2) >= this.props.playerX && (x + width/2) <= (this.props.playerX + 17))
     const yBounds = ((y + height/2) >= this.props.playerY && (y + height/2) <= (this.props.playerY + 24))
 
@@ -23,19 +27,65 @@ class Enemy extends Component {
     }
   }
 
+  movementLogic = () => {
+    const { top, bottom, left, right } = this.props.levelBounds;
+    const { playerX, playerY } = this.props
+    let x = this.props.x,
+        y = this.props.y,
+        rotation = this.props.rotation
+    const movespeed = 4;
+
+    if (x !== playerX) {
+      if (x < playerX) {
+        x += movespeed;
+      } else {
+        x -= movespeed;
+      }
+    }
+    if (y !== playerY) {
+      if (y < playerY) {
+        y += movespeed;
+      } else {
+        y -= movespeed;
+      }
+    }
+
+    // if (this.props.type = 'patroller') {
+    //
+    // }
+
+    // determine diagonal rotations
+    if (x !== this.props.x && y !== this.props.y) {
+      if (x > this.props.x && y < this.props.y) {
+        rotation = 225;
+      }
+      if (x > this.props.x && y > this.props.y) {
+        rotation = 315;
+      }
+      if (x < this.props.x && y < this.props.y) {
+        rotation = 135;
+      }
+      if (x < this.props.x && y > this.props.y) {
+        rotation = 45;
+      }
+    }
+
+    // this.props.dispatch(updateEnemyPos({[this.props.mobId]: {...this.props, x, y, rotation}}));
+  }
+
   render() {
-    const { height, width } = this.props.positioning;
-    const { x, y } = this.props;
+    const { height, width, x, y, rotation } = this.props;
     const spriteStyle = {
       height: `${height}px`,
       width: `${width}px`,
       left: `${x}px`,
       marginTop: `${y}px`,
+      transform: `rotate(${rotation}deg)`,
     };
 
     return (
       <div className="enemy" style={spriteStyle}>
-        <xSmall>{this.props.health}</xSmall>
+        <xsmall>{this.props.health}</xsmall>
       </div>
     )
   }
@@ -43,7 +93,6 @@ class Enemy extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    positioning: state.enemy.positioning,
     levelBounds: state.level.bounds,
     playerX: state.player.positioning.x,
     playerY: state.player.positioning.y,

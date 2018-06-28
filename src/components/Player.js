@@ -30,63 +30,85 @@ class Player extends React.Component {
   }
 
   movementLogic = () => {
-    let { x, y, rotation, walking } = this.props.positioning
+    const { top, bottom, left, right } = this.props.levelBounds
     const oldX = this.props.positioning.x,
           oldY = this.props.positioning.y
-    const { top, bottom, left, right } = this.props.levelBounds
+    let { x, y, rotation, walking } = this.props.positioning
 
     //determine direction rotation and speed
-    if (this.keyState['w'] || this.keyState['ArrowUp']) {
+    if (this.keyState['w']) {
       this.props.dispatch(updatePlayerWalking(true))
-      rotation = 180;
-      if (this.props.positioning.y <= top) {
+      if (oldY <= top) {
         y = top;
       } else {
         y -= 4;
       }
     }
-    if (this.keyState['s'] || this.keyState['ArrowDown']) {
+    if (this.keyState['s']) {
       this.props.dispatch(updatePlayerWalking(true))
-      rotation = 360;
-      if (this.props.positioning.y >= bottom) {
+      if (oldY >= bottom) {
         y = bottom;
       } else {
         y += 4;
       }
     }
-    if (this.keyState['a'] || this.keyState['ArrowLeft']) {
+    if (this.keyState['a']) {
       this.props.dispatch(updatePlayerWalking(true))
-      rotation = 90;
-      if (this.props.positioning.x <= left) {
+      if (oldX <= left) {
         x = left;
       } else {
         x -= 4;
       }
     }
-    if (this.keyState['d'] || this.keyState['ArrowRight']) {
+    if (this.keyState['d']) {
       this.props.dispatch(updatePlayerWalking(true))
-      rotation = 270;
-      if (this.props.positioning.x >= right) {
+      if (oldX >= right) {
         x = right;
       } else {
         x += 4;
       }
     }
-    // determine diagonal rotations
-    if (x !== oldX && y !== oldY) {
-      if (x > oldX && y < oldY) {
-        rotation = 225;
-      }
-      if (x > oldX && y > oldY) {
-        rotation = 315;
-      }
-      if (x < oldX && y < oldY) {
-        rotation = 135;
-      }
-      if (x < oldX && y > oldY) {
-        rotation = 45;
-      }
+
+    if (this.keyState['ArrowUp'] && this.keyState['ArrowLeft']){
+      rotation = 135;
     }
+    else if (this.keyState['ArrowUp'] && this.keyState['ArrowRight']){
+      rotation = 225;
+    }
+    else if (this.keyState['ArrowDown'] && this.keyState['ArrowLeft']){
+      rotation = 45;
+    }
+    else if (this.keyState['ArrowDown'] && this.keyState['ArrowRight']){
+      rotation = 315;
+    }
+    else if (this.keyState['ArrowUp']) {
+      rotation = 180;
+    }
+    else if (this.keyState['ArrowDown']) {
+      rotation = 360;
+    }
+    else if (this.keyState['ArrowLeft']) {
+      rotation = 90;
+    }
+    else if (this.keyState['ArrowRight']) {
+      rotation = 270;
+    }
+
+    // old movement based rotation logic
+    // if (x !== oldX && y !== oldY) {
+    //   if (x > oldX && y < oldY) {
+    //     rotation = 225;
+    //   }
+    //   if (x > oldX && y > oldY) {
+    //     rotation = 315;
+    //   }
+    //   if (x < oldX && y < oldY) {
+    //     rotation = 135;
+    //   }
+    //   if (x < oldX && y > oldY) {
+    //     rotation = 45;
+    //   }
+    // }
 
     this.props.dispatch(updatePlayerPos({x, y, rotation}));
   }
@@ -126,7 +148,7 @@ class Player extends React.Component {
 
     return (
       <div>
-        <xSmall id="player-health">{this.props.health}</xSmall>
+        <xsmall id="player-health">{this.props.health}</xsmall>
         <div className="player" style={spriteStyle}>
           {player}
         </div>
