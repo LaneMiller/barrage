@@ -29,6 +29,17 @@
   margin-top: -10px;
 }
 
+.bullets {
+  margin-top: -10px;
+  margin-left: 6.5px;
+}
+
+.bullet {
+  height: 2px;
+  width: 2px;
+  margin-bottom: 15px;
+}
+
 .enemy {
   position: absolute;
   background-color: red;

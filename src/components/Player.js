@@ -3,30 +3,41 @@ import {SpriteSheet, AnimatedSpriteSheet} from 'react-spritesheet'
 import Walk_Anim from "../Walk_Anim.png"
 import { connect } from 'react-redux'
 import { updatePlayerPos, updatePlayerWalking } from '../actions'
+import Bullet from './Bullet'
 
 class Player extends React.Component {
-  componentDidMount() {
+  constructor(props) {
+    super(props)
     this.keyState = {}
-    window.addEventListener("keydown", this.handleMovement)
-    window.addEventListener("keyup", this.stopMovement)
-    this.interval = setInterval(this.movementLogic, 20)
+    this.bullets = []
+  }
+
+  componentDidMount() {
+    window.addEventListener("keydown", this.handleKeyPress)
+    window.addEventListener("keyup", this.stopKeyPress)
+    this.interval = setInterval(this.playerLoop, 30)
   }
 
   componentWillUnmount() {
     clearInterval(this.interval)
   }
 
-  handleMovement = (e) => {
+  handleKeyPress = (e) => {
     this.keyState[e.key] = true;
   }
 
-  stopMovement = (e) => {
+  stopKeyPress = (e) => {
     this.keyState[e.key] = false;
     this.stopSprite()
   }
 
   stopSprite = () => {
     this.props.dispatch(updatePlayerWalking(false))
+  }
+
+  playerLoop = () => {
+    this.movementLogic()
+    this.bulletLogic()
   }
 
   movementLogic = () => {
@@ -38,6 +49,7 @@ class Player extends React.Component {
     //determine direction rotation and speed
     if (this.keyState['w']) {
       this.props.dispatch(updatePlayerWalking(true))
+      rotation = 180;
       if (oldY <= top) {
         y = top;
       } else {
@@ -46,6 +58,7 @@ class Player extends React.Component {
     }
     if (this.keyState['s']) {
       this.props.dispatch(updatePlayerWalking(true))
+      rotation = 0;
       if (oldY >= bottom) {
         y = bottom;
       } else {
@@ -54,6 +67,7 @@ class Player extends React.Component {
     }
     if (this.keyState['a']) {
       this.props.dispatch(updatePlayerWalking(true))
+      rotation = 90;
       if (oldX <= left) {
         x = left;
       } else {
@@ -62,6 +76,7 @@ class Player extends React.Component {
     }
     if (this.keyState['d']) {
       this.props.dispatch(updatePlayerWalking(true))
+      rotation = 270;
       if (oldX >= right) {
         x = right;
       } else {
@@ -69,6 +84,29 @@ class Player extends React.Component {
       }
     }
 
+    // movement based diagonal rotations
+    if (x !== oldX && y !== oldY) {
+      if (x > oldX && y < oldY) {
+        rotation = 225;
+      }
+      if (x > oldX && y > oldY) {
+        rotation = 315;
+      }
+      if (x < oldX && y < oldY) {
+        rotation = 135;
+      }
+      if (x < oldX && y > oldY) {
+        rotation = 45;
+      }
+    }
+
+    // override rotation with arrow keys
+    rotation = this.aimingLogic(rotation)
+
+    this.props.dispatch(updatePlayerPos({x, y, rotation}));
+  }
+
+  aimingLogic = (rotation) => {
     if (this.keyState['ArrowUp'] && this.keyState['ArrowLeft']){
       rotation = 135;
     }
@@ -94,27 +132,15 @@ class Player extends React.Component {
       rotation = 270;
     }
 
-    // old movement based rotation logic
-    // if (x !== oldX && y !== oldY) {
-    //   if (x > oldX && y < oldY) {
-    //     rotation = 225;
-    //   }
-    //   if (x > oldX && y > oldY) {
-    //     rotation = 315;
-    //   }
-    //   if (x < oldX && y < oldY) {
-    //     rotation = 135;
-    //   }
-    //   if (x < oldX && y > oldY) {
-    //     rotation = 45;
-    //   }
-    // }
+    return rotation;
+  }
 
-    this.props.dispatch(updatePlayerPos({x, y, rotation}));
+  bulletLogic = () => {
+
   }
 
   renderPlayer = () => {
-    const data = {
+    const idleSprite = {
       idle: {
         x: 0,
         y: 0,
@@ -122,6 +148,7 @@ class Player extends React.Component {
         height: 24,
       }
     }
+
     if (this.props.positioning.walking) {
       return <AnimatedSpriteSheet
         filename={Walk_Anim}
@@ -133,8 +160,23 @@ class Player extends React.Component {
         speed={105}
       />
   } else {
-    return <SpriteSheet filename={Walk_Anim} data={data} sprite={'idle'} />
+    return <SpriteSheet filename={Walk_Anim} data={idleSprite} sprite={'idle'} />
   }
+  }
+
+  renderBullets = () => {
+    if (this.keyState[' ']) {
+      // <Bullet type={this.props.ammo} />
+      this.bullets.push(
+        <Bullet type='normal' />
+      )
+      if (this.bullets.length > 10) {
+        this.bullets.length = 10;
+      }
+      return this.bullets
+    } else {
+      this.bullets = []
+    }
   }
 
   render() {
@@ -145,12 +187,16 @@ class Player extends React.Component {
               transform:`rotate(${rotation}deg)`
             }
     const player = this.renderPlayer()
+    const bullets = this.renderBullets()
 
     return (
       <div>
         <xsmall id="player-health">{this.props.health}</xsmall>
         <div className="player" style={spriteStyle}>
           {player}
+          <div className="bullets">
+            {bullets}
+          </div>
         </div>
       </div>
     )
