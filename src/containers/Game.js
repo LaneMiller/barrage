@@ -7,7 +7,11 @@ class Game extends Component {
   render() {
     return (
       <div className='game'>
-        <img src={require("../Background.png")}/>
+        {/*
+          <img src={require("../Background.png")}/>
+          <img src={require("../closedLevelBig.png")}/>
+          */}
+          <img src={require("../closedLevel.png")}/>
         <Level {...this.state} />
       </div>
     )

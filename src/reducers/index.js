@@ -20,7 +20,7 @@ const initialState = {
       y: 90,
       rotation: 0,
       walking: false,
-    }
+    },
   },
   enemy: {
 

@@ -8,7 +8,7 @@
 .game > img {
   position: relative;
   top: 500px;
-  transform: scale(7);
+  transform: scale(10);
   image-rendering: pixelated;
 }
 
@@ -35,9 +35,10 @@
 }
 
 .bullet {
-  height: 2px;
-  width: 2px;
-  margin-bottom: 15px;
+  position: relative;
+  /* height: 2px;
+  width: 2px; */
+  /* margin-bottom: 15px; */
 }
 
 .enemy {

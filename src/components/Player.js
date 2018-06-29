@@ -8,18 +8,21 @@ import Bullet from './Bullet'
 class Player extends React.Component {
   constructor(props) {
     super(props)
-    this.keyState = {}
-    this.bullets = []
+    this.keyState = {};
+    this.bullets = {};
+    this.bulletKey = 1;
   }
 
   componentDidMount() {
     window.addEventListener("keydown", this.handleKeyPress)
     window.addEventListener("keyup", this.stopKeyPress)
-    this.interval = setInterval(this.playerLoop, 30)
+    this.playerLoopInterval = setInterval(this.playerLoop, 30)
+    this.bulletInterval = setInterval(this.bulletLogic, 100)
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval)
+    clearInterval(this.playerLoopInterval)
+    clearInterval(this.bulletInterval)
   }
 
   handleKeyPress = (e) => {
@@ -37,7 +40,6 @@ class Player extends React.Component {
 
   playerLoop = () => {
     this.movementLogic()
-    this.bulletLogic()
   }
 
   movementLogic = () => {
@@ -136,7 +138,41 @@ class Player extends React.Component {
   }
 
   bulletLogic = () => {
+    this.fireGun()
+    const { top, bottom, left, right } = this.props.levelBounds
 
+    for (let key in this.bullets) {
+      const bullet = this.bullets[key]
+      const angle = this.bullets[key].angle
+
+      if (angle === 225 || (angle === 270 || angle === 315)) {
+        bullet.x += 3;
+      }
+      if (angle === 45 || (angle === 90 || angle === 135)) {
+        bullet.x -= 3;
+      }
+      if (angle === 0 || (angle === 45 || angle === 315)) {
+        bullet.y += 3;
+      }
+      if (angle === 135 || (angle === 180 || angle === 225)) {
+        bullet.y -= 3;
+      }
+
+      if (bullet.x <= left || bullet.x >= right) {
+        delete this.bullets[key];
+      }
+      if (bullet.y <= top || bullet.y >= bottom) {
+        delete this.bullets[key];
+      }
+
+    }
+  }
+
+  fireGun = () => {
+    const { x, y, rotation } = this.props.positioning;
+    if (this.keyState[' ']) {
+      this.bullets[this.bulletKey++] = {angle: rotation, x, y};
+    }
   }
 
   renderPlayer = () => {
@@ -165,18 +201,16 @@ class Player extends React.Component {
   }
 
   renderBullets = () => {
-    if (this.keyState[' ']) {
-      // <Bullet type={this.props.ammo} />
-      this.bullets.push(
-        <Bullet type='normal' />
+    let bullets = []
+    for (let key in this.bullets) {
+      bullets.push(
+        <Bullet key={key} {...this.bullets[key]} />
       )
-      if (this.bullets.length > 10) {
-        this.bullets.length = 10;
-      }
-      return this.bullets
-    } else {
-      this.bullets = []
     }
+    if (bullets.length > 10) {
+      bullets.length = 10;
+    }
+    return bullets
   }
 
   render() {
@@ -194,9 +228,9 @@ class Player extends React.Component {
         <xsmall id="player-health">{this.props.health}</xsmall>
         <div className="player" style={spriteStyle}>
           {player}
-          <div className="bullets">
-            {bullets}
-          </div>
+        </div>
+        <div className="bullets">
+          {bullets}
         </div>
       </div>
     )
