@@ -1,6 +1,6 @@
 import React from 'react';
 import {SpriteSheet, AnimatedSpriteSheet} from 'react-spritesheet'
-import Walk_Anim from "../Walk_Anim.png"
+import Walk_Anim from "../Walk_Anim_bright.png"
 import { connect } from 'react-redux'
 import { updatePlayerPos, updatePlayerWalking } from '../actions'
 import Bullet from './Bullet'
@@ -12,14 +12,13 @@ class Player extends React.Component {
     this.bullets = {};
     this.bulletKey = 1;
   }
-
   componentDidMount() {
     window.addEventListener("keydown", this.handleKeyPress)
     window.addEventListener("keyup", this.stopKeyPress)
-    this.playerLoopInterval = setInterval(this.playerLoop, 30)
-    this.bulletInterval = setInterval(this.bulletLogic, 100)
+    this.playerLoopInterval = setInterval(this.movementLogic, 30)
+    this.fireInterval = setInterval(this.fireGun, 300)
+    this.bulletLogicInterval = setInterval(this.bulletLogic, 30)
   }
-
   componentWillUnmount() {
     clearInterval(this.playerLoopInterval)
     clearInterval(this.bulletInterval)
@@ -28,18 +27,12 @@ class Player extends React.Component {
   handleKeyPress = (e) => {
     this.keyState[e.key] = true;
   }
-
   stopKeyPress = (e) => {
     this.keyState[e.key] = false;
     this.stopSprite()
   }
-
   stopSprite = () => {
     this.props.dispatch(updatePlayerWalking(false))
-  }
-
-  playerLoop = () => {
-    this.movementLogic()
   }
 
   movementLogic = () => {
@@ -61,7 +54,7 @@ class Player extends React.Component {
     if (this.keyState['s']) {
       this.props.dispatch(updatePlayerWalking(true))
       rotation = 0;
-      if (oldY >= bottom) {
+      if (y >= bottom) {
         y = bottom;
       } else {
         y += 4;
@@ -125,7 +118,7 @@ class Player extends React.Component {
       rotation = 180;
     }
     else if (this.keyState['ArrowDown']) {
-      rotation = 360;
+      rotation = 0;
     }
     else if (this.keyState['ArrowLeft']) {
       rotation = 90;
@@ -138,40 +131,39 @@ class Player extends React.Component {
   }
 
   bulletLogic = () => {
-    this.fireGun()
     const { top, bottom, left, right } = this.props.levelBounds
 
     for (let key in this.bullets) {
       const bullet = this.bullets[key]
       const angle = this.bullets[key].angle
+      const bulletSpeed = 5;
 
       if (angle === 225 || (angle === 270 || angle === 315)) {
-        bullet.x += 3;
+        bullet.x += bulletSpeed;
       }
       if (angle === 45 || (angle === 90 || angle === 135)) {
-        bullet.x -= 3;
+        bullet.x -= bulletSpeed;
       }
       if (angle === 0 || (angle === 45 || angle === 315)) {
-        bullet.y += 3;
+        bullet.y += bulletSpeed;
       }
       if (angle === 135 || (angle === 180 || angle === 225)) {
-        bullet.y -= 3;
+        bullet.y -= bulletSpeed;
       }
 
-      if (bullet.x <= left || bullet.x >= right) {
+      if (bullet.x < (left-10) || bullet.x > (right+12)) {
         delete this.bullets[key];
       }
-      if (bullet.y <= top || bullet.y >= bottom) {
+      if (bullet.y < (top-10) || bullet.y > (bottom+10)) {
         delete this.bullets[key];
       }
-
     }
   }
 
   fireGun = () => {
     const { x, y, rotation } = this.props.positioning;
     if (this.keyState[' ']) {
-      this.bullets[this.bulletKey++] = {angle: rotation, x, y};
+      this.bullets[this.bulletKey++] = {angle: rotation, x, y, damage: 5};
     }
   }
 
@@ -185,19 +177,21 @@ class Player extends React.Component {
       }
     }
 
-    if (this.props.positioning.walking) {
+    if (this.props.health <= 0) {
+      console.log("You've died!!!")
+    } else if (this.props.positioning.walking) {
       return <AnimatedSpriteSheet
         filename={Walk_Anim}
         initialFrame={0}
         frame={{ width: 17, height: 24 }}
-        bounds={{ x: 0, y: 0, width: 32, height: 48 }}
+        bounds={{ x: 0, y: 0, width: 32, height: 24 }}
         isPlaying
         loop
         speed={105}
       />
-  } else {
-    return <SpriteSheet filename={Walk_Anim} data={idleSprite} sprite={'idle'} />
-  }
+    } else {
+      return <SpriteSheet filename={Walk_Anim} data={idleSprite} sprite={'idle'} />
+    }
   }
 
   renderBullets = () => {
@@ -207,14 +201,16 @@ class Player extends React.Component {
         <Bullet key={key} {...this.bullets[key]} />
       )
     }
-    if (bullets.length > 10) {
-      bullets.length = 10;
+    if (bullets.length > 30) {
+      bullets.length = 30;
     }
     return bullets
   }
 
   render() {
     const { x, y, rotation, walking } = this.props.positioning
+    const healthBar = 100 * (this.props.health/100)
+    const healthStyle = {width: `${healthBar}px`}
     const spriteStyle = {
               left:`${x}px`,
               marginTop:`${y}px`,
@@ -225,7 +221,7 @@ class Player extends React.Component {
 
     return (
       <div>
-        <xsmall id="player-health">{this.props.health}</xsmall>
+        <xsmall id="player-health" style={healthStyle}>HP:</xsmall>
         <div className="player" style={spriteStyle}>
           {player}
         </div>

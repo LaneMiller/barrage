@@ -1,23 +1,18 @@
- // level.catch.enemies format: [ {type: 'baddie',  health: 10, damage: 5, x: 780,
- // y: 100}, {type: 'baddie', health: 10, damage: 5, x: 900,
- // y: 11,}, {type: 'bigBaddie', health: 20, damage: 10, x: 1000,
- // y: 170,} ]
-
 const initialState = {
   level: {
-    bounds: {top: 9, bottom: 179, left: 770, right: 1132},
+    bounds: {top: 25, bottom: 192, left: 758, right: 1145},
     exits: [],
     enemies: {
-      1: {mobId: 1, type: 'patroller', health: 1, damage: 5, x: 780, y: 100, height: 15, width: 15, rotation: 0, walking: false,},
-      2: {mobId: 2, type: 'patroller', health: 2, damage: 5, x: 900, y: 11, height: 15, width: 15, rotation: 90, walking: false,},
-      3: {mobId: 3, type: 'follower', health: 2, damage: 10, x: 1000, y: 170,height: 20, width: 20, rotation: 270, walking: false,}
+      1: {mobId: 1, type: 'patroller', health: 20, damage: 5, x: 780, y: 100, height: 24, width: 13, rotation: 0, walking: false,},
+      2: {mobId: 2, type: 'patroller', health: 20, damage: 5, x: 900, y: 35, height: 24, width: 13, rotation: 90, walking: false,},
+      3: {mobId: 3, type: 'follower', health: 20, damage: 10, x: 1000, y: 170, height: 24, width: 13, rotation: 270, walking: false,}, 4: {mobId: 4, type: 'follower', health: 20, damage: 10, x: 900, y: 170, height: 24, width: 13, rotation: 180, walking: false,}
     }
   },
   player: {
     health: 100,
     positioning: {
-      x: 953,
-      y: 90,
+      x: 952,
+      y: 111,
       rotation: 0,
       walking: false,
     },
@@ -40,6 +35,9 @@ const reducer = (state = initialState, action) => {
 
     case 'DAMAGE_PLAYER':
       return {...state, player:{...state.player, health:state.player.health - action.payload}}
+
+    case 'DAMAGE_ENEMY':
+      return {...state, level:{...state.level, enemies:{...state.level.enemies, ...action.payload}}}
 
     default:
       console.log("Returned state, no changes")

@@ -7,12 +7,11 @@ class Level extends Component {
   renderEnemies = () => {
     const map = [];
     for ( let key in this.props.enemies) {
-      map.push(<Enemy key={key} {...this.props.enemies[key]} />)
+      if (this.props.enemies[key].health > 0) {
+        map.push(<Enemy key={key} {...this.props.enemies[key]} />)
+      }
     }
     return map
-    // return this.props.enemies.map( enemy => (
-    //   <Enemy {...enemy} />
-    // ))
   }
 
   render() {

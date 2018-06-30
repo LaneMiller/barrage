@@ -13,3 +13,7 @@ export function updateEnemyPos(pos) {
 export function damagePlayer(int) {
   return {type: 'DAMAGE_PLAYER', payload: int}
 }
+
+export function damageEnemy(int) {
+  return {type: 'DAMAGE_ENEMY', payload: int}
+}

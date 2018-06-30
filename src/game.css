@@ -1,14 +1,16 @@
 .game {
+  color: white;
   width: auto;
   height: 1080px;
-  background: hsl(216, 45%, 77%);
+  background: hsl(0, 1%, 23%);
   overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .game > img {
   position: relative;
-  top: 500px;
-  transform: scale(10);
+  top: 550px;
+  transform: scale(9);
   image-rendering: pixelated;
 }
 
@@ -23,10 +25,18 @@
   image-rendering: pixelated;
 }
 
+#score {
+  position: absolute;
+  margin-left: -14em;
+  margin-top: -20px;
+}
+
 #player-health {
   position: absolute;
-  margin-left: -14px;
-  margin-top: -10px;
+  background-color: red;
+  height: 5px;
+  margin-left: -13em;
+  margin-top: 232px;
 }
 
 .bullets {
@@ -35,13 +45,18 @@
 }
 
 .bullet {
-  position: relative;
-  /* height: 2px;
-  width: 2px; */
-  /* margin-bottom: 15px; */
+  position: absolute;
 }
 
 .enemy {
   position: absolute;
+  image-rendering: pixelated;
+  /* background-color: red; */
+}
+
+.health-bar {
+  position: absolute;
   background-color: red;
+  height: 2px;
+  top: -4px;
 }

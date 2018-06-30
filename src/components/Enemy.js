@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { damagePlayer, updateEnemyPos } from '../actions'
+import {SpriteSheet, AnimatedSpriteSheet} from 'react-spritesheet'
+import Zombie_Anim from '../Zombie_Anim.png'
 
 class Enemy extends Component {
   componentDidMount() {
     this.interval = setInterval(this.enemyCycle, 100)
   }
-
   componentWillUnmount() {
     clearInterval(this.interval)
   }
@@ -22,7 +23,6 @@ class Enemy extends Component {
     const yBounds = ((y + height/2) >= this.props.playerY && (y + height/2) <= (this.props.playerY + 24))
 
     if (xBounds && yBounds) {
-      console.log("hit!");
       this.props.dispatch(damagePlayer(this.props.damage))
     }
   }
@@ -33,7 +33,7 @@ class Enemy extends Component {
     let x = this.props.x,
         y = this.props.y,
         rotation = this.props.rotation
-    const movespeed = 4;
+    const movespeed = 2;
 
     if (x !== playerX) {
       if (x < playerX) {
@@ -50,10 +50,31 @@ class Enemy extends Component {
       }
     }
 
-    // if (this.props.type = 'patroller') {
-    //
-    // }
+    //keep enemies within level bounds
+    if (x <= left) {
+      x = left;
+    } else if (x >= right) {
+      x = right;
+    } else if (y <= top) {
+      y = top;
+    } else if (y >= bottom) {
+      y = bottom;
+    }
 
+    if (x !== this.props.x) {
+      if (x > this.props.x) {
+        rotation = 270;
+      } else {
+        rotation = 90;
+      }
+    }
+    if (y !== this.props.y) {
+      if (y > this.props.y) {
+        rotation = 0;
+      } else {
+        rotation = 180;
+      }
+    }
     // determine diagonal rotations
     if (x !== this.props.x && y !== this.props.y) {
       if (x > this.props.x && y < this.props.y) {
@@ -70,11 +91,26 @@ class Enemy extends Component {
       }
     }
 
-    // this.props.dispatch(updateEnemyPos({[this.props.mobId]: {...this.props, x, y, rotation}}));
+    this.props.dispatch( updateEnemyPos({[this.props.mobId]: {...this.props, x, y, rotation}}) );
+  }
+
+  renderEnemy = () => {
+    return <AnimatedSpriteSheet
+      filename={Zombie_Anim}
+      initialFrame={0}
+      frame={{ width: 13, height: 24 }}
+      bounds={{ x: 0, y: 0, width: 78, height: 24 }}
+      isPlaying
+      loop
+      speed={150}
+    />
   }
 
   render() {
+    const enemy = this.renderEnemy()
     const { height, width, x, y, rotation } = this.props;
+    const healthBar = this.props.width * (this.props.health/20)
+    const healthStyle = { width: `${healthBar}px` }
     const spriteStyle = {
       height: `${height}px`,
       width: `${width}px`,
@@ -85,7 +121,11 @@ class Enemy extends Component {
 
     return (
       <div className="enemy" style={spriteStyle}>
-        <xsmall>{this.props.health}</xsmall>
+        {/*
+          <p style={{marginTop:'-20px', position:'absolute'}}>{this.props.health}</p>
+          */}
+          <div className='health-bar' style={healthStyle}></div>
+        {enemy}
       </div>
     )
   }
