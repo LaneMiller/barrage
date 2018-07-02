@@ -3,8 +3,13 @@ import { connect } from 'react-redux'
 import { damagePlayer, updateEnemyPos } from '../actions'
 import {SpriteSheet, AnimatedSpriteSheet} from 'react-spritesheet'
 import Zombie_Anim from '../Zombie_Anim.png'
+import Zombie_Anim_Purple from '../Zombie_Anim_Purple.png'
 
 class Enemy extends Component {
+  state = {
+    maxHealth: this.props.health
+  }
+
   componentDidMount() {
     this.interval = setInterval(this.enemyCycle, 100)
   }
@@ -33,7 +38,7 @@ class Enemy extends Component {
     let x = this.props.x,
         y = this.props.y,
         rotation = this.props.rotation
-    const movespeed = 2;
+    const movespeed = this.props.speed;
 
     if (x !== playerX) {
       if (x < playerX) {
@@ -76,7 +81,7 @@ class Enemy extends Component {
       }
     }
     // determine diagonal rotations
-    if (x !== this.props.x && y !== this.props.y) {
+    if ((x !== this.props.x && y !== this.props.y) && y !== playerY) {
       if (x > this.props.x && y < this.props.y) {
         rotation = 225;
       }
@@ -95,8 +100,14 @@ class Enemy extends Component {
   }
 
   renderEnemy = () => {
+    let zed_anim
+    if (this.props.type === 'green') {
+      zed_anim = Zombie_Anim
+    } else {
+      zed_anim = Zombie_Anim_Purple
+    }
     return <AnimatedSpriteSheet
-      filename={Zombie_Anim}
+      filename={zed_anim}
       initialFrame={0}
       frame={{ width: 13, height: 24 }}
       bounds={{ x: 0, y: 0, width: 78, height: 24 }}
@@ -109,7 +120,7 @@ class Enemy extends Component {
   render() {
     const enemy = this.renderEnemy()
     const { height, width, x, y, rotation } = this.props;
-    const healthBar = this.props.width * (this.props.health/20)
+    const healthBar = this.props.width * (this.props.health/this.state.maxHealth)
     const healthStyle = { width: `${healthBar}px` }
     const spriteStyle = {
       height: `${height}px`,

@@ -1,4 +1,12 @@
+@font-face {
+  font-family: '1980';
+  font-style: normal;
+  font-weight: 1000;
+  src: url('./1980XX.ttf');
+}
+
 .game {
+  font-family: '1980';
   color: white;
   width: auto;
   height: 1080px;
@@ -14,6 +22,19 @@
   image-rendering: pixelated;
 }
 
+#difficulty-screen {
+  position: absolute;
+  top: 300px;
+  left: 32.7%;
+}
+
+.difficulty-choice {
+  font-size: 50px;
+  text-align: left;
+  margin-left: 280px;
+  margin-top: -30px;
+}
+
 .level {
   transform: scale(4);
 }
@@ -27,19 +48,32 @@
 
 #score {
   position: absolute;
-  margin-left: -14em;
-  margin-top: -20px;
+  font-size: 100px !important;
+  /* margin-left: -14em;
+  margin-top: -20px; */
+  font-size: 60px;
+  top: -41px;
+  left: 8%;
+}
+
+#player-health-bar {
+  position: absolute;
+  background-color: red;
+  height: 5px;
+  margin-top: -10px;
+  left: 56%;
 }
 
 #player-health {
   position: absolute;
-  background-color: red;
-  height: 5px;
-  margin-left: -13em;
-  margin-top: 232px;
+  top: -3px;
+  left: -11px;
+  height: 11px;
+  image-rendering: pixelated
 }
 
 .bullets {
+  font-family: sans-serif;
   margin-top: -10px;
   margin-left: 6.5px;
 }
@@ -51,7 +85,6 @@
 .enemy {
   position: absolute;
   image-rendering: pixelated;
-  /* background-color: red; */
 }
 
 .health-bar {
@@ -59,4 +92,34 @@
   background-color: red;
   height: 2px;
   top: -4px;
+}
+
+#score-card {
+  position: absolute;
+  top: 250px;
+  left: 34.4%;
+  width: 600px;
+  height: 670px;
+  background-color: hsla(195, 82%, 55%, 1);
+  border-radius: 10px;
+}
+
+#score-card > h1 {
+  font-size: 90px;
+}
+
+#score-card > h3 {
+  margin-top: -60px;
+  font-size: 70px;
+}
+
+#score-card > h4 {
+  text-align: left;
+  margin-left: 40px;
+  margin-top: -60px;
+  font-size: 70px;
+}
+
+#score-card > p {
+  font-size: 50px;
 }

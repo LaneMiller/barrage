@@ -1,6 +1,7 @@
 import React from 'react';
 import {SpriteSheet, AnimatedSpriteSheet} from 'react-spritesheet'
 import Walk_Anim from "../Walk_Anim_bright.png"
+import HealthBar from '../HealthBar.png'
 import { connect } from 'react-redux'
 import { updatePlayerPos, updatePlayerWalking } from '../actions'
 import Bullet from './Bullet'
@@ -163,7 +164,7 @@ class Player extends React.Component {
   fireGun = () => {
     const { x, y, rotation } = this.props.positioning;
     if (this.keyState[' ']) {
-      this.bullets[this.bulletKey++] = {angle: rotation, x, y, damage: 5};
+      this.bullets[this.bulletKey++] = {angle: rotation, x, y};
     }
   }
 
@@ -209,7 +210,7 @@ class Player extends React.Component {
 
   render() {
     const { x, y, rotation, walking } = this.props.positioning
-    const healthBar = 100 * (this.props.health/100)
+    const healthBar = 87 * (this.props.health/100)
     const healthStyle = {width: `${healthBar}px`}
     const spriteStyle = {
               left:`${x}px`,
@@ -221,7 +222,9 @@ class Player extends React.Component {
 
     return (
       <div>
-        <xsmall id="player-health" style={healthStyle}>HP:</xsmall>
+        <div id="player-health-bar" style={healthStyle}>
+          <img id="player-health" src={HealthBar}/>
+        </div>
         <div className="player" style={spriteStyle}>
           {player}
         </div>
@@ -236,6 +239,7 @@ class Player extends React.Component {
 const mapStateToProps = (state) => {
   return {
     health: state.player.health,
+    gun: state.player.gun,
     positioning: state.player.positioning,
     levelBounds: state.level.bounds,
   }

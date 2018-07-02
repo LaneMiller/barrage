@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { damageEnemy } from '../actions';
+import { damageEnemy, increaseKillScore } from '../actions';
 
 class Bullet extends Component {
   componentDidMount() {
@@ -36,9 +36,17 @@ class Bullet extends Component {
       }
 
       if (xBounds && yBounds) {
-        this.props.dispatch( damageEnemy({[enemy.mobId]: {...enemy, health: (enemy.health - this.props.damage)}}) );
-      }
-    }
+        const newHealth = enemy.health - this.props.gun.damage
+        this.props.dispatch(
+          damageEnemy( {[enemy.mobId]: {...enemy, health: newHealth}} )
+        );
+        if (newHealth <= 0) {
+          this.props.dispatch(
+            increaseKillScore(enemy.points)
+          );
+        };
+      };
+    };
   }
 
   bulletOffsets = () => {
@@ -81,6 +89,7 @@ class Bullet extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    gun: state.player.gun,
     enemies: state.level.enemies,
   };
 }
