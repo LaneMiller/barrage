@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { damageEnemy, increaseKillScore } from '../actions';
+import { damageEnemy, removeEnemy, increaseKillScore } from '../actions';
 
 class Bullet extends Component {
   componentDidMount() {
     this.interval = setInterval(this.checkCollision, 100);
   }
-
   componentWillUnmount() {
     clearInterval(this.interval);
   }
@@ -41,6 +40,9 @@ class Bullet extends Component {
           damageEnemy( {[enemy.mobId]: {...enemy, health: newHealth}} )
         );
         if (newHealth <= 0) {
+          const remaining = {...this.props.enemies}
+          delete remaining[enemy.mobId]
+          this.props.dispatch( removeEnemy(remaining) )
           this.props.dispatch(
             increaseKillScore(enemy.points)
           );

@@ -1,10 +1,10 @@
 import React from 'react';
-import {SpriteSheet, AnimatedSpriteSheet} from 'react-spritesheet'
-import Walk_Anim from "../Walk_Anim_bright.png"
-import HealthBar from '../HealthBar.png'
-import { connect } from 'react-redux'
-import { updatePlayerPos, updatePlayerWalking } from '../actions'
-import Bullet from './Bullet'
+import {SpriteSheet, AnimatedSpriteSheet} from 'react-spritesheet';
+import Walk_Anim from "../Walk_Anim_bright.png";
+import HealthBar from '../HealthBar.png';
+import { connect } from 'react-redux';
+import { updatePlayerPos, updatePlayerWalking, reduceAmmo, changePlayerGun } from '../actions';
+import Bullet from './Bullet';
 
 class Player extends React.Component {
   constructor(props) {
@@ -14,16 +14,22 @@ class Player extends React.Component {
     this.bulletKey = 1;
   }
   componentDidMount() {
-    window.addEventListener("keydown", this.handleKeyPress)
-    window.addEventListener("keyup", this.stopKeyPress)
-    this.playerLoopInterval = setInterval(this.movementLogic, 30)
-    this.fireInterval = setInterval(this.fireGun, 300)
-    this.bulletLogicInterval = setInterval(this.bulletLogic, 30)
+    window.addEventListener("keydown", this.handleKeyPress);
+    window.addEventListener("keyup", this.stopKeyPress);
+    this.playerLoopInterval = setInterval(this.movementLogic, 30);
+    this.fireInterval = setInterval(this.fireGun, 300);
+    this.bulletLogicInterval = setInterval(this.bulletLogic, 30);
   }
   componentWillUnmount() {
-    clearInterval(this.playerLoopInterval)
-    clearInterval(this.bulletInterval)
+    clearInterval(this.playerLoopInterval);
+    clearInterval(this.fireInterval);
+    clearInterval(this.bulletInterval);
   }
+  // componentDidUpdate() {
+  //   if (this.props.gun.ammo && !this.ammo) {
+  //     this.ammo = this.props.gun.ammo;
+  //   };
+  // }
 
   handleKeyPress = (e) => {
     this.keyState[e.key] = true;
@@ -131,6 +137,24 @@ class Player extends React.Component {
     return rotation;
   }
 
+  fireGun = () => {
+    const { x, y, rotation } = this.props.positioning;
+    
+    if (this.keyState[' ']) {
+      if (this.props.gun.ammo || this.props.gun.ammo === 0) {
+        let ammo = this.props.gun.ammo
+        if (ammo > 0) {
+          this.bullets[this.bulletKey++] = {angle: rotation, x, y};
+          this.props.dispatch( reduceAmmo(--ammo) )
+        } else {
+          this.props.dispatch( changePlayerGun({type: 'pistol', damage: 5}) )
+        };
+      } else {
+        this.bullets[this.bulletKey++] = {angle: rotation, x, y};
+      };
+    };
+  }
+
   bulletLogic = () => {
     const { top, bottom, left, right } = this.props.levelBounds
 
@@ -161,13 +185,6 @@ class Player extends React.Component {
     }
   }
 
-  fireGun = () => {
-    const { x, y, rotation } = this.props.positioning;
-    if (this.keyState[' ']) {
-      this.bullets[this.bulletKey++] = {angle: rotation, x, y};
-    }
-  }
-
   renderPlayer = () => {
     const idleSprite = {
       idle: {
@@ -179,7 +196,7 @@ class Player extends React.Component {
     }
 
     if (this.props.health <= 0) {
-      console.log("You've died!!!")
+      window.removeEventListener('keydown', this.handleKeyPress)
     } else if (this.props.positioning.walking) {
       return <AnimatedSpriteSheet
         filename={Walk_Anim}

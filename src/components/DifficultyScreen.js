@@ -2,34 +2,36 @@ import React, { Component } from 'react';
 import Selection_Arrow from '../Selection_Arrow.png'
 
 class DifficultyScreen extends Component {
-  state = {
-    selected: 'Easy',
-    choices: ['Easy', 'Medium', 'Hard'],
+  constructor(props) {
+    super(props)
+    this.choices = ['Easy', 'Medium', 'Hard']
   }
-
   componentDidMount() {
     window.addEventListener("keydown", this.selectDifficulty)
   }
 
   selectDifficulty = (e) => {
-    const { choices, selected } = this.state;
-    let i = choices.indexOf(selected);
+    const choices = this.choices
+    const { difficulty } = this.props
+    let i = choices.indexOf(difficulty);
 
-    if (e.key === 'ArrowDown' && selected !== choices[choices.length-1]){
-      this.setState({ selected: choices[i+1] })
-    } else if( e.key === 'ArrowUp' && selected !== choices[0]){
-      this.setState({ selected: choices[i-1] })
+    if (e.key === 'ArrowDown' && difficulty !== choices[choices.length-1]){
+      this.props.updateDifficulty(choices[i+1])
+    } else if (e.key === 'ArrowUp' && difficulty !== choices[0]){
+      this.props.updateDifficulty(choices[i-1])
+    } else if (e.key === 'Enter') {
+      this.props.setDifficulty()
     }
   }
 
   renderChoices = () => {
     const arrow = <img src={Selection_Arrow}/>
 
-    return this.state.choices.map(choice => {
-      if (choice === this.state.selected) {
-        return <h4 className='difficulty-choice'>{arrow}{choice}</h4>
+    return this.choices.map(choice => {
+      if (choice === this.props.difficulty) {
+        return <h4 key={choice} className='difficulty-choice'>{arrow}{choice}</h4>
       } else {
-        return <h4 className='difficulty-choice'>{choice}</h4>
+        return <h4 key={choice} className='difficulty-choice'>{choice}</h4>
       }
     })
   }

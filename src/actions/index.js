@@ -29,3 +29,11 @@ export function increaseScore(int) {
 export function increaseKillScore(int) {
   return {type: 'INCREASE_KILL_SCORE', payload: int};
 }
+
+export function reduceAmmo(int) {
+  return {type: 'DECREASE_AMMO', payload: int};
+}
+
+export function changePlayerGun(gunObj) {
+  return {type: 'CHANGE_GUN', payload: gunObj};
+}

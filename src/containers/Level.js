@@ -1,31 +1,26 @@
 import React, { Component } from 'react';
 import Player from '../components/Player';
 import Enemy from '../components/Enemy';
+import Pickups from './Pickups'
 import { connect } from 'react-redux';
-import { removeEnemy } from '../actions';
 
 class Level extends Component {
   renderEnemies = () => {
     const { enemies } = this.props
     const map = [];
     for ( let key in enemies) {
-      if (enemies[key].health > 0) {
-        map.push(<Enemy key={key} {...enemies[key]} />)
-      } else {
-        const remaining = {...enemies}
-        delete remaining[key]
-        this.props.dispatch( removeEnemy(remaining) )
-      }
+      map.push(<Enemy key={key} {...enemies[key]} />)
     }
     return map
   }
 
   render() {
-    const enemies = this.renderEnemies()
+    const Enemies = this.renderEnemies()
     return (
       <div className='level'>
+        <Pickups />
         <Player />
-        {enemies}
+        {Enemies}
       </div>
     )
   }

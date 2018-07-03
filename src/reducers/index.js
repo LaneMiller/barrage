@@ -37,33 +37,38 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'UPDATE_PLAYER_POS':
-      return {...state, player:{...state.player, positioning:{...state.player.positioning, ...action.payload}}}
+      return {...state, player:{...state.player, positioning:{...state.player.positioning, ...action.payload}}};
 
     case 'UPDATE_PLAYER_WALKING':
-      return {...state, player:{...state.player, positioning:{...state.player.positioning, ...action.payload}}}
+      return {...state, player:{...state.player, positioning:{...state.player.positioning, ...action.payload}}};
 
     case 'UPDATE_ENEMY_POS':
-      return {...state, level:{...state.level, enemies:{...state.level.enemies, ...action.payload}}}
+      return {...state, level:{...state.level, enemies:{...state.level.enemies, ...action.payload}}};
 
     case 'DAMAGE_PLAYER':
-      return {...state, player:{...state.player, health:state.player.health - action.payload}}
+      return {...state, player:{...state.player, health:state.player.health - action.payload}};
 
     case 'DAMAGE_ENEMY':
-      return {...state, level:{...state.level, enemies:{...state.level.enemies, ...action.payload}}}
+      return {...state, level:{...state.level, enemies:{...state.level.enemies, ...action.payload}}};
 
     case 'INCREASE_SCORE':
-      return {...state, player:{...state.player, score: state.player.score + action.payload}}
+      return {...state, player:{...state.player, score: state.player.score + action.payload}};
 
     case 'INCREASE_KILL_SCORE':
-      return {...state, player:{...state.player, score: state.player.score + action.payload, kills: state.player.kills + 1}}
+      return {...state, player:{...state.player, score: state.player.score + action.payload, kills: state.player.kills + 1}};
 
     case 'REMOVE_ENEMY':
-      console.log(action.payload);
-      return {...state, level:{...state.level, enemies: {...action.payload}}}
+      return {...state, level:{...state.level, enemies: {...action.payload}}};
+
+    case 'DECREASE_AMMO':
+      return {...state, player:{...state.player, gun:{...state.player.gun, ammo: action.payload}}};
+
+    case 'CHANGE_GUN':
+      return {...state, player:{...state.player, gun: action.payload}};
 
     default:
       console.log("Returned state, no changes")
-      return state
+      return state;
   }
 }
 

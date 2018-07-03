@@ -72,6 +72,12 @@
   image-rendering: pixelated
 }
 
+.gun-pickup {
+  position: absolute;
+  transform: scale(0.3);
+  image-rendering: pixelated;
+}
+
 .bullets {
   font-family: sans-serif;
   margin-top: -10px;

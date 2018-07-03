@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 class Game extends Component {
   state = {
     status: 'title',
-    difficulty: 'medium',
+    difficulty: 'Easy',
     currentLevel: 1,
   }
 
@@ -17,10 +17,13 @@ class Game extends Component {
   }
   startGame = (e) => {
     this.setState({ status: 'difficulty screen' })
+    window.removeEventListener('keydown', this.startGame)
   }
-  chooseDifficulty = (e) => {
-    console.log(e.target);
-    // this.setState({ difficulty: ``, status: 'game' })
+  updateDifficulty = (difficulty) => {
+    this.setState({ difficulty })
+  }
+  setDifficulty = () => {
+    this.setState({ status: 'game' })
   }
 
   renderGameState = () => {
@@ -34,7 +37,7 @@ class Game extends Component {
       )
     } else if (this.state.status === 'difficulty screen') {
       return (
-        <DifficultyScreen chooseDifficulty={this.chooseDifficulty}/>
+        <DifficultyScreen updateDifficulty={this.updateDifficulty} setDifficulty={this.setDifficulty} difficulty={this.state.difficulty}/>
       )
     } else if (health <= 0 && lives === 0) {
       // <div className="game-over" style={{position: 'absolute', top: '550px', left: '46%'}}>
