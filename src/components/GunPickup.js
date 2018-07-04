@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { SpriteSheet } from 'react-spritesheet'
-import Gun_Icons from '../Gun_Icons.png'
+import { SpriteSheet } from 'react-spritesheet';
+import Gun_Icons from '../Gun_Icons.png';
 
 class GunPickup extends Component {
   componentDidMount() {
@@ -12,11 +12,13 @@ class GunPickup extends Component {
   }
 
   checkCollision = () => {
-    const xBounds = ((this.props.playerX + 17/2) >= this.props.x && this.props.playerX <= (this.props.x + 29.4));
-    const yBounds = ((this.props.playerY + 24/2) >= this.props.y && this.props.playerY <= (this.props.y + 6.6));
+    const x = this.props.x + 35;
+    const y = this.props.y + 7;
+    const xBounds = ((this.props.playerX + 17/2) >= x && this.props.playerX <= (x + 29.4));
+    const yBounds = ((this.props.playerY + 24/2) >= y && this.props.playerY <= (y + 6.6));
 
     if (xBounds && yBounds) {
-      this.props.pickupGun(this, 'gun')
+      this.props.pickupGun(this, 'gun');
     };
   }
 
@@ -40,18 +42,11 @@ class GunPickup extends Component {
     }
     const pickup = this.renderPickup();
 
-    return(
-      <React.Fragment>
-        <div style={{position: 'absolute', height: '6.6px', width: '29.4px', marginLeft: `${this.props.x}px`, marginTop: `${this.props.y}px`, backgroundColor: 'red'}}>
-        </div>
-        <div style={{position: 'absolute', height: '24px', width: '17px', marginLeft: `${this.props.playerX}px`, marginTop: `${this.props.playerY}px`, backgroundColor: 'red'}}>
-        </div>
-
-        <div className='gun-pickup' style={spriteStyle}>
-          {pickup}
-        </div>
-      </React.Fragment>
-    )
+    return (
+      <div className='gun-pickup' style={spriteStyle}>
+        {pickup}
+      </div>
+    );
   }
 }
 

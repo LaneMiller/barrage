@@ -1,9 +1,8 @@
 import React from 'react';
 import {SpriteSheet, AnimatedSpriteSheet} from 'react-spritesheet';
 import Walk_Anim from "../Walk_Anim_bright.png";
-import HealthBar from '../HealthBar.png';
 import { connect } from 'react-redux';
-import { updatePlayerPos, updatePlayerWalking, reduceAmmo, changePlayerGun } from '../actions';
+import { updatePlayerPos, updatePlayerWalking, changeAmmoValue, changePlayerGun } from '../actions';
 import Bullet from './Bullet';
 
 class Player extends React.Component {
@@ -11,7 +10,7 @@ class Player extends React.Component {
     super(props)
     this.keyState = {};
     this.bullets = {};
-    this.bulletKey = 1;
+    this.bulletKey = 0;
   }
   componentDidMount() {
     window.addEventListener("keydown", this.handleKeyPress);
@@ -21,15 +20,12 @@ class Player extends React.Component {
     this.bulletLogicInterval = setInterval(this.bulletLogic, 30);
   }
   componentWillUnmount() {
+    window.removeEventListener("keydown", this.handleKeyPress);
+    window.removeEventListener("keyup", this.stopKeyPress);
     clearInterval(this.playerLoopInterval);
     clearInterval(this.fireInterval);
     clearInterval(this.bulletInterval);
   }
-  // componentDidUpdate() {
-  //   if (this.props.gun.ammo && !this.ammo) {
-  //     this.ammo = this.props.gun.ammo;
-  //   };
-  // }
 
   handleKeyPress = (e) => {
     this.keyState[e.key] = true;
@@ -139,20 +135,27 @@ class Player extends React.Component {
 
   fireGun = () => {
     const { x, y, rotation } = this.props.positioning;
-    
+
     if (this.keyState[' ']) {
       if (this.props.gun.ammo || this.props.gun.ammo === 0) {
         let ammo = this.props.gun.ammo
         if (ammo > 0) {
-          this.bullets[this.bulletKey++] = {angle: rotation, x, y};
-          this.props.dispatch( reduceAmmo(--ammo) )
+          this.shotgun();
+          this.props.dispatch( changeAmmoValue(--ammo) )
         } else {
           this.props.dispatch( changePlayerGun({type: 'pistol', damage: 5}) )
         };
       } else {
-        this.bullets[this.bulletKey++] = {angle: rotation, x, y};
+        this.bullets[++this.bulletKey] = {bulletKey: this.bulletKey, angle: rotation, x, y};
       };
     };
+  }
+
+  shotgun = () => {
+    const { x, y, rotation } = this.props.positioning;
+    this.bullets[++this.bulletKey] = {bulletKey: this.bulletKey, angle: rotation-10, x, y};
+    this.bullets[++this.bulletKey] = {bulletKey: this.bulletKey, angle: rotation, x, y};
+    this.bullets[++this.bulletKey] = {bulletKey: this.bulletKey, angle: rotation+10, x, y};
   }
 
   bulletLogic = () => {
@@ -163,26 +166,45 @@ class Player extends React.Component {
       const angle = this.bullets[key].angle
       const bulletSpeed = 5;
 
-      if (angle === 225 || (angle === 270 || angle === 315)) {
+      if (angle > 180 && angle < 360) {
         bullet.x += bulletSpeed;
       }
-      if (angle === 45 || (angle === 90 || angle === 135)) {
+      if (angle > 0 && angle < 180) {
         bullet.x -= bulletSpeed;
       }
-      if (angle === 0 || (angle === 45 || angle === 315)) {
+      if (angle > 270 || angle < 90) {
         bullet.y += bulletSpeed;
       }
-      if (angle === 135 || (angle === 180 || angle === 225)) {
+      if (angle > 90 && angle < 270) {
         bullet.y -= bulletSpeed;
       }
 
+      //calculate shotgun spread
+      if ((angle === -10 || angle === 10) || (angle === 170)) {
+        bullet.x += bulletSpeed/2;
+      }
+      if (angle === 190) {
+        bullet.x -= bulletSpeed/2;
+      }
+      if (angle === 100 || angle === 260) {
+        bullet.y += bulletSpeed/2;
+      }
+      if (angle === 80 || angle === 280) {
+        bullet.y -= bulletSpeed/2;
+      }
+
+      // remove out of bounds bullets
       if (bullet.x < (left-10) || bullet.x > (right+12)) {
-        delete this.bullets[key];
+        this.removeBullet(key)
       }
       if (bullet.y < (top-10) || bullet.y > (bottom+10)) {
-        delete this.bullets[key];
+        this.removeBullet(key)
       }
     }
+  }
+
+  removeBullet = (key) => {
+    delete this.bullets[key];
   }
 
   renderPlayer = () => {
@@ -216,7 +238,7 @@ class Player extends React.Component {
     let bullets = []
     for (let key in this.bullets) {
       bullets.push(
-        <Bullet key={key} {...this.bullets[key]} />
+        <Bullet key={key} removeBullet={this.removeBullet} {...this.bullets[key]} />
       )
     }
     if (bullets.length > 30) {
@@ -227,8 +249,6 @@ class Player extends React.Component {
 
   render() {
     const { x, y, rotation, walking } = this.props.positioning
-    const healthBar = 87 * (this.props.health/100)
-    const healthStyle = {width: `${healthBar}px`}
     const spriteStyle = {
               left:`${x}px`,
               marginTop:`${y}px`,
@@ -239,9 +259,6 @@ class Player extends React.Component {
 
     return (
       <div>
-        <div id="player-health-bar" style={healthStyle}>
-          <img id="player-health" src={HealthBar}/>
-        </div>
         <div className="player" style={spriteStyle}>
           {player}
         </div>

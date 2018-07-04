@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import GunPickup from '../components/GunPickup';
-import { changePlayerGun } from '../actions';
+import { changeAmmoValue, changePlayerGun } from '../actions';
 
 class Pickups extends Component {
   constructor(props) {
@@ -14,7 +14,7 @@ class Pickups extends Component {
   }
 
   componentDidMount() {
-    setTimeout(this.spawnGunPickup, 2000);
+    setTimeout(this.spawnGunPickup, 5000);
   }
   shouldComponentUpdate(nP, nextState) {
     return (this.state.pickups !== nextState.pickups);
@@ -42,11 +42,11 @@ class Pickups extends Component {
     const i = Math.floor(Math.random() * (guns.length))
 
     this.setState({
-      pickups: [...this.state.pickups, <GunPickup pickupId={this.pickupId++} pickupGun={this.getPickup} type={guns[i].type} damage={guns[i].damage} ammo={guns[i].ammo} x={x} y={y} />]
+      pickups: [...this.state.pickups, <GunPickup pickupId={this.pickupId++} key={this.pickupId} pickupGun={this.getPickup} type={guns[i].type} damage={guns[i].damage} ammo={guns[i].ammo} x={x} y={y} />]
     });
 
-    const delay = Math.floor(Math.random() * 3 + 2) * 10000
-    setTimeout(this.spawnGunPickup, 4000);
+    const delay = Math.floor(Math.random() * 2 + 1) * 10000
+    setTimeout(this.spawnGunPickup, delay);
   }
 
   iconOffsets = () => {
@@ -63,11 +63,16 @@ class Pickups extends Component {
   getPickup = (object, cat) => {
     const pickups = this.state.pickups.filter(pickup => pickup.props.pickupId !== object.props.pickupId);
 
-    this.setState({ pickups })
+    this.setState({ pickups });
 
     if (cat === 'gun') {
-      const { type, damage, ammo } = object.props
-      this.props.dispatch( changePlayerGun({type, damage, ammo}) )
+      const { type, damage, ammo } = object.props;
+
+      if (this.props.gun.type === type) {
+        this.props.dispatch( changeAmmoValue(ammo) );
+      } else {
+        this.props.dispatch( changePlayerGun({type, damage, ammo}) );
+      }
     }
   }
 
@@ -84,6 +89,7 @@ class Pickups extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    gun: state.player.gun,
     levelBounds: state.level.bounds,
   }
 }

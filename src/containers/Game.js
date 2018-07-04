@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Level from './Level'
 import ScoreCard from '../components/ScoreCard'
+import HealthBar from '../HealthBar.png';
 import DifficultyScreen from '../components/DifficultyScreen'
 import '../game.css'
 import { connect } from 'react-redux';
@@ -40,19 +41,19 @@ class Game extends Component {
         <DifficultyScreen updateDifficulty={this.updateDifficulty} setDifficulty={this.setDifficulty} difficulty={this.state.difficulty}/>
       )
     } else if (health <= 0 && lives === 0) {
-      // <div className="game-over" style={{position: 'absolute', top: '550px', left: '46%'}}>
-      //   <h1>You Dead.</h1>
-      //   <h3>Game Over</h3>
-      // </div>
       return (
         <ScoreCard />
       )
     } else {
+      const healthBar = 87 * (health/100)
       return (
-        <React.Fragment>
+        <div className='game-items'>
           <h1 id="score">Score: {score}</h1>
+          <div id="player-health-bar" style={{width: `${healthBar}px`}}>
+            <img id="player-health" src={HealthBar}/>
+          </div>
           <Level enemies={this.props.level.enemies}/>
-        </React.Fragment>
+        </div>
       )
     }
   }

@@ -30,8 +30,8 @@ export function increaseKillScore(int) {
   return {type: 'INCREASE_KILL_SCORE', payload: int};
 }
 
-export function reduceAmmo(int) {
-  return {type: 'DECREASE_AMMO', payload: int};
+export function changeAmmoValue(int) {
+  return {type: 'CHANGE_AMMO_VALUE', payload: int};
 }
 
 export function changePlayerGun(gunObj) {

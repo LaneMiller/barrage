@@ -60,7 +60,7 @@ const reducer = (state = initialState, action) => {
     case 'REMOVE_ENEMY':
       return {...state, level:{...state.level, enemies: {...action.payload}}};
 
-    case 'DECREASE_AMMO':
+    case 'CHANGE_AMMO_VALUE':
       return {...state, player:{...state.player, gun:{...state.player.gun, ammo: action.payload}}};
 
     case 'CHANGE_GUN':
