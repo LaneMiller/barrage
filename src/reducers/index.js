@@ -3,6 +3,7 @@ const initialState = {
     levelId: 1,
     bounds: {top: 25, bottom: 192, left: 758, right: 1145},
     exits: [],
+    killedEnemies: 0,
     enemies: {
       1: {mobId: 1, type: 'green', health: 20, damage: 5, speed: 2, points: 100, x: 780, y: 100, height: 24, width: 13, rotation: 0, walking: false,},
       2: {mobId: 2, type: 'green', health: 20, damage: 5, speed: 2, points: 100, x: 900, y: 35, height: 24, width: 13, rotation: 90, walking: false,},
@@ -58,7 +59,7 @@ const reducer = (state = initialState, action) => {
       return {...state, player:{...state.player, score: state.player.score + action.payload, kills: state.player.kills + 1}};
 
     case 'REMOVE_ENEMY':
-      return {...state, level:{...state.level, enemies: {...action.payload}}};
+      return {...state, level:{...state.level, killedEnemies: state.level.killedEnemies + 1, enemies: {...action.payload}}};
 
     case 'CHANGE_AMMO_VALUE':
       return {...state, player:{...state.player, gun:{...state.player.gun, ammo: action.payload}}};

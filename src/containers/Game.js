@@ -52,7 +52,7 @@ class Game extends Component {
           <div id="player-health-bar" style={{width: `${healthBar}px`}}>
             <img id="player-health" src={HealthBar}/>
           </div>
-          <Level enemies={this.props.level.enemies}/>
+          <Level difficulty={this.state.difficulty} enemies={this.props.level.enemies}/>
         </div>
       )
     }

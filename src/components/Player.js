@@ -192,6 +192,23 @@ class Player extends React.Component {
       if (angle === 80 || angle === 280) {
         bullet.y -= bulletSpeed/2;
       }
+      //calculate for diagonals
+      if (angle === 35 || angle === 235) {
+        bullet.x += bulletSpeed/2;
+        bullet.y += bulletSpeed/2;
+      }
+      if (angle === 55 || angle === 215) {
+        bullet.x -= bulletSpeed/2;
+        bullet.y -= bulletSpeed/2;
+      }
+      if (angle === 125 || angle === 325) {
+        bullet.x -= bulletSpeed/2;
+        bullet.y += bulletSpeed/2;
+      }
+      if (angle === 145 || angle === 305) {
+        bullet.x += bulletSpeed/2;
+        bullet.y -= bulletSpeed/2;
+      }
 
       // remove out of bounds bullets
       if (bullet.x < (left-10) || bullet.x > (right+12)) {
