@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { SpriteSheet } from 'react-spritesheet';
 import Gun_Icons from '../Gun_Icons.png';
+import gunSprites from '../adapters/gunSpriteConfig'
 
 class GunPickup extends Component {
   componentDidMount() {
@@ -23,15 +24,6 @@ class GunPickup extends Component {
   }
 
   renderPickup = () => {
-    const gunSprites = {
-      shotgun: {
-        x: 0,
-        y: 0,
-        width: 98,
-        height: 22,
-      },
-    }
-
     return <SpriteSheet  filename={Gun_Icons} data={gunSprites} sprite={this.props.type} />
   }
 

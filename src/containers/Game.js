@@ -1,10 +1,16 @@
+// Third-Party
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { SpriteSheet } from 'react-spritesheet';
+// Components and Containers
 import Level from './Level'
 import ScoreCard from '../components/ScoreCard'
 import HealthBar from '../HealthBar.png';
 import DifficultyScreen from '../components/DifficultyScreen'
+// Styling and Assets
 import '../game.css'
-import { connect } from 'react-redux';
+import Gun_Icons from '../Gun_Icons.png';
+import gunSprites from '../adapters/gunSpriteConfig'
 
 class Game extends Component {
   state = {
@@ -46,27 +52,40 @@ class Game extends Component {
       )
     } else {
       const healthBar = 87 * (health/100)
+      const currentGun = this.renderCurrentGun()
+
       return (
-        <div className='game-items'>
-          <h1 id="score">Score: {score}</h1>
-          <div id="player-health-bar" style={{width: `${healthBar}px`}}>
-            <img id="player-health" src={HealthBar}/>
+        <React.Fragment>
+          <img src={require("../level.png")}/>
+
+          <div className='game-items'>
+            <h1 id="score">Score: {score}</h1>
+
+            <div id="player-health-bar"
+              style={{width: `${healthBar}px`}}>
+              <img id="player-health" src={HealthBar}/>
+            </div>
+
+            <div id='current-weapon'>
+              {currentGun}
+              <p>{this.props.player.gun.type}</p>
+            </div>
+
+            <Level difficulty={this.state.difficulty} enemies={this.props.level.enemies}/>
           </div>
-          <Level difficulty={this.state.difficulty} enemies={this.props.level.enemies}/>
-        </div>
+        </React.Fragment>
       )
     }
+  }
+
+  renderCurrentGun = () => {
+    return <SpriteSheet  filename={Gun_Icons} data={gunSprites} sprite={this.props.player.gun.type} />
   }
 
   render() {
     const gameState = this.renderGameState()
     return (
       <div className='game'>
-        {/*
-          <img src={require("../Background.png")}/>
-          <img src={require("../closedLevelBlue.png")}/>
-          */}
-          <img src={require("../level.png")}/>
         {gameState}
       </div>
     )
