@@ -273,7 +273,7 @@ class Player extends React.Component {
             }
     const player = this.renderPlayer()
     const bullets = this.renderBullets()
-
+    
     return (
       <div>
         <div className="player" style={spriteStyle}>

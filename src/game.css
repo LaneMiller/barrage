@@ -35,9 +35,13 @@
   margin-top: -30px;
 }
 
-/* .level {
-  transform: scale(4);
-} */
+.level > img {
+  position: absolute;
+  left: 856px;
+  top: 69px;
+  transform: scale(2.25);
+  image-rendering: pixelated;
+}
 
 .player {
   position: absolute;

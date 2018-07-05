@@ -96,7 +96,6 @@ class Enemy extends Component {
       }
     }
 
-    // this.props.updateEnemyPos(this.props.mobId, x, y, rotation);
     this.props.dispatch( updateEnemyPos({[this.props.mobId]: {...this.props, x, y, rotation}}) );
   }
 
