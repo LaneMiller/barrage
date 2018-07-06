@@ -30,10 +30,27 @@ export function increaseKillScore(int) {
   return {type: 'INCREASE_KILL_SCORE', payload: int};
 }
 
+export function updateLevelPickups(pickups) {
+  console.log(pickups);
+  return {type: 'UPDATE_LEVEL_PICKUPS', payload: pickups}
+}
+
 export function changeAmmoValue(int) {
   return {type: 'CHANGE_AMMO_VALUE', payload: int};
 }
 
 export function changePlayerGun(gunObj) {
   return {type: 'CHANGE_GUN', payload: gunObj};
+}
+
+export function updatePlayerLevelStatus(status) {
+  return {type: 'UPDATE_PLAYER_LEVEL_STATUS', payload: status}
+}
+
+export function incrementWaveCount() {
+  return {type: 'INCREMENT_WAVE'}
+}
+
+export function readyNextLevel({levelId, level, startingX, startingY}) {
+  return {type: 'READY_NEXT_LEVEL', payload: {levelId, level, startingX, startingY}}
 }

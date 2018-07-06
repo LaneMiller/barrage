@@ -1,24 +1,25 @@
+import enemyTypes from '../dependencies/enemyTypes'
+
 const initialState = {
+  currentLevel: 1,
+  // turn level into an object of objects?
   level: {
     levelId: 1,
     bounds: {top: 25, bottom: 192, left: 758, right: 1145},
     exits: [],
+    pickups: [],
+    waveSize: Math.floor(14 / 3),
+    wave: 0,
     killedEnemies: 0,
     enemies: {
-      1: {mobId: 1, type: 'green', health: 20, damage: 5, speed: 2, points: 100, height: 24, width: 13, rotation: 0, walking: false,},
-      2: {mobId: 2, type: 'green', health: 20, damage: 5, speed: 2, points: 100, height: 24, width: 13, rotation: 90, walking: false,},
-      3: {mobId: 3, type: 'green', health: 20, damage: 5, speed: 2, points: 100, height: 24, width: 13, rotation: 315, walking: false,},
-      4: {mobId: 4, type: 'green', health: 20, damage: 5, speed: 2, points: 100, height: 24, width: 13, rotation: 180, walking: false,},
-      5: {mobId: 5, type: 'green', health: 20, damage: 5, speed: 2, points: 100, height: 24, width: 13, rotation: 270, walking: false,},
-      6: {mobId: 6, type: 'purple', health: 50, damage: 10, speed: 3, points: 200, height: 24, width: 13, rotation: 0, walking: false,},
-      7: {mobId: 7, type: 'purple', health: 50, damage: 10, speed: 3, points: 200, height: 24, width: 13, rotation: 45, walking: false,},
-      8: {mobId: 8, type: 'purple', health: 50, damage: 10, speed: 3, points: 200, height: 24, width: 13, rotation: 0, walking: false,},
-      9: {mobId: 9, type: 'purple', health: 50, damage: 10, speed: 3, points: 200, height: 24, width: 13, rotation: 0, walking: false,},
-      10: {mobId: 10, type: 'purple', health: 50, damage: 10, speed: 3, points: 200, height: 24, width: 13, rotation: 0, walking: false,},
-      11: {mobId: 11, type: 'purple', health: 50, damage: 10, speed: 3, points: 200, height: 24, width: 13, rotation: 0, walking: false,},
-      12: {mobId: 12, type: 'purple', health: 50, damage: 10, speed: 3, points: 200, height: 24, width: 13, rotation: 0, walking: false,},
-      13: {mobId: 13, type: 'purple', health: 50, damage: 10, speed: 3, points: 200, height: 24, width: 13, rotation: 0, walking: false,},
-      14: {mobId: 14, type: 'purple', health: 50, damage: 10, speed: 3, points: 200, height: 24, width: 13, rotation: 0, walking: false,},
+      1: {mobId: 1, rotation: 0, ...enemyTypes.green},
+      2: {mobId: 2, rotation: 90, ...enemyTypes.green},
+      3: {mobId: 3, rotation: 315, ...enemyTypes.green},
+      4: {mobId: 4, rotation: 180, ...enemyTypes.green},
+      5: {mobId: 5, rotation: 270, ...enemyTypes.purple},
+      6: {mobId: 6, rotation: 0, ...enemyTypes.green},
+      7: {mobId: 7, rotation: 45, ...enemyTypes.purple},
+      8: {mobId: 8, rotation: 0, ...enemyTypes.purple},
     }
   },
   player: {
@@ -35,6 +36,7 @@ const initialState = {
       rotation: 0,
       walking: false,
     },
+    levelStatus: 'active',
   },
   enemy: {
 
@@ -67,11 +69,31 @@ const reducer = (state = initialState, action) => {
     case 'REMOVE_ENEMY':
       return {...state, level:{...state.level, killedEnemies: state.level.killedEnemies + 1, enemies: {...action.payload}}};
 
+    case 'UPDATE_LEVEL_PICKUPS':
+      return {...state, level: {...state.level, pickups: action.payload}};
+
     case 'CHANGE_AMMO_VALUE':
       return {...state, player:{...state.player, gun:{...state.player.gun, ammo: action.payload}}};
 
     case 'CHANGE_GUN':
       return {...state, player:{...state.player, gun: action.payload}};
+
+    case 'UPDATE_PLAYER_LEVEL_STATUS':
+      return {...state, player:{...state.player, levelStatus: action.payload}};
+
+    case 'INCREMENT_WAVE':
+      return {...state, level: {...state.level, wave: state.level.wave + 1}}
+
+    case 'READY_NEXT_LEVEL':
+      return {...state,
+        currentLevel: action.payload.levelId,
+        level: action.payload.level,
+        player: {...state.player,
+          positioning: {...state.player.positioning,
+            x: action.payload.startingX,
+            y: action.payload.startingY}
+          }
+        };
 
     default:
       console.log("Returned state, no changes")

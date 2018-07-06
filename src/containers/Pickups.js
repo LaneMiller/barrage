@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import GunPickup from '../components/GunPickup';
-import { changeAmmoValue, changePlayerGun } from '../actions';
+import { changeAmmoValue, changePlayerGun, updateLevelPickups } from '../actions';
 
 class Pickups extends Component {
   constructor(props) {
@@ -17,16 +17,16 @@ class Pickups extends Component {
     setTimeout(this.spawnGunPickup, 5000);
   }
   shouldComponentUpdate(nP, nextState) {
-    return (this.state.pickups !== nextState.pickups);
+    return (this.props.pickups !== nP.pickups);
   }
 
   iconOffsets = () => {
     const { top, bottom, left, right } = this.props.levelBounds;
 
     const adjTop = top + 8;
-    const adjBottom = bottom + 8;
+    const adjBottom = bottom + 5;
     const adjLeft = left - 28;
-    const adjRight = right - 30;
+    const adjRight = right - 40;
 
     return {adjTop, adjBottom, adjLeft, adjRight}
   }
@@ -41,29 +41,20 @@ class Pickups extends Component {
     ]
     const i = Math.floor(Math.random() * (guns.length))
 
-    this.setState({
-      pickups: [...this.state.pickups, <GunPickup pickupId={this.pickupId++} key={this.pickupId} pickupGun={this.getPickup} type={guns[i].type} damage={guns[i].damage} ammo={guns[i].ammo} x={x} y={y} />]
-    });
+    this.props.dispatch( updateLevelPickups([...this.props.pickups, <GunPickup pickupId={this.pickupId++} key={this.pickupId} derenderPickup={this.derenderPickup} pickupGun={this.getPickup} type={guns[i].type} damage={guns[i].damage} ammo={guns[i].ammo} x={x} y={y} />]) )
 
     const delay = Math.floor(Math.random() * 2 + 1) * 10000
     setTimeout(this.spawnGunPickup, delay);
   }
 
-  iconOffsets = () => {
-    const { top, bottom, left, right } = this.props.levelBounds;
+  derenderPickup = (id) => {
+    const pickups = this.props.pickups.filter(pickup => pickup.props.pickupId !== id);
 
-    const adjTop = top + 8;
-    const adjBottom = bottom + 8;
-    const adjLeft = left - 28;
-    const adjRight = right - 30;
-
-    return {adjTop, adjBottom, adjLeft, adjRight}
+    this.props.dispatch( updateLevelPickups(pickups) );
   }
 
   getPickup = (object, cat) => {
-    const pickups = this.state.pickups.filter(pickup => pickup.props.pickupId !== object.props.pickupId);
-
-    this.setState({ pickups });
+    this.derenderPickup(object.props.pickupId)
 
     if (cat === 'gun') {
       const { type, damage, ammo } = object.props;
@@ -77,7 +68,7 @@ class Pickups extends Component {
   }
 
  render() {
-   const pickups = this.state.pickups.length > 0 ? this.state.pickups : null
+   const pickups = this.props.pickups.length > 0 ? this.props.pickups : null;
 
    return (
      <div id="pickups">
@@ -89,6 +80,7 @@ class Pickups extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    pickups: state.level.pickups,
     gun: state.player.gun,
     levelBounds: state.level.bounds,
   }

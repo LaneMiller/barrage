@@ -24,6 +24,9 @@ class GunPickup extends Component {
   }
 
   renderPickup = () => {
+    const derenderPickup = () => {this.props.derenderPickup(this.props.pickupId)}
+    setTimeout(derenderPickup, 6000)
+
     return <SpriteSheet  filename={Gun_Icons} data={gunSprites} sprite={this.props.type} />
   }
 

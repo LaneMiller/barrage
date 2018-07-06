@@ -2,8 +2,9 @@ import React from 'react';
 import {SpriteSheet, AnimatedSpriteSheet} from 'react-spritesheet';
 import Walk_Anim from "../Walk_Anim_bright.png";
 import { connect } from 'react-redux';
-import { updatePlayerPos, updatePlayerWalking, changeAmmoValue, changePlayerGun } from '../actions';
+import { updatePlayerPos, updatePlayerWalking, changeAmmoValue, changePlayerGun, readyNextLevel, updatePlayerLevelStatus } from '../actions';
 import Bullet from './Bullet';
+import levelSelect from '../dependencies/levelSelect';
 
 class Player extends React.Component {
   constructor(props) {
@@ -43,65 +44,80 @@ class Player extends React.Component {
     const oldX = this.props.positioning.x,
           oldY = this.props.positioning.y
     let { x, y, rotation, walking } = this.props.positioning
+    const movespeed = 4;
 
-    //determine direction rotation and speed
-    if (this.keyState['w']) {
-      this.props.dispatch(updatePlayerWalking(true))
-      rotation = 180;
-      if (oldY <= top) {
-        y = top;
-      } else {
-        y -= 4;
+    if (oldX >= 1184) {
+      this.props.dispatch(
+        readyNextLevel({levelId: this.props.levelId + 1, level: {...levelSelect[this.props.levelId + 1]}, startingX: 753, startingY: 111})
+      );
+      this.props.dispatch( updatePlayerLevelStatus('active') );
+    } else {
+      //determine direction rotation and speed
+      if (this.keyState['w']) {
+        this.props.dispatch(updatePlayerWalking(true))
+        rotation = 180;
+        if (oldY <= top) {
+          y = top;
+        } else {
+          y -= movespeed;
+        }
       }
-    }
-    if (this.keyState['s']) {
-      this.props.dispatch(updatePlayerWalking(true))
-      rotation = 0;
-      if (y >= bottom) {
-        y = bottom;
-      } else {
-        y += 4;
+      if (this.keyState['s']) {
+        this.props.dispatch(updatePlayerWalking(true))
+        rotation = 0;
+        if (y >= bottom) {
+          y = bottom;
+        } else {
+          y += movespeed;
+        }
       }
-    }
-    if (this.keyState['a']) {
-      this.props.dispatch(updatePlayerWalking(true))
-      rotation = 90;
-      if (oldX <= left) {
-        x = left;
-      } else {
-        x -= 4;
+      if (this.keyState['a']) {
+        this.props.dispatch(updatePlayerWalking(true))
+        rotation = 90;
+        if (oldX <= left) {
+          x = left;
+        } else {
+          x -= movespeed;
+        }
       }
-    }
-    if (this.keyState['d']) {
-      this.props.dispatch(updatePlayerWalking(true))
-      rotation = 270;
-      if (oldX >= right) {
-        x = right;
-      } else {
-        x += 4;
+      if (this.keyState['d']) {
+        this.props.dispatch(updatePlayerWalking(true))
+        rotation = 270;
+        // Allows player exit on level clear
+        if (oldX >= right && this.props.levelStatus !== 'clear') {
+          x = right;
+        } else {
+          x += movespeed;
+        }
       }
-    }
 
-    // movement based diagonal rotations
-    if (x !== oldX && y !== oldY) {
-      if (x > oldX && y < oldY) {
-        rotation = 225;
+      // Prevents wall clipping on player exit
+      if (x > right && (y < 103 || y > 118)) {
+        y = oldY;
+        x = oldX;
       }
-      if (x > oldX && y > oldY) {
-        rotation = 315;
+
+      // movement based diagonal rotations
+      if (x !== oldX && y !== oldY) {
+        if (x > oldX && y < oldY) {
+          rotation = 225;
+        }
+        if (x > oldX && y > oldY) {
+          rotation = 315;
+        }
+        if (x < oldX && y < oldY) {
+          rotation = 135;
+        }
+        if (x < oldX && y > oldY) {
+          rotation = 45;
+        }
       }
-      if (x < oldX && y < oldY) {
-        rotation = 135;
-      }
-      if (x < oldX && y > oldY) {
-        rotation = 45;
-      }
+
+      // override rotation with arrow keys
+      rotation = this.aimingLogic(rotation)
+
+      this.props.dispatch(updatePlayerPos({x, y, rotation}));
     }
-
-    // override rotation with arrow keys
-    rotation = this.aimingLogic(rotation)
-
-    this.props.dispatch(updatePlayerPos({x, y, rotation}));
   }
 
   aimingLogic = (rotation) => {
@@ -273,7 +289,7 @@ class Player extends React.Component {
             }
     const player = this.renderPlayer()
     const bullets = this.renderBullets()
-    
+
     return (
       <div>
         <div className="player" style={spriteStyle}>
@@ -292,7 +308,9 @@ const mapStateToProps = (state) => {
     health: state.player.health,
     gun: state.player.gun,
     positioning: state.player.positioning,
+    levelId: state.level.levelId,
     levelBounds: state.level.bounds,
+    levelStatus: state.player.levelStatus,
   }
 }
 

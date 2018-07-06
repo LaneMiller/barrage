@@ -77,25 +77,31 @@
   image-rendering: pixelated;
 }
 
-#current-weapon {
+#current-gun {
   position: absolute;
-  height: 60px;
+  height: 70px;
   width: 110px;
   border: 2px solid hsla(105, 63%, 40%, 0.86);
   border-radius: 2px;
   background-color: black;
   top: -57px;
   left: 985px;
-  padding-top: 25px;
+  padding-top: 15px;
   padding-left: 10px;
   transform: scale(0.25);
   image-rendering: pixelated;
 }
 
-#current-weapon > p {
-  margin-top: 0px;
-  margin-left: -3px;
-  font-size: 28px;
+#current-gun-type {
+  margin-top: -5px;
+  margin-left: -4px;
+  font-size: 33px;
+}
+
+#ammo-count {
+  margin-top: -30px;
+  margin-left: -4px;
+  font-size: 22px;
 }
 
 .gun-pickup {

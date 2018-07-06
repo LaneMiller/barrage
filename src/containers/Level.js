@@ -1,34 +1,40 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import Player from '../components/Player';
 import Enemy from '../components/Enemy';
 import Pickups from './Pickups'
-import { connect } from 'react-redux';
+
 import difficultyAdapter from '../adapters/difficulty'
-import { updateEnemyPos } from '../actions'
+import { updateEnemyPos, updatePlayerLevelStatus, incrementWaveCount } from '../actions'
 
 class Level extends Component {
   state = {
-    waveSize: Math.floor(Object.keys(this.props.enemies).length / 3),
-    wave: 1,
     doors: null,
+    levelExits: null,
   }
 
   componentDidMount() {
     const delay = difficultyAdapter[this.props.difficulty];
     this.spawnRate = setInterval(this.incrementWave, delay);
 
-    for (let key in this.props.enemies) {
-      // set inital location for enemies
-      const spawnXY = this.randomSpawnPoints();
-      this.props.dispatch( updateEnemyPos({[key]: {...this.props.enemies[key], x: spawnXY[0], y: spawnXY[1]}}) );
-    }
+    this.setSpawnPoints();
+    this.incrementWave();
   }
   componentWillUnmount() {
     clearInterval(this.spawnRate);
   }
+  componentDidUpdate(prevProps) {
+    if (this.props.levelId !== prevProps.levelId) {
+      this.setSpawnPoints();
+    }
+  }
   incrementWave = () => {
-    if (this.state.wave < 3) {
-      this.setState({ wave: this.state.wave + 1, doors: <img src={require("../openLevel.png")}/>});
+    if (this.props.wave < 3) {
+      this.props.dispatch( incrementWaveCount() );
+      this.setState({
+        doors: <img src={require("../openLevelMinimal.png")}/>
+      });
 
       setTimeout(this.closeDoors, 1000);
     }
@@ -38,24 +44,33 @@ class Level extends Component {
   }
 
   randomSpawnPoints = () => {
-    // top, right, left, bottom
-    let spawnsXY = [[952, 20], [1150, 111], [753, 111], [952, 197]]
+    // top, right, bottom, left
+    let spawnsXY = [[952, 20], [1150, 111], [952, 197], [753, 111]]
     return spawnsXY[Math.floor(Math.random() * spawnsXY.length)];
   }
 
+  setSpawnPoints = () => {
+    console.log('here', this.props.enemies);
+    for (let key in this.props.enemies) {
+      // set inital location for enemies
+      const spawnXY = this.randomSpawnPoints();
+
+      this.props.dispatch( updateEnemyPos({[key]: {...this.props.enemies[key], x: spawnXY[0], y: spawnXY[1]}}) );
+    }
+  }
+
   renderEnemies = () => {
-    const { waveSize } = this.state;
-    const { dead } = this.props;
+    const { waveSize, dead } = this.props;
     const { top, bottom, left, right } = this.props.levelBounds;
     const map = [];
 
     let i = 0;
     for (let key in this.props.enemies) {
-      if (this.state.wave === 1 && i < waveSize - dead) {
+      if (this.props.wave === 1 && i < waveSize - dead) {
         map.push(<Enemy key={key} {...this.props.enemies[key]} />)
-      } else if (this.state.wave === 2 && i < (waveSize*2 - dead)) {
+      } else if (this.props.wave === 2 && i < (waveSize*2 - dead)) {
         map.push(<Enemy key={key} {...this.props.enemies[key]} />)
-      } else if (this.state.wave > 2) {
+      } else if (this.props.wave > 2) {
         map.push(<Enemy key={key} {...this.props.enemies[key]} />)
       };
       i++
@@ -64,13 +79,24 @@ class Level extends Component {
     return map;
   }
 
+  renderExits = () => {
+    if (Object.keys(this.props.enemies).length === 0) {
+      this.props.dispatch( updatePlayerLevelStatus('clear') )
+      return <img src={require("../exitRight.png")}/>
+    } else {
+      return null;
+    }
+  }
+
   render() {
-    const Enemies = this.renderEnemies()
-    const openDoors = this.state.doors !== null ? this.state.doors : null
+    const Enemies = this.renderEnemies();
+    const openDoors = this.state.doors !== null ? this.state.doors : null;
+    const levelExits = this.renderExits();
 
     return (
       <div className='level'>
         {openDoors}
+        {levelExits}
         <Pickups />
         <Player />
         {Enemies}
@@ -81,9 +107,10 @@ class Level extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    wave: state.level.wave,
+    waveSize: state.level.waveSize,
     levelBounds: state.level.bounds,
     dead: state.level.killedEnemies,
-    enemies: state.level.enemies,
   }
 }
 export default connect(mapStateToProps)(Level);
