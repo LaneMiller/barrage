@@ -16,8 +16,8 @@ class Pickups extends Component {
   componentDidMount() {
     setTimeout(this.spawnGunPickup, 5000);
   }
-  shouldComponentUpdate(nP, nextState) {
-    return (this.props.pickups !== nP.pickups);
+  shouldComponentUpdate(nextProps) {
+    return (this.props.pickups !== nextProps.pickups);
   }
 
   iconOffsets = () => {
@@ -37,11 +37,12 @@ class Pickups extends Component {
     const y = Math.floor(Math.random() * (adjBottom - adjTop + 1) + adjTop);
 
     const guns = [
-      {type: 'shotgun', damage: 10, ammo: 20},
+      {type: 'shotgun', damage: 10, ammo: 20, rate: 300},
+      {type: 'particle', damage: 5, ammo: 100, rate: 50},
     ]
     const i = Math.floor(Math.random() * (guns.length))
 
-    this.props.dispatch( updateLevelPickups([...this.props.pickups, <GunPickup pickupId={this.pickupId++} key={this.pickupId} derenderPickup={this.derenderPickup} pickupGun={this.getPickup} type={guns[i].type} damage={guns[i].damage} ammo={guns[i].ammo} x={x} y={y} />]) )
+    this.props.dispatch( updateLevelPickups([...this.props.pickups, <GunPickup pickupId={this.pickupId++} key={this.pickupId} derenderPickup={this.derenderPickup} pickupGun={this.getPickup} {...guns[i]} x={x} y={y} />]) )
 
     const delay = Math.floor(Math.random() * 2 + 1) * 10000
     setTimeout(this.spawnGunPickup, delay);
@@ -57,12 +58,12 @@ class Pickups extends Component {
     this.derenderPickup(object.props.pickupId)
 
     if (cat === 'gun') {
-      const { type, damage, ammo } = object.props;
+      const { type, damage, ammo, rate } = object.props;
 
       if (this.props.gun.type === type) {
         this.props.dispatch( changeAmmoValue(ammo) );
       } else {
-        this.props.dispatch( changePlayerGun({type, damage, ammo}) );
+        this.props.dispatch( changePlayerGun({type, damage, ammo, rate}) );
       }
     }
   }

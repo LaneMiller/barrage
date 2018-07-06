@@ -17,7 +17,7 @@ class Player extends React.Component {
     window.addEventListener("keydown", this.handleKeyPress);
     window.addEventListener("keyup", this.stopKeyPress);
     this.playerLoopInterval = setInterval(this.movementLogic, 30);
-    this.fireInterval = setInterval(this.fireGun, 300);
+    this.fireInterval = setInterval(this.fireGun, this.props.gun.rate);
     this.bulletLogicInterval = setInterval(this.bulletLogic, 30);
   }
   componentWillUnmount() {
@@ -26,6 +26,12 @@ class Player extends React.Component {
     clearInterval(this.playerLoopInterval);
     clearInterval(this.fireInterval);
     clearInterval(this.bulletInterval);
+  }
+  componentDidUpdate(prevProps) {
+    if (this.props.gun.type !== prevProps.gun.type) {
+      clearInterval(this.fireInterval);
+      this.fireInterval = setInterval(this.fireGun, this.props.gun.rate);
+    }
   }
 
   handleKeyPress = (e) => {
@@ -154,12 +160,16 @@ class Player extends React.Component {
 
     if (this.keyState[' ']) {
       if (this.props.gun.ammo || this.props.gun.ammo === 0) {
-        let ammo = this.props.gun.ammo
+        let ammo = this.props.gun.ammo;
         if (ammo > 0) {
-          this.shotgun();
-          this.props.dispatch( changeAmmoValue(--ammo) )
+          if (this.props.gun.type === 'shotgun') {
+            this.shotgun();
+          } else {
+            this.bullets[++this.bulletKey] = {bulletKey: this.bulletKey, angle: rotation, x, y};
+          }
+          this.props.dispatch( changeAmmoValue(--ammo) );
         } else {
-          this.props.dispatch( changePlayerGun({type: 'pistol', damage: 5}) )
+          this.props.dispatch( changePlayerGun({type: 'pistol', damage: 5, rate: 300}) );
         };
       } else {
         this.bullets[++this.bulletKey] = {bulletKey: this.bulletKey, angle: rotation, x, y};

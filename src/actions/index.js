@@ -31,7 +31,6 @@ export function increaseKillScore(int) {
 }
 
 export function updateLevelPickups(pickups) {
-  console.log(pickups);
   return {type: 'UPDATE_LEVEL_PICKUPS', payload: pickups}
 }
 

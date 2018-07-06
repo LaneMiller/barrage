@@ -28,7 +28,7 @@ const initialState = {
     kills: 0,
     cash: 0,
     prizes: 0,
-    gun: {type: 'pistol', damage: 5},
+    gun: {type: 'pistol', damage: 5, rate: 300},
     positioning: {
       x: 952,
       y: 111,
