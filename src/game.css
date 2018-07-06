@@ -142,6 +142,10 @@
   border-radius: 10px;
 }
 
+#win-screen > h1 {
+  font-size: 150px;
+}
+
 #score-card > h1 {
   font-size: 90px;
 }

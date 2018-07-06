@@ -9,9 +9,8 @@ import HealthBar from '../HealthBar.png';
 import DifficultyScreen from '../components/DifficultyScreen'
 // Styling and Assets
 import '../game.css'
-import levelSelect from '../dependancies/levelSelect'
 import Gun_Icons from '../Gun_Icons.png';
-import gunSprites from '../adapters/gunSpriteConfig'
+import gunSprites from '../adapters/gunSpriteConfig';
 
 class Game extends Component {
   state = {
@@ -49,6 +48,13 @@ class Game extends Component {
     } else if (health <= 0 && lives === 0) {
       return (
         <ScoreCard />
+      )
+    } else if (Object.keys(this.props.level.enemies).length === 0 && this.props.currentLevel === 3) {
+      return (
+        <div id='win-screen'>
+          <h1>You Win!</h1>
+          <ScoreCard />
+        </div>
       )
     } else {
       const healthBar = 87 * (health/100);
@@ -100,6 +106,7 @@ class Game extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    currentLevel: state.currentLevel,
     level: state.level,
     player: state.player,
   }

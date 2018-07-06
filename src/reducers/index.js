@@ -2,7 +2,6 @@ import enemyTypes from '../dependencies/enemyTypes'
 
 const initialState = {
   currentLevel: 1,
-  // turn level into an object of objects?
   level: {
     levelId: 1,
     bounds: {top: 25, bottom: 192, left: 758, right: 1145},
