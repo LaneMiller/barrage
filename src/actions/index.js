@@ -42,6 +42,10 @@ export function changePlayerGun(gunObj) {
   return {type: 'CHANGE_GUN', payload: gunObj};
 }
 
+export function updatePlayerValue(valueObj) {
+  return {type: 'UPDATE_PLAYER_VALUE', payload: valueObj}
+}
+
 export function updatePlayerLevelStatus(status) {
   return {type: 'UPDATE_PLAYER_LEVEL_STATUS', payload: status}
 }

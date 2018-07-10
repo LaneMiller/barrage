@@ -7,7 +7,7 @@ const initialState = {
     bounds: {top: 25, bottom: 192, left: 758, right: 1145},
     exits: [],
     pickups: [],
-    waveSize: Math.floor(14 / 3),
+    waveSize: Math.floor(8 / 3),
     wave: 0,
     killedEnemies: 0,
     enemies: {
@@ -23,7 +23,7 @@ const initialState = {
   },
   player: {
     health: 100,
-    lives: 0,
+    lives: 3,
     score: 0,
     kills: 0,
     cash: 0,
@@ -76,6 +76,9 @@ const reducer = (state = initialState, action) => {
 
     case 'CHANGE_GUN':
       return {...state, player:{...state.player, gun: action.payload}};
+
+    case 'UPDATE_PLAYER_VALUE':
+      return {...state, player:{...state.player, ...action.payload}}
 
     case 'UPDATE_PLAYER_LEVEL_STATUS':
       return {...state, player:{...state.player, levelStatus: action.payload}};

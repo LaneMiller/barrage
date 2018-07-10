@@ -1,20 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import GunPickup from '../components/GunPickup';
-import { changeAmmoValue, changePlayerGun, updateLevelPickups } from '../actions';
+import HealthPickup from '../components/HealthPickup';
+import { changeAmmoValue, changePlayerGun, updateLevelPickups, updatePlayerValue } from '../actions';
 
 class Pickups extends Component {
   constructor(props) {
     super(props);
 
     this.pickupId = 1;
-    this.state = {
-      pickups: []
-    };
   }
 
   componentDidMount() {
     setTimeout(this.spawnGunPickup, 5000);
+    setTimeout(this.spawnHealthPickup, 6000)
   }
   shouldComponentUpdate(nextProps) {
     return (this.props.pickups !== nextProps.pickups);
@@ -25,16 +24,20 @@ class Pickups extends Component {
 
     const adjTop = top + 8;
     const adjBottom = bottom + 5;
-    const adjLeft = left - 28;
+    const adjLeft = left - 20;
     const adjRight = right - 40;
 
-    return {adjTop, adjBottom, adjLeft, adjRight}
+    return {adjTop, adjBottom, adjLeft, adjRight};
+  }
+
+  randomXY = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
   spawnGunPickup = () => {
     const { adjTop, adjBottom, adjLeft, adjRight } = this.iconOffsets();
-    const x = Math.floor(Math.random() * (adjRight - adjLeft + 1) + adjLeft);
-    const y = Math.floor(Math.random() * (adjBottom - adjTop + 1) + adjTop);
+    const x = this.randomXY(adjLeft, adjRight);
+    const y = this.randomXY(adjTop, adjBottom);
 
     const guns = [
       {type: 'shotgun', damage: 10, ammo: 20, rate: 300},
@@ -46,6 +49,18 @@ class Pickups extends Component {
 
     const delay = Math.floor(Math.random() * 2 + 1) * 10000
     setTimeout(this.spawnGunPickup, delay);
+  }
+
+  spawnHealthPickup = () => {
+    const { adjTop, adjBottom, adjLeft, adjRight } = this.iconOffsets();
+
+    const x = this.randomXY(adjLeft, adjRight);
+    const y = this.randomXY(adjTop, adjBottom);
+
+    this.props.dispatch( updateLevelPickups([...this.props.pickups, <HealthPickup pickupId={this.pickupId++} key={this.pickupId} derenderPickup={this.derenderPickup} pickupHealth={this.getPickup} healing={10} x={x} y={y} />]) )
+
+    const delay = Math.floor(Math.random() * 3 + 1) * 10000
+    setTimeout(this.spawnHealthPickup, delay);
   }
 
   derenderPickup = (id) => {
@@ -65,6 +80,13 @@ class Pickups extends Component {
       } else {
         this.props.dispatch( changePlayerGun({type, damage, ammo, rate}) );
       }
+    } else if (cat === 'health') {
+      const { healing } = object.props;
+      if ((this.props.playerHealth + healing) > 100) {
+        this.props.dispatch( updatePlayerValue({health: 100}) );
+      } else {
+        this.props.dispatch( updatePlayerValue({health: this.props.playerHealth + healing}) );
+      }
     }
   }
 
@@ -82,6 +104,8 @@ class Pickups extends Component {
 const mapStateToProps = (state) => {
   return {
     pickups: state.level.pickups,
+    playerHealth: state.player.health,
+    playerScore: state.player.score,
     gun: state.player.gun,
     levelBounds: state.level.bounds,
   }

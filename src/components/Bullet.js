@@ -53,22 +53,46 @@ class Bullet extends Component {
   }
 
   bulletOffsets = () => {
-    let { x, y } = this.props;
-    if (this.props.angle === 0) {
+    let { x, y, angle } = this.props;
+    //downward
+    if (angle >= -10 && angle <= 10) {
       x -= .25;
-      y += 7;
+      y += 12;
     }
-    if (this.props.angle === 90) {
-      x -= 5;
-      y += 2;
+    //SW-ward
+    if (angle >= 35 && angle <= 55) {
+      x -= 8;
+      y += 10;
     }
-    if (this.props.angle === 180) {
+    //leftward
+    if (angle >= 80 && angle <= 100) {
+      x -= 10;
+      y += 3;
+    }
+    //NW-ward
+    if (angle >= 125 && angle <= 145) {
+      x -= 7;
+      y -= 3;
+    }
+    //upward
+    if (angle >= 170 && angle <= 190) {
       x -= .25;
-      y -= 1;
+      y -= 6;
     }
-    if (this.props.angle === 270) {
-      x += 3;
-      y += 2;
+    //NE-ward
+    if (angle >= 215 && angle <= 235) {
+      x += 6;
+      y -= 4;
+    }
+    //rightward
+    if (angle >= 260 && angle <= 280) {
+      x += 8;
+      y += 3;
+    }
+    //SE-ward
+    if (angle >= 305 && angle <= 325) {
+      x += 6;
+      y += 10;
     }
 
     return [x,y];

@@ -44,18 +44,19 @@ class Level extends Component {
   }
 
   randomSpawnPoints = () => {
-    // top, right, bottom, left
-    let spawnsXY = [[952, 20], [1150, 111], [952, 197], [753, 111]]
+    // top x3, right x3, bottom x3, left x3 (to prevent stacking)
+    let spawnsXY = [[950, 20], [952, 20], [954, 20], [1150, 110], [1150, 112], [1150, 114], [950, 197], [952, 197], [954, 197], [753, 110], [753, 112], [753, 114]]
     return spawnsXY[Math.floor(Math.random() * spawnsXY.length)];
   }
 
   setSpawnPoints = () => {
-    console.log('here', this.props.enemies);
     for (let key in this.props.enemies) {
       // set inital location for enemies
       const spawnXY = this.randomSpawnPoints();
 
-      this.props.dispatch( updateEnemyPos({[key]: {...this.props.enemies[key], x: spawnXY[0], y: spawnXY[1]}}) );
+      this.props.dispatch( updateEnemyPos({
+        [key]: {...this.props.enemies[key], x: spawnXY[0], y: spawnXY[1]}
+      }) );
     }
   }
 

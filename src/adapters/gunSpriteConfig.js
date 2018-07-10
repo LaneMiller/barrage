@@ -6,7 +6,13 @@ const gunSprites = {
     height: 22,
   },
   particle: {
-    x: 0,
+    x: 98,
+    y: 0,
+    width: 98,
+    height: 22,
+  },
+  pistol: {
+    x: 196,
     y: 0,
     width: 98,
     height: 22,

@@ -61,12 +61,26 @@
   left: 755px;
 }
 
+#level-display {
+  position: absolute;
+  font-size: 25px !important;
+  top: -41px;
+  left: 933px;
+}
+
 #player-health-bar {
   position: absolute;
   background-color: red;
   height: 5px;
   margin-top: -10px;
   left: 56%;
+}
+
+#lives-counter {
+  position: absolute;
+  font-size: 18px !important;
+  top: -17px;
+  left: 1167px;
 }
 
 #player-health {
@@ -88,7 +102,7 @@
   left: 985px;
   padding-top: 15px;
   padding-left: 10px;
-  transform: scale(0.25);
+  transform: scale(0.3);
   image-rendering: pixelated;
 }
 
@@ -107,6 +121,12 @@
 .gun-pickup {
   position: absolute;
   transform: scale(0.3);
+  image-rendering: pixelated;
+}
+
+.health-pickup {
+  position: absolute;
+  transform: scale(0.35);
   image-rendering: pixelated;
 }
 

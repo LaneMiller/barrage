@@ -3,12 +3,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { SpriteSheet } from 'react-spritesheet';
 // Components and Containers
-import Level from './Level'
-import ScoreCard from '../components/ScoreCard'
+import Level from './Level';
+import ScoreCard from '../components/ScoreCard';
 import HealthBar from '../HealthBar.png';
-import DifficultyScreen from '../components/DifficultyScreen'
+import DifficultyScreen from '../components/DifficultyScreen';
 // Styling and Assets
-import '../game.css'
+import '../game.css';
 import Gun_Icons from '../Gun_Icons.png';
 import gunSprites from '../adapters/gunSpriteConfig';
 
@@ -49,7 +49,7 @@ class Game extends Component {
       return (
         <ScoreCard />
       )
-    } else if (Object.keys(this.props.level.enemies).length === 0 && this.props.currentLevel === 3) {
+    } else if (Object.keys(this.props.level.enemies).length === 0 && this.props.currentLevel === 4) {
       return (
         <div id='win-screen'>
           <h1>You Win!</h1>
@@ -57,20 +57,27 @@ class Game extends Component {
         </div>
       )
     } else {
+      const tileMap = this.props.currentLevel !== 4 ? <img src={require("../level.png")}/> : <img src={require("../bossLevel.png")}/>
       const healthBar = 87 * (health/100);
       const currentGun = this.renderCurrentGun();
       const ammoCount = this.props.player.gun.ammo ? <p id='ammo-count'>Ammo: {this.props.player.gun.ammo}</p> : null;
 
       return (
         <React.Fragment>
-          <img src={require("../level.png")}/>
+          {tileMap}
 
           <div className='game-items'>
             <h1 id="score">Score: {score}</h1>
 
+            <h1 id="level-display"> Level {this.props.currentLevel}</h1>
+
             <div id="player-health-bar"
               style={{width: `${healthBar}px`}}>
               <img id="player-health" src={HealthBar}/>
+            </div>
+
+            <div id='lives-counter'>
+              x{this.props.player.lives}
             </div>
 
             <div id='current-gun'>
@@ -83,7 +90,7 @@ class Game extends Component {
               difficulty={this.state.difficulty}
               levelId={this.props.level.levelId}
               enemies={this.props.level.enemies}
-              />
+            />
           </div>
         </React.Fragment>
       )

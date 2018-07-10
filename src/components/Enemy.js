@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { damagePlayer, updateEnemyPos } from '../actions'
+import { damagePlayer, updatePlayerValue, updateEnemyPos } from '../actions'
 import {SpriteSheet, AnimatedSpriteSheet} from 'react-spritesheet'
 import Zombie_Anim from '../Zombie_Anim.png'
 import Zombie_Anim_Purple from '../Zombie_Anim_Purple.png'
@@ -11,33 +11,50 @@ class Enemy extends Component {
   }
 
   componentDidMount() {
-    this.interval = setInterval(this.enemyCycle, 100)
+    // These are seperate so that only collision can be disabled
+    // on player respawn.
+    this.collisionInterval = setInterval(this.checkCollision, 100)
+    this.movementInterval = setInterval(this.movementLogic, 100)
   }
   componentWillUnmount() {
-    clearInterval(this.interval)
+    clearInterval(this.collisionInterval);
+    clearInterval(this.movementInterval);
   }
-
-  enemyCycle = () => {
-    this.checkCollision()
-    this.movementLogic()
+  componentDidUpdate(prevProps) {
+    if (prevProps.playerLives !== this.props.playerLives) {
+      clearInterval(this.collisionInterval);
+      const restartCollision = () => {
+        this.collisionInterval = setInterval(this.checkCollision, 100);
+      }
+      setTimeout(restartCollision, 1000);
+    }
   }
 
   checkCollision = () => {
     const { height, width, x, y } = this.props;
-    const xBounds = ((x + width/2) >= this.props.playerX && (x + width/2) <= (this.props.playerX + 17))
-    const yBounds = ((y + height/2) >= this.props.playerY && (y + height/2) <= (this.props.playerY + 24))
+    const xBounds = ((x + width/2) >= this.props.playerX && (x + width/2) <= (this.props.playerX + 17));
+    const yBounds = ((y + height/2) >= this.props.playerY && (y + height/2) <= (this.props.playerY + 24));
 
     if (xBounds && yBounds) {
-      this.props.dispatch(damagePlayer(this.props.damage))
+      const { damage, playerHealth, playerLives } = this.props;
+
+      this.props.dispatch(damagePlayer(damage));
+
+      if (playerHealth - damage <= 0 && playerLives !== 0) {
+        this.props.dispatch( updatePlayerValue({
+          lives: this.props.playerLives - 1,
+          health: 100
+        }) );
+      }
     }
   }
 
   movementLogic = () => {
     const { top, bottom, left, right } = this.props.levelBounds;
-    const { playerX, playerY } = this.props
+    const { playerX, playerY } = this.props;
     let x = this.props.x,
         y = this.props.y,
-        rotation = this.props.rotation
+        rotation = this.props.rotation;
     const movespeed = this.props.speed;
 
     if (x !== playerX) {
@@ -100,11 +117,11 @@ class Enemy extends Component {
   }
 
   renderEnemy = () => {
-    let zed_anim
+    let zed_anim;
     if (this.props.type === 'green') {
-      zed_anim = Zombie_Anim
+      zed_anim = Zombie_Anim;
     } else {
-      zed_anim = Zombie_Anim_Purple
+      zed_anim = Zombie_Anim_Purple;
     }
     return <AnimatedSpriteSheet
       filename={zed_anim}
@@ -118,10 +135,10 @@ class Enemy extends Component {
   }
 
   render() {
-    const enemy = this.renderEnemy()
+    const enemy = this.renderEnemy();
     const { height, width, x, y, rotation } = this.props;
-    const healthBar = this.props.width * (this.props.health/this.state.maxHealth)
-    const healthStyle = { width: `${healthBar}px` }
+    const healthBar = this.props.width * (this.props.health/this.state.maxHealth);
+    const healthStyle = { width: `${healthBar}px` };
     const spriteStyle = {
       height: `${height}px`,
       width: `${width}px`,
@@ -145,6 +162,8 @@ class Enemy extends Component {
 const mapStateToProps = (state) => {
   return {
     levelBounds: state.level.bounds,
+    playerHealth: state.player.health,
+    playerLives: state.player.lives,
     playerX: state.player.positioning.x,
     playerY: state.player.positioning.y,
   }

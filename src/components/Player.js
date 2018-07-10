@@ -31,6 +31,8 @@ class Player extends React.Component {
     if (this.props.gun.type !== prevProps.gun.type) {
       clearInterval(this.fireInterval);
       this.fireInterval = setInterval(this.fireGun, this.props.gun.rate);
+    } else if (this.props.levelId !== prevProps.levelId) {
+      this.bullets = {};
     }
   }
 
@@ -260,7 +262,7 @@ class Player extends React.Component {
       }
     }
 
-    if (this.props.health <= 0) {
+    if (this.props.health <= 0 && this.props.lives === 0) {
       window.removeEventListener('keydown', this.handleKeyPress)
     } else if (this.props.positioning.walking) {
       return <AnimatedSpriteSheet
@@ -302,11 +304,11 @@ class Player extends React.Component {
 
     return (
       <div>
-        <div className="player" style={spriteStyle}>
-          {player}
-        </div>
         <div className="bullets">
           {bullets}
+        </div>
+        <div className="player" style={spriteStyle}>
+          {player}
         </div>
       </div>
     )
@@ -316,6 +318,7 @@ class Player extends React.Component {
 const mapStateToProps = (state) => {
   return {
     health: state.player.health,
+    lives: state.player.lives,
     gun: state.player.gun,
     positioning: state.player.positioning,
     levelId: state.level.levelId,
