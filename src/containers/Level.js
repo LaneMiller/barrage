@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 
 import Player from '../components/Player';
 import Enemy from '../components/Enemy';
-import Pickups from './Pickups'
+import Boss from '../components/Boss';
+import Pickups from './Pickups';
 
-import difficultyAdapter from '../adapters/difficulty'
-import { updateEnemyPos, updatePlayerLevelStatus, incrementWaveCount } from '../actions'
+import difficultyAdapter from '../adapters/difficulty';
+import { updateEnemyPos, updatePlayerLevelStatus, incrementWaveCount } from '../actions';
 
 class Level extends Component {
   state = {
@@ -80,6 +81,10 @@ class Level extends Component {
     return map;
   }
 
+  renderBoss = () => {
+    return <Boss key='1' boss={this.props.enemies[1]} />
+  }
+
   renderExits = () => {
     if (Object.keys(this.props.enemies).length === 0) {
       this.props.dispatch( updatePlayerLevelStatus('clear') )
@@ -90,7 +95,7 @@ class Level extends Component {
   }
 
   render() {
-    const Enemies = this.renderEnemies();
+    const Enemies = this.props.levelId === 4 ? this.renderBoss() : this.renderEnemies();
     const openDoors = this.state.doors !== null ? this.state.doors : null;
     const levelExits = this.renderExits();
 
@@ -108,6 +113,7 @@ class Level extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    levelId: state.level.levelId,
     wave: state.level.wave,
     waveSize: state.level.waveSize,
     levelBounds: state.level.bounds,

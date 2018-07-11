@@ -152,6 +152,11 @@
   top: -4px;
 }
 
+#boss {
+  position: absolute;
+  image-rendering: pixelated;
+}
+
 #score-card {
   position: absolute;
   top: 250px;

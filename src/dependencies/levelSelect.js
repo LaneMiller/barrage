@@ -7,7 +7,7 @@ const levelSelect = {
     exits: [],
     pickups: [],
     waveSize: Math.floor(12 / 3),
-    wave: 0,
+    wave: 1,
     killedEnemies: 0,
     enemies: {
       1: {mobId: 1, rotation: 0, ...enemyTypes.green},
@@ -31,7 +31,7 @@ const levelSelect = {
     exits: [],
     pickups: [],
     waveSize: Math.floor(14 / 2.5),
-    wave: 0,
+    wave: 1,
     killedEnemies: 0,
     enemies: {
       1: {mobId: 1, rotation: 0, ...enemyTypes.green},
@@ -53,6 +53,9 @@ const levelSelect = {
   4: {
     levelId: 4,
     bounds: {top: 25, bottom: 192, left: 758, right: 1145},
+    waveSize: 1,
+    wave: 1,
+    killedEnemies: 0,
     pickups: [],
     enemies: {
      1: {mobId: 1, rotation: 0, ...enemyTypes.boss}
