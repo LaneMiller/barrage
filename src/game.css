@@ -145,16 +145,22 @@
   image-rendering: pixelated;
 }
 
+#boss {
+  position: absolute;
+  image-rendering: pixelated;
+  height: 98px;
+  /* Make Boss 3 servers wide */
+  width: 68px;
+  left: 928px;
+  margin-top: 7px;
+  transform: scale(0.9);
+}
+
 .health-bar {
   position: absolute;
   background-color: red;
   height: 2px;
   top: -4px;
-}
-
-#boss {
-  position: absolute;
-  image-rendering: pixelated;
 }
 
 #score-card {
