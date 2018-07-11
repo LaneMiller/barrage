@@ -13,7 +13,7 @@ class Boss extends Component {
       boss: {
         x: 0,
         y: 0,
-        width: 63,
+        width: 167,
         height: 98,
       }
     }

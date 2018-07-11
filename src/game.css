@@ -149,11 +149,10 @@
   position: absolute;
   image-rendering: pixelated;
   height: 98px;
-  /* Make Boss 3 servers wide */
-  width: 68px;
-  left: 928px;
+  width: 167px;
+  left: 877px;
   margin-top: 7px;
-  transform: scale(0.9);
+  transform: scale(0.8);
 }
 
 .health-bar {
