@@ -14,7 +14,7 @@ class Pickups extends Component {
 
   componentDidMount() {
     setTimeout(this.spawnGunPickup, 5000);
-    setTimeout(this.spawnPickup, 6000)
+    setTimeout(this.spawnPickup, 7000)
   }
   shouldComponentUpdate(nextProps) {
     return (this.props.pickups !== nextProps.pickups);
@@ -46,7 +46,7 @@ class Pickups extends Component {
     ]
     const i = Math.floor(Math.random() * (guns.length))
 
-    this.props.dispatch( updateLevelPickups([...this.props.pickups, <GunPickup pickupId={this.pickupId++} key={this.pickupId} derenderPickup={this.derenderPickup} pickupGun={this.getPickup} {...guns[i]} x={x} y={y} />]) )
+    this.props.dispatch( updateLevelPickups([...this.props.pickups, <GunPickup key={this.pickupId++} pickupId={this.pickupId} derenderPickup={this.derenderPickup} pickupGun={this.getPickup} {...guns[i]} x={x} y={y} />]) )
 
     const delay = this.randomIntInRange(1, 2) * 10000
     setTimeout(this.spawnGunPickup, delay);
@@ -77,7 +77,6 @@ class Pickups extends Component {
     this.props.dispatch(
       updateLevelPickups([...this.props.pickups, pickup])
     )
-
 
     const delay = this.randomIntInRange(1, 2) * 10000
     setTimeout(this.spawnPickup, delay);

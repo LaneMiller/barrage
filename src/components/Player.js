@@ -60,6 +60,9 @@ class Player extends React.Component {
       );
       this.props.dispatch( updatePlayerLevelStatus('active') );
     } else {
+      if (this.keyState['/']) {
+        console.log("NOW");
+      }
       //determine direction rotation and speed
       if (this.keyState['w']) {
         this.props.dispatch(updatePlayerWalking(true))
