@@ -49,7 +49,7 @@ class Game extends Component {
       return (
         <ScoreCard />
       )
-    } else if (Object.keys(this.props.level.enemies).length === 0 && this.props.currentLevel === 4) {
+    } else if (Object.keys(this.props.level.enemies).length === 0 && this.props.currentLevel === 3) {
       return (
         <div id='win-screen'>
           <h1>You Win!</h1>

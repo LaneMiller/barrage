@@ -50,14 +50,14 @@ const levelSelect = {
       14: {mobId: 14, rotation: 0, ...enemyTypes.purple},
     }
   },
-  4: {
-    levelId: 4,
-    bounds: {top: 25, bottom: 192, left: 758, right: 1145},
-    pickups: [],
-    enemies: {
-     1: {mobId: 1, rotation: 0, ...enemyTypes.boss}
-    }
-  },
+  // 4: {
+  //   levelId: 4,
+  //   bounds: {top: 25, bottom: 192, left: 758, right: 1145},
+  //   pickups: [],
+  //   enemies: {
+  //    1: {mobId: 1, rotation: 0, ...enemyTypes.boss}
+  //   }
+  // },
 }
 
 export default levelSelect;
