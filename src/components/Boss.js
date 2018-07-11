@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { SpriteSheet } from 'react-spritesheet'
-import BossSprite from '../Boss.png'
+import BossSprite from '../MechaBoss.png'
 
 class Boss extends Component {
   state = {
@@ -13,8 +13,8 @@ class Boss extends Component {
       boss: {
         x: 0,
         y: 0,
-        width: 167,
-        height: 98,
+        width: 73,
+        height: 55,
       }
     }
   }

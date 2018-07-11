@@ -150,9 +150,9 @@
   image-rendering: pixelated;
   height: 98px;
   width: 167px;
-  left: 877px;
-  margin-top: 7px;
-  transform: scale(0.8);
+  left: 938px;
+  margin-top: 50px;
+  transform: scale(1.3);
 }
 
 .health-bar {
