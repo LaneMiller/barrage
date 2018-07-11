@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import GunPickup from '../components/GunPickup';
 import HealthPickup from '../components/HealthPickup';
+import PointsPickup from '../components/PointsPickup';
 import { changeAmmoValue, changePlayerGun, updateLevelPickups, updatePlayerValue } from '../actions';
 
 class Pickups extends Component {
@@ -13,7 +14,7 @@ class Pickups extends Component {
 
   componentDidMount() {
     setTimeout(this.spawnGunPickup, 5000);
-    setTimeout(this.spawnHealthPickup, 6000)
+    setTimeout(this.spawnPickup, 6000)
   }
   shouldComponentUpdate(nextProps) {
     return (this.props.pickups !== nextProps.pickups);
@@ -30,14 +31,14 @@ class Pickups extends Component {
     return {adjTop, adjBottom, adjLeft, adjRight};
   }
 
-  randomXY = (min, max) => {
+  randomIntInRange = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
   spawnGunPickup = () => {
     const { adjTop, adjBottom, adjLeft, adjRight } = this.iconOffsets();
-    const x = this.randomXY(adjLeft, adjRight);
-    const y = this.randomXY(adjTop, adjBottom);
+    const x = this.randomIntInRange(adjLeft, adjRight);
+    const y = this.randomIntInRange(adjTop, adjBottom);
 
     const guns = [
       {type: 'shotgun', damage: 10, ammo: 20, rate: 300},
@@ -47,20 +48,39 @@ class Pickups extends Component {
 
     this.props.dispatch( updateLevelPickups([...this.props.pickups, <GunPickup pickupId={this.pickupId++} key={this.pickupId} derenderPickup={this.derenderPickup} pickupGun={this.getPickup} {...guns[i]} x={x} y={y} />]) )
 
-    const delay = Math.floor(Math.random() * 2 + 1) * 10000
+    const delay = this.randomIntInRange(1, 2) * 10000
     setTimeout(this.spawnGunPickup, delay);
   }
 
-  spawnHealthPickup = () => {
+  spawnPickup = () => {
     const { adjTop, adjBottom, adjLeft, adjRight } = this.iconOffsets();
+    const x = this.randomIntInRange(adjLeft, adjRight);
+    const y = this.randomIntInRange(adjTop, adjBottom);
 
-    const x = this.randomXY(adjLeft, adjRight);
-    const y = this.randomXY(adjTop, adjBottom);
+    const i = Math.round(Math.random())
+    let pickup;
 
-    this.props.dispatch( updateLevelPickups([...this.props.pickups, <HealthPickup pickupId={this.pickupId++} key={this.pickupId} derenderPickup={this.derenderPickup} pickupHealth={this.getPickup} healing={10} x={x} y={y} />]) )
+    if (i === 0) {
+      pickup = <HealthPickup key={this.pickupId++}
+          pickupId={this.pickupId}
+          derenderPickup={this.derenderPickup}
+          pickupHealth={this.getPickup}
+          healing={10} x={x} y={y} />
+    } else {
+      pickup = <PointsPickup key={this.pickupId++}
+          pickupId={this.pickupId}
+          derenderPickup={this.derenderPickup}
+          pickupPoints={this.getPickup}
+          points={150} x={x} y={y} />
+    }
 
-    const delay = Math.floor(Math.random() * 3 + 1) * 10000
-    setTimeout(this.spawnHealthPickup, delay);
+    this.props.dispatch(
+      updateLevelPickups([...this.props.pickups, pickup])
+    )
+
+
+    const delay = this.randomIntInRange(1, 2) * 10000
+    setTimeout(this.spawnPickup, delay);
   }
 
   derenderPickup = (id) => {
@@ -70,6 +90,7 @@ class Pickups extends Component {
   }
 
   getPickup = (object, cat) => {
+    const { playerScore } = this.props;
     this.derenderPickup(object.props.pickupId)
 
     if (cat === 'gun') {
@@ -80,14 +101,29 @@ class Pickups extends Component {
       } else {
         this.props.dispatch( changePlayerGun({type, damage, ammo, rate}) );
       }
+      this.props.dispatch(
+        updatePlayerValue({score: playerScore + 25})
+      );
     } else if (cat === 'health') {
       const { healing } = object.props;
+      let health,
+          score = playerScore + 25;
+
       if ((this.props.playerHealth + healing) > 100) {
-        this.props.dispatch( updatePlayerValue({health: 100}) );
+        health = 100;
       } else {
-        this.props.dispatch( updatePlayerValue({health: this.props.playerHealth + healing}) );
+        health = this.props.playerHealth + healing;
       }
-    }
+
+      this.props.dispatch(
+        updatePlayerValue({health, score})
+      );
+    } else if (cat === 'points') {
+      const { points } = object.props;
+      this.props.dispatch(
+        updatePlayerValue({score: playerScore + points})
+      );
+    };
   }
 
  render() {

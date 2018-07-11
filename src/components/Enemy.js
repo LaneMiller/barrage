@@ -149,10 +149,7 @@ class Enemy extends Component {
 
     return (
       <div className="enemy" style={spriteStyle}>
-        {/*
-          <p style={{marginTop:'-20px', position:'absolute'}}>{this.props.health}</p>
-          */}
-          <div className='health-bar' style={healthStyle}></div>
+        <div className='health-bar' style={healthStyle}></div>
         {enemy}
       </div>
     )

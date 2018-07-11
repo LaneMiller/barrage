@@ -8,8 +8,8 @@ class ScoreCard extends Component {
         <h1>Total Score</h1>
         <h3>{this.props.player.score}</h3>
         <h4>Kills: {this.props.player.kills}</h4>
-        <h4>Prizes: {this.props.player.prizes}</h4>
-        <h4>Cash: {this.props.player.cash}</h4>
+        {/* <h4>Prizes: {this.props.player.prizes}</h4>
+        <h4>Cash: {this.props.player.cash}</h4> */}
         <p>CMD + R to play again</p>
       </div>
     )

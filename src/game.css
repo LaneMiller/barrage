@@ -124,7 +124,7 @@
   image-rendering: pixelated;
 }
 
-.health-pickup {
+.pickup {
   position: absolute;
   transform: scale(0.35);
   image-rendering: pixelated;

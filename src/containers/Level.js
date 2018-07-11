@@ -11,7 +11,6 @@ import { updateEnemyPos, updatePlayerLevelStatus, incrementWaveCount } from '../
 class Level extends Component {
   state = {
     doors: null,
-    levelExits: null,
   }
 
   componentDidMount() {
@@ -76,7 +75,7 @@ class Level extends Component {
       };
       i++
     };
-
+    console.log(this.props.wave, waveSize-dead, map, this.props.enemies);
     return map;
   }
 

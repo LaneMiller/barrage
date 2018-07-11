@@ -4,7 +4,7 @@ import { SpriteSheet } from 'react-spritesheet';
 import Pickups from '../Pickups.png'
 import pickupSprites from '../adapters/pickupSpriteConfig'
 
-class HealthPickup extends Component {
+class PointsPickup extends Component {
   componentDidMount() {
     this.interval = setInterval(this.checkCollision, 20);
   }
@@ -19,7 +19,7 @@ class HealthPickup extends Component {
     const yBounds = ((this.props.playerY + 24/2) >= y && this.props.playerY <= (y + 20));
 
     if (xBounds && yBounds) {
-      this.props.pickupHealth(this, 'health');
+      this.props.pickupPoints(this, 'points');
     };
   }
 
@@ -27,7 +27,7 @@ class HealthPickup extends Component {
     const derenderPickup = () => {this.props.derenderPickup(this.props.pickupId)}
     // setTimeout(derenderPickup, 6000)
 
-    return <SpriteSheet  filename={Pickups} data={pickupSprites} sprite={'health'} />
+    return <SpriteSheet  filename={Pickups} data={pickupSprites} sprite={'points'} />
   }
 
   render() {
@@ -53,4 +53,4 @@ const mapStateToProps = (state) => {
   };
 }
 
-export default connect(mapStateToProps)(HealthPickup);
+export default connect(mapStateToProps)(PointsPickup);
