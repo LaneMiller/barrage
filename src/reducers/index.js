@@ -7,7 +7,7 @@ const initialState = {
     bounds: {top: 25, bottom: 192, left: 758, right: 1145},
     exits: [],
     pickups: [],
-    waveSize: Math.floor(8 / 3),
+    waveSize: Math.floor(13 / 3),
     wave: 0,
     killedEnemies: 0,
     enemies: {
@@ -19,6 +19,11 @@ const initialState = {
       6: {mobId: 6, rotation: 0, ...enemyTypes.green},
       7: {mobId: 7, rotation: 45, ...enemyTypes.purple},
       8: {mobId: 8, rotation: 0, ...enemyTypes.purple},
+      9: {mobId: 9, rotation: 0, ...enemyTypes.green},
+      10: {mobId: 10, rotation: 0, ...enemyTypes.green},
+      11: {mobId: 11, rotation: 0, ...enemyTypes.green},
+      12: {mobId: 12, rotation: 0, ...enemyTypes.purple},
+      13: {mobId: 13, rotation: 0, ...enemyTypes.purple},
     }
   },
   player: {
