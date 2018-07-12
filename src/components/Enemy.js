@@ -13,7 +13,6 @@ class Enemy extends Component {
   componentDidMount() {
     // These are seperate so that only collision can be disabled
     // on player respawn.
-    console.log('enemy id', this.props.mobId);
     this.collisionInterval = setInterval(this.checkCollision, 100)
     this.movementInterval = setInterval(this.movementLogic, 100)
     this.deathInterval = setInterval(this.checkIfDead, 50)
