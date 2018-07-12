@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { AnimatedSpriteSheet } from 'react-spritesheet';
 
 import Player from '../components/Player';
 import Enemy from '../components/Enemy';
@@ -7,6 +8,7 @@ import Pickups from './Pickups';
 
 import difficultyAdapter from '../adapters/difficulty';
 import { updateEnemyPos, updatePlayerLevelStatus, incrementWaveCount, removeEnemy } from '../actions';
+import goArrow from '../goArrow.png';
 
 class Level extends Component {
   state = {
@@ -65,6 +67,24 @@ class Level extends Component {
     this.props.dispatch( removeEnemy(remaining) );
   }
 
+  renderGoArrow = () => {
+    if (Object.keys(this.props.enemies).length === 0) {
+      return (
+        <AnimatedSpriteSheet
+            filename={goArrow}
+            initialFrame={0}
+            frame={{ width: 87, height: 35 }}
+            bounds={{ x: 0, y: 0, width: 87, height: 35 }}
+            isPlaying
+            loop
+            speed={300}
+          />
+      )
+    } else {
+      return null;
+    }
+  }
+
   renderEnemies = () => {
     const { waveSize, dead } = this.props;
     const { top, bottom, left, right } = this.props.levelBounds;
@@ -98,6 +118,7 @@ class Level extends Component {
     const Enemies = this.renderEnemies();
     const openDoors = this.state.doors !== null ? this.state.doors : null;
     const levelExits = this.renderExits();
+    const goArrow = this.renderGoArrow();
 
     return (
       <div className='level'>
@@ -106,6 +127,10 @@ class Level extends Component {
         <Pickups />
         <Player />
         {Enemies}
+
+        <div id='go-arrow'>
+          {goArrow}
+        </div>
       </div>
     )
   }

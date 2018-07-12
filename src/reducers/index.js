@@ -28,7 +28,7 @@ const initialState = {
   },
   player: {
     health: 100,
-    lives: 3,
+    lives: 1,
     score: 0,
     kills: 0,
     bonus: 0,

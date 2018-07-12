@@ -77,6 +77,13 @@
   margin-top: 9%;
 }
 
+#go-arrow {
+  position: absolute;
+  margin-top: 75px;
+  margin-left: 1088px;
+  transform: scale(0.5);
+}
+
 .level > img {
   position: absolute;
   left: 856px;
