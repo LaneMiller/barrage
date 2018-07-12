@@ -5,6 +5,13 @@
   src: url('./1980XX.ttf');
 }
 
+@font-face {
+  font-family: 'Harmonic';
+  font-style: normal;
+  font-weight: 1000;
+  src: url('./Harmonic.ttf');
+}
+
 .game {
   font-family: '1980';
   color: white;
@@ -22,6 +29,10 @@
   image-rendering: pixelated;
 }
 
+#title {
+  font-family: 'Harmonic';
+}
+
 #difficulty-screen {
   position: absolute;
   top: 300px;
@@ -33,6 +44,32 @@
   text-align: left;
   margin-left: 280px;
   margin-top: -30px;
+}
+
+#directions {
+  font-size: 75px;
+}
+
+#directions > img {
+  transform: scale(4);
+  image-rendering: pixelated;
+  margin-top: 400px;
+}
+
+#wasd {
+  position: absolute;
+  margin-top: -5%;
+  margin-left: 32.5%;
+}
+
+#arrows {
+  position: absolute;
+  margin-top: -5%;
+  margin-left: 57.5%;
+}
+
+#space {
+  margin-top: 9%;
 }
 
 .level > img {

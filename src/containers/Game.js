@@ -19,17 +19,22 @@ class Game extends Component {
   }
 
   componentDidMount() {
-    window.addEventListener('keydown', this.startGame);
+    window.addEventListener('keydown', this.chooseDifficulty);
   }
-  startGame = (e) => {
+  chooseDifficulty = (e) => {
     this.setState({ status: 'difficulty screen' });
-    window.removeEventListener('keydown', this.startGame);
+    window.removeEventListener('keydown', this.chooseDifficulty);
   }
   updateDifficulty = (difficulty) => {
     this.setState({ difficulty });
   }
   setDifficulty = () => {
+    window.addEventListener('keydown', this.startGame);
+    this.setState({ status: 'directions' });
+  }
+  startGame = () => {
     this.setState({ status: 'game' });
+    window.removeEventListener('keydown', this.startGame);
   }
 
   renderGameState = () => {
@@ -37,13 +42,22 @@ class Game extends Component {
     if (this.state.status === 'title') {
       return (
         <div className="title-screen" style={{position: 'absolute', top: '300px', left: '39%'}}>
-          <h1 style={{fontSize: '160px'}}>Barrage</h1>
+          <h1 id='title' style={{fontSize: '200px'}}>BARRAGE</h1>
           <p style={{fontSize: '60px'}}>press any key to start</p>
         </div>
       )
     } else if (this.state.status === 'difficulty screen') {
       return (
         <DifficultyScreen updateDifficulty={this.updateDifficulty} setDifficulty={this.setDifficulty} difficulty={this.state.difficulty}/>
+      )
+    } else if (this.state.status === 'directions') {
+      return (
+        <div id='directions'>
+          <img src={require('../Directions.png')} />
+          <h1 id='wasd'>Move</h1>
+          <h1 id='arrows'>Aim</h1>
+          <h1 id='space'>Fire!</h1>
+        </div>
       )
     } else if (health <= 0 && lives === 0) {
       return (

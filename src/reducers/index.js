@@ -31,8 +31,7 @@ const initialState = {
     lives: 3,
     score: 0,
     kills: 0,
-    cash: 0,
-    prizes: 0,
+    bonus: 0,
     gun: {type: 'pistol', damage: 5, rate: 300},
     positioning: {
       x: 952,

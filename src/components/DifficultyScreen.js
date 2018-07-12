@@ -21,6 +21,7 @@ class DifficultyScreen extends Component {
       this.props.updateDifficulty(choices[i-1])
     } else if (e.key === 'Enter') {
       this.props.setDifficulty()
+      window.removeEventListener("keydown", this.selectDifficulty)
     }
   }
 

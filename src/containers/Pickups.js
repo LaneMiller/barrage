@@ -89,7 +89,7 @@ class Pickups extends Component {
   }
 
   getPickup = (object, cat) => {
-    const { playerScore } = this.props;
+    const { playerScore, playerBonus } = this.props;
     this.derenderPickup(object.props.pickupId)
 
     if (cat === 'gun') {
@@ -101,12 +101,13 @@ class Pickups extends Component {
         this.props.dispatch( changePlayerGun({type, damage, ammo, rate}) );
       }
       this.props.dispatch(
-        updatePlayerValue({score: playerScore + 25})
+        updatePlayerValue({score: playerScore + 25, bonus: playerBonus + 25})
       );
     } else if (cat === 'health') {
       const { healing } = object.props;
       let health,
-          score = playerScore + 25;
+          score = playerScore + 25,
+          bonus = playerBonus + 25;
 
       if ((this.props.playerHealth + healing) > 100) {
         health = 100;
@@ -115,12 +116,12 @@ class Pickups extends Component {
       }
 
       this.props.dispatch(
-        updatePlayerValue({health, score})
+        updatePlayerValue({health, score, bonus})
       );
     } else if (cat === 'points') {
       const { points } = object.props;
       this.props.dispatch(
-        updatePlayerValue({score: playerScore + points})
+        updatePlayerValue({score: playerScore + points, bonus: playerBonus + points})
       );
     };
   }
@@ -141,6 +142,7 @@ const mapStateToProps = (state) => {
     pickups: state.level.pickups,
     playerHealth: state.player.health,
     playerScore: state.player.score,
+    playerBonus: state.player.bonus,
     gun: state.player.gun,
     levelBounds: state.level.bounds,
   }
