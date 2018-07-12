@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 
 import Player from '../components/Player';
 import Enemy from '../components/Enemy';
-import Pickups from './Pickups'
+import Pickups from './Pickups';
 
-import difficultyAdapter from '../adapters/difficulty'
-import { updateEnemyPos, updatePlayerLevelStatus, incrementWaveCount } from '../actions'
+import difficultyAdapter from '../adapters/difficulty';
+import { updateEnemyPos, updatePlayerLevelStatus, incrementWaveCount, removeEnemy } from '../actions';
 
 class Level extends Component {
   state = {
@@ -59,6 +59,12 @@ class Level extends Component {
     }
   }
 
+  removeEnemy = (id) => {
+    const remaining = {...this.props.enemies};
+    delete remaining[id];
+    this.props.dispatch( removeEnemy(remaining) );
+  }
+
   renderEnemies = () => {
     const { waveSize, dead } = this.props;
     const { top, bottom, left, right } = this.props.levelBounds;
@@ -67,15 +73,15 @@ class Level extends Component {
     let i = 0;
     for (let key in this.props.enemies) {
       if (this.props.wave === 1 && i < waveSize - dead) {
-        map.push(<Enemy key={key} {...this.props.enemies[key]} />)
+        map.push(<Enemy key={key} removeEnemy={this.removeEnemy} {...this.props.enemies[key]} />)
       } else if (this.props.wave === 2 && i < (waveSize*2 - dead)) {
-        map.push(<Enemy key={key} {...this.props.enemies[key]} />)
+        map.push(<Enemy key={key} removeEnemy={this.removeEnemy} {...this.props.enemies[key]} />)
       } else if (this.props.wave > 2) {
-        map.push(<Enemy key={key} {...this.props.enemies[key]} />)
+        map.push(<Enemy key={key} removeEnemy={this.removeEnemy} {...this.props.enemies[key]} />)
       };
       i++
     };
-    console.log(this.props.wave, waveSize-dead, map, this.props.enemies);
+
     return map;
   }
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { damageEnemy, removeEnemy, increaseKillScore } from '../actions';
+import { damageEnemy } from '../actions';
 
 class Bullet extends Component {
   componentDidMount() {
@@ -38,16 +38,8 @@ class Bullet extends Component {
         this.props.removeBullet(this.props.bulletKey);
         const newHealth = enemy.health - this.props.gun.damage;
         this.props.dispatch(
-          damageEnemy( {[enemy.mobId]: {...enemy, health: newHealth}} )
+          damageEnemy( {[key]: {...enemy, health: newHealth}} )
         );
-        if (newHealth <= 0) {
-          const remaining = {...this.props.enemies};
-          delete remaining[enemy.mobId];
-          this.props.dispatch( removeEnemy(remaining) );
-          this.props.dispatch(
-            increaseKillScore(enemy.points)
-          );
-        };
       };
     };
   }

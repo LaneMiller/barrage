@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { damagePlayer, updatePlayerValue, updateEnemyPos } from '../actions'
+import { damagePlayer, updatePlayerValue, updateEnemyPos, increaseKillScore } from '../actions'
 import {SpriteSheet, AnimatedSpriteSheet} from 'react-spritesheet'
 import Zombie_Anim from '../Zombie_Anim.png'
 import Zombie_Anim_Purple from '../Zombie_Anim_Purple.png'
@@ -13,12 +13,15 @@ class Enemy extends Component {
   componentDidMount() {
     // These are seperate so that only collision can be disabled
     // on player respawn.
+    console.log('enemy id', this.props.mobId);
     this.collisionInterval = setInterval(this.checkCollision, 100)
     this.movementInterval = setInterval(this.movementLogic, 100)
+    this.deathInterval = setInterval(this.checkIfDead, 50)
   }
   componentWillUnmount() {
     clearInterval(this.collisionInterval);
     clearInterval(this.movementInterval);
+    clearInterval(this.deathInterval);
   }
   componentDidUpdate(prevProps) {
     if (prevProps.playerLives !== this.props.playerLives) {
@@ -124,6 +127,15 @@ class Enemy extends Component {
     this.props.dispatch( updateEnemyPos({[this.props.mobId]: {...this.props, x, y, rotation}}) );
   }
 
+  checkIfDead = () => {
+    if (this.props.health <= 0) {
+      this.props.removeEnemy(this.props.mobId);
+      this.props.dispatch(
+        increaseKillScore(this.props.points)
+      );
+    }
+  }
+
   renderEnemy = () => {
     let zed_anim;
     if (this.props.type === 'green') {
@@ -166,6 +178,7 @@ class Enemy extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    enemies: state.level.enemies,
     levelBounds: state.level.bounds,
     playerHealth: state.player.health,
     playerLives: state.player.lives,

@@ -29,6 +29,11 @@
   image-rendering: pixelated;
 }
 
+.title-screen {
+  margin-top: -80px;
+  margin-left: -110px;
+}
+
 #title {
   font-family: 'Harmonic';
 }
@@ -53,7 +58,7 @@
 #directions > img {
   transform: scale(4);
   image-rendering: pixelated;
-  margin-top: 400px;
+  margin-top: 430px;
 }
 
 #wasd {

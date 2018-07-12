@@ -25,7 +25,7 @@ class HealthPickup extends Component {
 
   renderPickup = () => {
     const derenderPickup = () => {this.props.derenderPickup(this.props.pickupId)}
-    // setTimeout(derenderPickup, 6000)
+    setTimeout(derenderPickup, 6000)
 
     return <SpriteSheet  filename={Pickups} data={pickupSprites} sprite={'health'} />
   }
