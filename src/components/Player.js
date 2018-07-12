@@ -6,6 +6,9 @@ import { updatePlayerPos, updatePlayerWalking, changeAmmoValue, changePlayerGun,
 import Bullet from './Bullet';
 import levelSelect from '../dependencies/levelSelect';
 
+var XboxController = require('xbox-controller');
+var xbox = new XboxController;
+
 class Player extends React.Component {
   constructor(props) {
     super(props)
@@ -60,9 +63,9 @@ class Player extends React.Component {
       );
       this.props.dispatch( updatePlayerLevelStatus('active') );
     } else {
-      if (this.keyState['/']) {
-        console.log("NOW");
-      }
+      xbox.on('left:move', function(position){
+        console.log(position);
+      });
       //determine direction rotation and speed
       if (this.keyState['w']) {
         this.props.dispatch(updatePlayerWalking(true))
