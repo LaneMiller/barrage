@@ -65,7 +65,7 @@ class Pickups extends Component {
           pickupId={this.pickupId}
           derenderPickup={this.derenderPickup}
           pickupHealth={this.getPickup}
-          healing={10} x={x} y={y} />
+          healing={15} x={x} y={y} />
     } else {
       pickup = <PointsPickup key={this.pickupId++}
           pickupId={this.pickupId}
