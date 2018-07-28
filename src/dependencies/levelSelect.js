@@ -20,7 +20,7 @@ const levelSelect = {
       8: {mobId: 8, rotation: 0, ...enemyTypes.green},
       9: {mobId: 9, rotation: 0, ...enemyTypes.purple},
       10: {mobId: 10, rotation: 0, ...enemyTypes.green},
-      11: {mobId: 11, rotation: 0, ...enemyTypes.purple},
+      11: {mobId: 11, rotation: 0, ...enemyTypes.green},
       12: {mobId: 12, rotation: 0, ...enemyTypes.purple},
       13: {mobId: 13, rotation: 0, ...enemyTypes.purple},
       14: {mobId: 14, rotation: 0, ...enemyTypes.purple},
