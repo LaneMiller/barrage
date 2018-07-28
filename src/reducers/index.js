@@ -2,30 +2,30 @@ import enemyTypes from '../dependencies/enemyTypes'
 
 const initialState = {
   currentLevel: 1,
-  level: {
-    levelId: 1,
-    bounds: {top: 25, bottom: 192, left: 758, right: 1145},
-    exits: [],
-    pickups: [],
-    waveSize: Math.floor(13 / 3),
-    wave: 0,
-    killedEnemies: 0,
-    enemies: {
-      1: {mobId: 1, rotation: 0, ...enemyTypes.green},
-      2: {mobId: 2, rotation: 90, ...enemyTypes.green},
-      3: {mobId: 3, rotation: 315, ...enemyTypes.green},
-      4: {mobId: 4, rotation: 180, ...enemyTypes.green},
-      5: {mobId: 5, rotation: 270, ...enemyTypes.purple},
-      6: {mobId: 6, rotation: 0, ...enemyTypes.green},
-      7: {mobId: 7, rotation: 45, ...enemyTypes.purple},
-      8: {mobId: 8, rotation: 0, ...enemyTypes.purple},
-      9: {mobId: 9, rotation: 0, ...enemyTypes.green},
-      10: {mobId: 10, rotation: 0, ...enemyTypes.green},
-      11: {mobId: 11, rotation: 0, ...enemyTypes.green},
-      12: {mobId: 12, rotation: 0, ...enemyTypes.purple},
-      13: {mobId: 13, rotation: 0, ...enemyTypes.purple},
-    }
-  },
+  // level: {
+  //   levelId: 1,
+  //   bounds: {top: 25, bottom: 192, left: 758, right: 1145},
+  //   exits: [],
+  //   pickups: [],
+  //   waveSize: Math.floor(13 / 3),
+  //   wave: 0,
+  //   killedEnemies: 0,
+  //   enemies: {
+  //     1: {mobId: 1, rotation: 0, ...enemyTypes.green},
+  //     2: {mobId: 2, rotation: 90, ...enemyTypes.green},
+  //     3: {mobId: 3, rotation: 315, ...enemyTypes.green},
+  //     4: {mobId: 4, rotation: 180, ...enemyTypes.green},
+  //     5: {mobId: 5, rotation: 270, ...enemyTypes.purple},
+  //     6: {mobId: 6, rotation: 0, ...enemyTypes.green},
+  //     7: {mobId: 7, rotation: 45, ...enemyTypes.purple},
+  //     8: {mobId: 8, rotation: 0, ...enemyTypes.purple},
+  //     9: {mobId: 9, rotation: 0, ...enemyTypes.green},
+  //     10: {mobId: 10, rotation: 0, ...enemyTypes.green},
+  //     11: {mobId: 11, rotation: 0, ...enemyTypes.green},
+  //     12: {mobId: 12, rotation: 0, ...enemyTypes.purple},
+  //     13: {mobId: 13, rotation: 0, ...enemyTypes.purple},
+  //   }
+  // },
   player: {
     health: 100,
     lives: 1,
@@ -48,6 +48,9 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'SET_LEVEL':
+      return {...state, level: action.payload}
+
     case 'UPDATE_PLAYER_POS':
       return {...state, player:{...state.player, positioning:{...state.player.positioning, ...action.payload}}};
 
@@ -93,7 +96,6 @@ const reducer = (state = initialState, action) => {
     case 'READY_NEXT_LEVEL':
       return {...state,
         currentLevel: action.payload.levelId,
-        level: action.payload.level,
         player: {...state.player,
           positioning: {...state.player.positioning,
             x: action.payload.startingX,

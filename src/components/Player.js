@@ -4,7 +4,7 @@ import Walk_Anim from "../Walk_Anim_bright.png";
 import { connect } from 'react-redux';
 import { updatePlayerPos, updatePlayerWalking, changeAmmoValue, changePlayerGun, readyNextLevel, updatePlayerLevelStatus } from '../actions';
 import Bullet from './Bullet';
-import levelSelect from '../dependencies/levelSelect';
+// import levelSelect from '../dependencies/levelSelect';
 
 class Player extends React.Component {
   constructor(props) {
@@ -56,7 +56,7 @@ class Player extends React.Component {
 
     if (oldX >= 1184) {
       this.props.dispatch(
-        readyNextLevel({levelId: this.props.levelId + 1, level: {...levelSelect[this.props.levelId + 1]}, startingX: 753, startingY: 111})
+        readyNextLevel({levelId: this.props.levelId + 1, startingX: 753, startingY: 111})
       );
       this.props.dispatch( updatePlayerLevelStatus('active') );
     } else {

@@ -7,8 +7,11 @@ import Level from './Level';
 import ScoreCard from '../components/ScoreCard';
 import HealthBar from '../HealthBar.png';
 import DifficultyScreen from '../components/DifficultyScreen';
+// Actions
+import { setLevel } from '../actions'
 // Styling and Assets
 import '../game.css';
+import enemyTypes from '../dependencies/enemyTypes'
 import Gun_Icons from '../Gun_Icons.png';
 import gunSprites from '../adapters/gunSpriteConfig';
 
@@ -20,6 +23,7 @@ class Game extends Component {
 
   componentDidMount() {
     window.addEventListener('keydown', this.chooseDifficulty);
+    this.fetchLevel()
   }
   chooseDifficulty = (e) => {
     this.setState({ status: 'difficulty screen' });
@@ -35,6 +39,34 @@ class Game extends Component {
   startGame = () => {
     this.setState({ status: 'game' });
     window.removeEventListener('keydown', this.startGame);
+  }
+  componentDidUpdate(prevProps) {
+    if (this.props.currentLevel !== prevProps.currentLevel) {
+      this.fetchLevel()
+    }
+  }
+
+  fetchLevel = () => {
+      fetch(`http://localhost:3000/api/v1/levels/${this.props.currentLevel}`).then(res => res.json()).then(this.setLevel);
+  }
+
+  setLevel = (data) => {
+    const level = {
+      levelId: data.id,
+      bounds: {top: data.top_bound, bottom: data.bottom_bound, left: data.left_bound, right: data.right_bound},
+      exits: [],
+      pickups: [],
+      waveSize: data.wave_size,
+      wave: 0,
+      killedEnemies: 0,
+      enemies: {}
+    }
+
+    for (let e of data.enemies) {
+      level.enemies[e.id] = {mobId: e.id, ...enemyTypes[e.enemy_type]}
+    }
+
+    this.props.dispatch( setLevel(level) )
   }
 
   renderGameState = () => {

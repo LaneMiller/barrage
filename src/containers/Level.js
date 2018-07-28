@@ -56,7 +56,7 @@ class Level extends Component {
       const spawnXY = this.randomSpawnPoints();
 
       this.props.dispatch( updateEnemyPos({
-        [key]: {...this.props.enemies[key], x: spawnXY[0], y: spawnXY[1]}
+        [key]: {...this.props.enemies[key], x: spawnXY[0], y: spawnXY[1], rotation: 0}
       }) );
     }
   }

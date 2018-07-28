@@ -1,3 +1,7 @@
+export function setLevel(levelData) {
+  return {type: 'SET_LEVEL', payload: levelData};
+}
+
 export function updatePlayerPos(pos) {
   return {type: 'UPDATE_PLAYER_POS', payload: pos};
 }
@@ -54,6 +58,6 @@ export function incrementWaveCount() {
   return {type: 'INCREMENT_WAVE'}
 }
 
-export function readyNextLevel({levelId, level, startingX, startingY}) {
-  return {type: 'READY_NEXT_LEVEL', payload: {levelId, level, startingX, startingY}}
+export function readyNextLevel({levelId, startingX, startingY}) {
+  return {type: 'READY_NEXT_LEVEL', payload: {levelId, startingX, startingY}}
 }
