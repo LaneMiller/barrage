@@ -8,6 +8,7 @@ import Pickups from './Pickups';
 
 import difficultyAdapter from '../adapters/difficulty';
 import { updateEnemyPos, updatePlayerLevelStatus, incrementWaveCount, removeEnemy } from '../actions';
+import tilemapAdapter from '../adapters/tilemaps';
 import goArrow from '../goArrow.png';
 
 class Level extends Component {
@@ -33,8 +34,10 @@ class Level extends Component {
   incrementWave = () => {
     if (this.props.wave < 3) {
       this.props.dispatch( incrementWaveCount() );
+      
+      const openDoorsFile = tilemapAdapter[this.props.levelId].open;
       this.setState({
-        doors: <img src={require("../openLevelMinimal.png")}/>
+        doors: <img src={require(`../${openDoorsFile}`)}/>
       });
 
       setTimeout(this.closeDoors, 1000);

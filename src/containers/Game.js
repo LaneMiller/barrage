@@ -9,6 +9,7 @@ import HealthBar from '../HealthBar.png';
 import DifficultyScreen from '../components/DifficultyScreen';
 // Styling and Assets
 import '../game.css';
+import tilemapAdapter from '../adapters/tilemaps';
 import Gun_Icons from '../Gun_Icons.png';
 import gunSprites from '../adapters/gunSpriteConfig';
 
@@ -72,14 +73,15 @@ class Game extends Component {
       )
     } else {
       const { currentLevel } = this.props;
-      const tileMap = currentLevel !== 4 ? <img src={require(`../level${currentLevel}.png`)}/> : <img src={require("../bossLevel.png")}/>
+      const tilemapFile = tilemapAdapter[currentLevel].tilemap;
+      const tilemap = currentLevel !== 4 ? <img src={require(`../${tilemapFile}`)}/> : <img src={require("../bossLevel.png")}/>
       const healthBar = 87 * (health/100);
       const currentGun = this.renderCurrentGun();
       const ammoCount = this.props.player.gun.ammo ? <p id='ammo-count'>Ammo: {this.props.player.gun.ammo}</p> : null;
 
       return (
         <React.Fragment>
-          {tileMap} // use adapter for tileMap selection
+          {tilemap} // use adapter for tilemap selection
 
           <div className='game-items'>
             <h1 id="score">Score: {score}</h1>
