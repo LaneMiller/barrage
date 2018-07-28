@@ -43,11 +43,16 @@ class Game extends Component {
   componentDidUpdate(prevProps) {
     if (this.props.currentLevel !== prevProps.currentLevel) {
       this.fetchLevel()
+      //this.autosave()
     }
   }
 
   fetchLevel = () => {
       fetch(`http://localhost:3000/api/v1/levels/${this.props.currentLevel}`).then(res => res.json()).then(this.setLevel);
+  }
+
+  autosave = () => {
+    // fetch(`http://localhost:3000/api/v1/users`, )
   }
 
   setLevel = (data) => {
