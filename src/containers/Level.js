@@ -34,7 +34,7 @@ class Level extends Component {
   incrementWave = () => {
     if (this.props.wave < 3) {
       this.props.dispatch( incrementWaveCount() );
-      
+
       const openDoorsFile = tilemapAdapter[this.props.levelId].open;
       this.setState({
         doors: <img src={require(`../${openDoorsFile}`)}/>
@@ -111,7 +111,8 @@ class Level extends Component {
   renderExits = () => {
     if (Object.keys(this.props.enemies).length === 0) {
       this.props.dispatch( updatePlayerLevelStatus('clear') )
-      return <img src={require("../exitRight.png")}/>
+      const openExitFile = tilemapAdapter[this.props.levelId].exit;
+      return <img src={require(`../${openExitFile}`)}/>
     } else {
       return null;
     }
