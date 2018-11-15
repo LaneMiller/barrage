@@ -25,13 +25,13 @@
   grid-template-columns: 1fr;
   grid-template-rows: 10% auto;
   grid-template-areas: "hud"
-                      "tilemap";
+                      "main-game";
 }
 
 .game > img {
   height: 100%;
   image-rendering: pixelated;
-  grid-area: tilemap;
+  grid-area: main-game;
   place-self: center;
 }
 
@@ -90,6 +90,11 @@
   transform: scale(0.5);
 }
 
+.level {
+  grid-area: main-game;
+  z-index: 1;
+}
+
 .level > img {
   position: absolute;
   left: 856px;
@@ -105,13 +110,13 @@
   image-rendering: pixelated;
 }
 
-.game-items {
+.hud-items {
   /* transform: scale(4); */
   grid-area: hud;
   display: grid;
   grid-template-columns: 2fr 2fr 2fr 1fr 2fr 1fr;
   grid-template-rows: 100%;
-  grid-template-areas: "score . level weapon health lives";
+  grid-template-areas: "score weapon level . health lives";
 }
 
 #score {
@@ -143,9 +148,11 @@
 #current-gun {
   grid-area: weapon;
   margin-top: 1%;
-  /* place-self: stretch; */
-  /* height: 100%;
-  width: 100%; */
+  /* place-self: center; */
+  justify-self: center;
+  /* height: 100%; */
+  /* margin: 0 auto; */
+  width: 50%;
   border: 2px solid hsla(105, 63%, 40%, 0.86);
   border-radius: 2px;
   background-color: black;
@@ -159,7 +166,7 @@
 }
 
 #current-gun div {
-  margin: 10% auto 5% auto;
+  margin: 8% auto 5% auto;
 }
 
 #current-gun-type {
