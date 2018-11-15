@@ -135,17 +135,14 @@
 }
 
 #lives-counter {
-  font-size: 60px;
+  padding-left: 10px;
   grid-area: lives;
-  place-self: center;
-  /* position: absolute;
-  top: -17px;
-  left: 1167px; */
+  place-self: start;
 }
 
 #current-gun {
   grid-area: weapon;
-  margin-top: 1px;
+  margin-top: 1%;
   /* place-self: stretch; */
   /* height: 100%;
   width: 100%; */
@@ -162,7 +159,7 @@
 }
 
 #current-gun div {
-  margin: 0 auto;
+  margin: 10% auto 5% auto;
 }
 
 #current-gun-type {
@@ -171,17 +168,21 @@
   font-size: 33px;
 }
 
-#ammo-count {
-  margin-top: -30px;
-  margin-left: -4px;
-  font-size: 22px;
+.health {
+  grid-area: health;
+  display: grid;
+  grid-template-rows: 5fr 2fr 1fr;
+  grid-template-areas: "." "health-bar" ".";
 }
 
 #player-health {
-  height: 11px;
+  /* height: 11px; */
   image-rendering: pixelated;
-  grid-area: health;
-  place-self: center;
+  grid-area: health-bar;
+  /* place-self: end; */
+  justify-self: end;
+  align-self: center;
+  /* padding-bottom: 1%; */
   /* position: absolute;
   top: -3px;
   left: -11px; */
@@ -189,10 +190,12 @@
 
 #player-health-bar {
   background-color: red;
-  height: 5px;
-  grid-area: health;
-  place-self: center;
-  z-index: 1;
+  margin-right: 3px;
+  /* height: 5px; */
+  /* grid-area: health; */
+  grid-area: health-bar;
+  justify-self: end;
+  align-self: center;
   /* position: absolute;
   margin-top: -10px;
   left: 56%; */

@@ -108,32 +108,34 @@ class Game extends Component {
         </div>
       )
     } else {
+      const hudHeight = document.querySelector(".game").clientHeight * 0.1
       const { currentLevel } = this.props;
-      const tileMap = currentLevel !== 4 ? <img src={require(`../level${currentLevel}.png`)}/> : <img src={require("../bossLevel.png")}/>
       const healthBar = 87 * (health/100);
       const currentGun = this.renderCurrentGun();
-      const ammoCount = this.props.player.gun.ammo ? <p id='ammo-count'>Ammo: {this.props.player.gun.ammo}</p> : <p id='ammo-count'>Ammo: ~</p>;
+      const ammoCount = this.props.player.gun.ammo ? ` x${this.props.player.gun.ammo}` : null;
+      const healthWidth = document.querySelector(".game").clientWidth * 0.195
+      const tileMap = currentLevel !== 4 ? <img src={require(`../level${currentLevel}.png`)}/> : <img src={require("../bossLevel.png")}/>
 
       return (
         <React.Fragment>
           <div className='game-items'>
-            <h1 id="score">Score: {score}</h1>
+            <h1 id="score" style={{fontSize: `${hudHeight}px`}}>Score: {score}</h1>
 
-            <h1 id="level-display"> Level {this.props.currentLevel}</h1>
-
-            <div id="player-health-bar"
-              style={{width: `${healthBar}px`}}>
-              <img id="player-health" src={HealthBar}/>
+            <h1 id="level-display" style={{fontSize: `${hudHeight}px`}}> Level {this.props.currentLevel}</h1>
+            <div className="health">
+              <div id="player-health-bar"
+                style={{height: `${hudHeight/8}px`, width: `${(healthWidth * 0.875)-3}px`}}>
+              </div>
+              <img id="player-health" src={HealthBar} width={`${healthWidth}px`}/>
             </div>
 
-            <div id='lives-counter'>
+            <div id='lives-counter' style={{fontSize: `${hudHeight}px`}}>
               x{this.props.player.lives}
             </div>
 
             <div id='current-gun'>
               {currentGun}
-              <p id='current-gun-type'>{this.props.player.gun.type}</p>
-              {ammoCount}
+              <p id='current-gun-type' style={{fontSize: `${hudHeight/3}px`}}>{this.props.player.gun.type}{ammoCount}</p>
             </div>
 
             <Level

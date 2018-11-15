@@ -91,10 +91,13 @@ class Bullet extends Component {
   }
 
   render() {
-    const xy = this.bulletOffsets();
+    // const xy = this.bulletOffsets();
+    let { x, y, angle } = this.props; //original positions
     const bulletStyle = {
-      marginLeft: `${xy[0]}px`,
-      marginTop: `${xy[1]}px`,
+      // marginLeft: `${xy[0]}px`,
+      // marginTop: `${xy[1]}px`,
+      marginLeft: `${x}px`,
+      marginTop: `${y}px`,
       transform: `rotate(${this.props.angle}deg)`,
     };
     return (

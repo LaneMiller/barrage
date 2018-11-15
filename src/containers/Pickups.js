@@ -23,10 +23,14 @@ class Pickups extends Component {
   iconOffsets = () => {
     const { top, bottom, left, right } = this.props.levelBounds;
 
-    const adjTop = top + 8;
-    const adjBottom = bottom + 5;
-    const adjLeft = left - 20;
-    const adjRight = right - 40;
+    // const adjTop = top + 8;
+    // const adjBottom = bottom + 5;
+    // const adjLeft = left - 20;
+    // const adjRight = right - 40;
+    const adjTop = top;
+    const adjBottom = bottom;
+    const adjLeft = left;
+    const adjRight = right;
 
     return {adjTop, adjBottom, adjLeft, adjRight};
   }
