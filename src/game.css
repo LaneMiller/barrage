@@ -16,17 +16,23 @@
   font-family: '1980';
   color: white;
   width: auto;
-  height: 1080px;
+  height: 100vh;
   background: hsl(0, 1%, 23%);
   overflow-x: hidden;
   overflow-y: hidden;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 10% auto;
+  grid-template-areas: "hud"
+                      "tilemap";
 }
 
 .game > img {
-  position: relative;
-  top: 550px;
-  transform: scale(9);
+  height: 100%;
   image-rendering: pixelated;
+  grid-area: tilemap;
+  place-self: center;
 }
 
 .title-screen {
@@ -100,59 +106,63 @@
 }
 
 .game-items {
-  transform: scale(4);
+  /* transform: scale(4); */
+  grid-area: hud;
+  display: grid;
+  grid-template-columns: 2fr 2fr 2fr 1fr 2fr 1fr;
+  grid-template-rows: 100%;
+  grid-template-areas: "score . level weapon health lives";
 }
 
 #score {
-  position: absolute;
-  font-size: 25px !important;
+  font-size: 70px;
+  grid-area: score;
+  margin: auto;
+  place-self: stretch;
+  /* position: absolute;
   top: -37px;
-  left: 755px;
+  left: 755px; */
 }
 
 #level-display {
-  position: absolute;
-  font-size: 25px !important;
+  /* font-size: 25px !important; */
+  font-size: 70px;
+  grid-area: level;
+  place-self: center;
+  /* position: absolute;
   top: -41px;
-  left: 933px;
-}
-
-#player-health-bar {
-  position: absolute;
-  background-color: red;
-  height: 5px;
-  margin-top: -10px;
-  left: 56%;
+  left: 933px; */
 }
 
 #lives-counter {
-  position: absolute;
-  font-size: 18px !important;
+  font-size: 60px;
+  grid-area: lives;
+  place-self: center;
+  /* position: absolute;
   top: -17px;
-  left: 1167px;
-}
-
-#player-health {
-  position: absolute;
-  top: -3px;
-  left: -11px;
-  height: 11px;
-  image-rendering: pixelated;
+  left: 1167px; */
 }
 
 #current-gun {
-  position: absolute;
-  height: 70px;
-  width: 110px;
+  grid-area: weapon;
+  margin-top: 1px;
+  /* place-self: stretch; */
+  /* height: 100%;
+  width: 100%; */
   border: 2px solid hsla(105, 63%, 40%, 0.86);
   border-radius: 2px;
   background-color: black;
+  /* padding-top: 15px;
+  padding-left: 10px; */
+  /* transform: scale(0.3); */
+  /* image-rendering: pixelated; */
+  /* position: absolute;
   top: -57px;
-  left: 985px;
-  padding-top: 15px;
-  padding-left: 10px;
-  transform: scale(0.3);
-  image-rendering: pixelated;
+  left: 985px; */
+}
+
+#current-gun div {
+  margin: 0 auto;
 }
 
 #current-gun-type {
@@ -165,6 +175,27 @@
   margin-top: -30px;
   margin-left: -4px;
   font-size: 22px;
+}
+
+#player-health {
+  height: 11px;
+  image-rendering: pixelated;
+  grid-area: health;
+  place-self: center;
+  /* position: absolute;
+  top: -3px;
+  left: -11px; */
+}
+
+#player-health-bar {
+  background-color: red;
+  height: 5px;
+  grid-area: health;
+  place-self: center;
+  z-index: 1;
+  /* position: absolute;
+  margin-top: -10px;
+  left: 56%; */
 }
 
 .gun-pickup {

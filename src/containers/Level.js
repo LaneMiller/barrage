@@ -16,11 +16,11 @@ class Level extends Component {
   }
 
   componentDidMount() {
-    const delay = difficultyAdapter[this.props.difficulty];
-    this.spawnRate = setInterval(this.incrementWave, delay);
-
-    this.setSpawnPoints();
-    this.incrementWave();
+    // const delay = difficultyAdapter[this.props.difficulty];
+    // this.spawnRate = setInterval(this.incrementWave, delay);
+    //
+    // this.setSpawnPoints();
+    // this.incrementWave();
   }
   componentWillUnmount() {
     clearInterval(this.spawnRate);

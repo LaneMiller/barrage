@@ -112,12 +112,10 @@ class Game extends Component {
       const tileMap = currentLevel !== 4 ? <img src={require(`../level${currentLevel}.png`)}/> : <img src={require("../bossLevel.png")}/>
       const healthBar = 87 * (health/100);
       const currentGun = this.renderCurrentGun();
-      const ammoCount = this.props.player.gun.ammo ? <p id='ammo-count'>Ammo: {this.props.player.gun.ammo}</p> : null;
+      const ammoCount = this.props.player.gun.ammo ? <p id='ammo-count'>Ammo: {this.props.player.gun.ammo}</p> : <p id='ammo-count'>Ammo: ~</p>;
 
       return (
         <React.Fragment>
-          {tileMap} // use adapter for tileMap selection
-
           <div className='game-items'>
             <h1 id="score">Score: {score}</h1>
 
@@ -144,13 +142,18 @@ class Game extends Component {
               enemies={this.props.level.enemies}
             />
           </div>
+
+          {tileMap}
         </React.Fragment>
       )
     }
   }
 
   renderCurrentGun = () => {
-    return <SpriteSheet  filename={Gun_Icons} data={gunSprites} sprite={this.props.player.gun.type} />
+    return <SpriteSheet filename={Gun_Icons}
+                        data={gunSprites}
+                        sprite={this.props.player.gun.type}
+                        />
   }
 
   render() {
