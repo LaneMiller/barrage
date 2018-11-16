@@ -91,11 +91,16 @@
 }
 
 .level {
+  border: 5px solid red;
   grid-area: main-game;
+  place-self: center;
+  height: 71%;
+  width: 141vh;
   z-index: 1;
 }
 
 .level > img {
+  /* positions doorways */
   position: absolute;
   left: 856px;
   top: 69px;
