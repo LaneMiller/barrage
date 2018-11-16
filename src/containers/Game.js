@@ -58,7 +58,7 @@ class Game extends Component {
   setLevel = (data) => {
     const level = {
       levelId: data.id,
-      bounds: {top: data.top_bound, bottom: data.bottom_bound, left: data.left_bound, right: data.right_bound},
+      // bounds: {top: data.top_bound, bottom: data.bottom_bound, left: data.left_bound, right: data.right_bound},
       exits: [],
       pickups: [],
       waveSize: data.wave_size,

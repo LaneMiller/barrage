@@ -5,6 +5,7 @@ import { AnimatedSpriteSheet } from 'react-spritesheet';
 import Player from '../components/Player';
 import Enemy from '../components/Enemy';
 import Pickups from './Pickups';
+import { setLevel } from '../actions'
 
 import difficultyAdapter from '../adapters/difficulty';
 import { updateEnemyPos, updatePlayerLevelStatus, incrementWaveCount, removeEnemy } from '../actions';
@@ -12,6 +13,12 @@ import goArrow from '../goArrow.png';
 
 class Level extends Component {
   state = {
+    bounds: {
+      top: null,
+      bottom: null,
+      left: null,
+      right: null,
+    },
     doors: null,
   }
 
@@ -21,14 +28,28 @@ class Level extends Component {
     //
     // this.setSpawnPoints();
     // this.incrementWave();
+    this.setBounds();
+    window.addEventListener("resize", this.setBounds);
   }
   componentWillUnmount() {
     clearInterval(this.spawnRate);
+    window.removeEventListener("resize", this.setBounds);
   }
   componentDidUpdate(prevProps) {
     if (this.props.levelId !== prevProps.levelId) {
       this.setSpawnPoints();
     }
+  }
+  setBounds = () => {
+    const playArea = document.querySelector('.level');
+    const bottom = playArea.offsetHeight;
+    const right = playArea.offsetWidth;
+    const bounds = {top: 0, bottom, left: 0, right};
+
+    this.setState({
+      bounds
+    });
+    this.props.dispatch( setLevel({...this.props.level, ...bounds}) )
   }
   incrementWave = () => {
     if (this.props.wave < 3) {
@@ -87,7 +108,8 @@ class Level extends Component {
 
   renderEnemies = () => {
     const { waveSize, dead } = this.props;
-    const { top, bottom, left, right } = this.props.levelBounds;
+    // const { top, bottom, left, right } = this.props.levelBounds;
+    const { top, bottom, left, right } = this.levelBounds || {top: null, bottom: null, left: null, right: null};
     const map = [];
 
     let i = 0;
@@ -119,7 +141,8 @@ class Level extends Component {
     const openDoors = this.state.doors !== null ? this.state.doors : null;
     const levelExits = this.renderExits();
     const goArrow = this.renderGoArrow();
-
+    const levelBounds = this.state.bounds;
+    console.log(levelBounds);
     return (
       <div className='level'>
         {openDoors}
@@ -138,6 +161,7 @@ class Level extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    level: state.level,
     wave: state.level.wave,
     waveSize: state.level.waveSize,
     levelBounds: state.level.bounds,
