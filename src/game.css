@@ -24,6 +24,7 @@
 
 .game > img {
   position: relative;
+  left: 96px;
   top: 550px;
   transform: scale(9);
   image-rendering: pixelated;
