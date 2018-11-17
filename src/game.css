@@ -91,6 +91,7 @@
 }
 
 .level {
+  position: relative;
   border: 1px solid red;
   grid-area: main-game;
   place-self: center;

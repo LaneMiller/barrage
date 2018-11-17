@@ -13,12 +13,6 @@ import goArrow from '../goArrow.png';
 
 class Level extends Component {
   state = {
-    bounds: {
-      top: null,
-      bottom: null,
-      left: null,
-      right: null,
-    },
     doors: null,
   }
 
@@ -46,9 +40,6 @@ class Level extends Component {
     const right = playArea.offsetWidth;
     const bounds = {top: 0, bottom, left: 0, right};
 
-    this.setState({
-      bounds
-    });
     this.props.dispatch( setLevel({...this.props.level, ...bounds}) )
   }
   incrementWave = () => {
@@ -141,7 +132,7 @@ class Level extends Component {
     const openDoors = this.state.doors !== null ? this.state.doors : null;
     const levelExits = this.renderExits();
     const goArrow = this.renderGoArrow();
-    const levelBounds = this.state.bounds;
+    const levelBounds = this.props.levelBounds;
     console.log(levelBounds);
     return (
       <div className='level'>

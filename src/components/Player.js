@@ -296,7 +296,7 @@ class Player extends React.Component {
     const { x, y, rotation, walking } = this.props.positioning
     const spriteStyle = {
               left:`${x}px`,
-              marginTop:`${y}px`,
+              top:`${y}px`,
               transform:`rotate(${rotation}deg)`
             }
     const player = this.renderPlayer()
@@ -304,6 +304,7 @@ class Player extends React.Component {
 
     return (
       <div>
+
         <div className="bullets">
           {bullets}
         </div>
