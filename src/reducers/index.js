@@ -49,6 +49,7 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET_LEVEL':
+      console.log('action.payload', action.payload);
       return {...state, level: action.payload}
 
     case 'UPDATE_PLAYER_POS':

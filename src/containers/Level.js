@@ -40,7 +40,7 @@ class Level extends Component {
     const right = playArea.offsetWidth;
     const bounds = {top: 0, bottom, left: 0, right};
 
-    this.props.dispatch( setLevel({...this.props.level, ...bounds}) )
+    this.props.dispatch( setLevel({...this.props.level, bounds}) );
   }
   incrementWave = () => {
     if (this.props.wave < 3) {
