@@ -188,6 +188,7 @@ class Player extends React.Component {
 
   bulletLogic = () => {
     const { top, bottom, left, right } = this.props.levelBounds
+    console.log(this.props.levelBounds);
 
     for (let key in this.bullets) {
       const bullet = this.bullets[key]

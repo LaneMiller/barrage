@@ -109,7 +109,7 @@
 }
 
 .player {
-  position: absolute;
+  /* position: absolute; */
   height: 24px;
   width: 17px;
   image-rendering: pixelated;
