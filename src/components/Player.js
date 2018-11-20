@@ -188,7 +188,6 @@ class Player extends React.Component {
 
   bulletLogic = () => {
     const { top, bottom, left, right } = this.props.levelBounds
-    console.log(this.props.levelBounds);
 
     for (let key in this.bullets) {
       const bullet = this.bullets[key]
@@ -294,19 +293,24 @@ class Player extends React.Component {
   }
 
   render() {
-    const { x, y, rotation, walking } = this.props.positioning
+    const { x, y, rotation, walking } = this.props.positioning;
+
+    const playAreaWidth = document.querySelector('.level') ? document.querySelector('.level').offsetWidth : 402;
+    const scale = playAreaWidth/402; // Current Width/1:1 width
+    
     const spriteStyle = {
               left:`${x}px`,
               top:`${y}px`,
-              transform:`rotate(${rotation}deg)`
+              height: `24px`,
+              width: `17px`,
+              transform:`rotate(${rotation}deg) scale(${scale})`,
             }
     const player = this.renderPlayer()
     const bullets = this.renderBullets()
 
     return (
-      <div>
-
-        <div className="bullets">
+      <div className="player-container">
+        <div className="bullets" style={{transform: `scale(${scale})`}}>
           {bullets}
         </div>
         <div className="player" style={spriteStyle}>
