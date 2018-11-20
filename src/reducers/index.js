@@ -1,6 +1,10 @@
 import enemyTypes from '../dependencies/enemyTypes'
 
 const initialState = {
+  playArea: {
+    width: 402,
+    height: 183,
+  },
   currentLevel: 1,
   // level: {
   //   levelId: 1,
@@ -34,8 +38,8 @@ const initialState = {
     bonus: 0,
     gun: {type: 'pistol', damage: 5, rate: 300},
     positioning: {
-      x: 952,
-      y: 111,
+      x: 201,
+      y: 91,
       rotation: 0,
       walking: false,
     },
@@ -50,6 +54,9 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET_LEVEL':
       return {...state, level: action.payload}
+
+    case 'SET_PLAY_AREA':
+      return {...state, playArea: action.payload}
 
     case 'UPDATE_PLAYER_POS':
       return {...state, player:{...state.player, positioning:{...state.player.positioning, ...action.payload}}};

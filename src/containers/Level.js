@@ -5,7 +5,7 @@ import { AnimatedSpriteSheet } from 'react-spritesheet';
 import Player from '../components/Player';
 import Enemy from '../components/Enemy';
 import Pickups from './Pickups';
-import { setLevel } from '../actions'
+import { setLevel, setPlayArea } from '../actions'
 
 import difficultyAdapter from '../adapters/difficulty';
 import { updateEnemyPos, updatePlayerLevelStatus, incrementWaveCount, removeEnemy } from '../actions';
@@ -38,18 +38,16 @@ class Level extends Component {
   }
   setBounds = () => {
     const playArea = document.querySelector('.level');
-    const scale = playArea.offsetWidth/402;
-
-    const bottom = playArea.offsetHeight/scale;
-    const left = (playArea.offsetWidth/scale)/4
-    const right = (playArea.offsetWidth/scale);
+    const scale = playArea.offsetHeight/402; // Current Width/1:1 width
+    const bottom = playArea.offsetHeight - (24 * scale); // accomodates for player height at scale
+    const right = playArea.offsetWidth - (24 * scale);
     const bounds = {top: 0, bottom, left: 0, right};
 
-    this.setState({
-      playAreaWidth: playArea.offsetWidth,
-      playAreaHeight: playArea.offsetHeight,
-    })
     this.props.dispatch( setLevel({...this.props.level, bounds}) );
+    this.props.dispatch( setPlayArea({
+      height: playArea.offsetHeight,
+      width: playArea.offsetWidth
+    }) );
   }
   incrementWave = () => {
     if (this.props.wave < 3) {
