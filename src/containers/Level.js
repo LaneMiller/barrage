@@ -137,6 +137,7 @@ class Level extends Component {
     const openDoors = this.state.doors !== null ? this.state.doors : null;
     const levelExits = this.renderExits();
     const goArrow = this.renderGoArrow();
+    const levelBounds = this.props.levelBounds;
 
     return (
       <div className='level'>

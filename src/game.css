@@ -83,6 +83,44 @@
   margin-top: 9%;
 }
 
+#go-arrow {
+  position: absolute;
+  margin-top: 75px;
+  margin-left: 1088px;
+  transform: scale(0.5);
+}
+
+.level {
+  position: relative;
+  border: 1px solid red;
+  grid-area: main-game;
+  place-self: center;
+  height: 71%;
+  width: 141vh;
+  z-index: 1;
+}
+
+.level > img {
+  /* positions doorways */
+  position: absolute;
+  left: 856px;
+  top: 69px;
+  transform: scale(2.25);
+  image-rendering: pixelated;
+}
+
+.player {
+  position: absolute;
+  /* height: 24px;
+  width: 17px; */
+  transform: scale(2);
+  image-rendering: pixelated;
+}
+
+.player > div {
+  /* transform: scale(2); */
+}
+
 .hud-items {
   /* transform: scale(4); */
   grid-area: hud;
