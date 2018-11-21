@@ -13,8 +13,6 @@ import goArrow from '../goArrow.png';
 
 class Level extends Component {
   state = {
-    playAreaHeight: 183,
-    playAreaWidth: 402,
     doors: null,
   }
 
