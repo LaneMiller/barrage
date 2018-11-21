@@ -111,9 +111,14 @@
 
 .player {
   position: absolute;
-  height: 24px;
-  width: 17px;
+  /* height: 24px;
+  width: 17px; */
+  transform: scale(2);
   image-rendering: pixelated;
+}
+
+.player > div {
+  /* transform: scale(2); */
 }
 
 .hud-items {
