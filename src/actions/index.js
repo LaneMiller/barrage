@@ -2,6 +2,10 @@ export function setLevel(levelData) {
   return {type: 'SET_LEVEL', payload: levelData};
 }
 
+export function setPlayArea(dimensions) {
+  return {type: 'SET_PLAY_AREA', payload: dimensions};
+}
+
 export function updatePlayerPos(pos) {
   return {type: 'UPDATE_PLAYER_POS', payload: pos};
 }

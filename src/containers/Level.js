@@ -5,7 +5,7 @@ import { AnimatedSpriteSheet } from 'react-spritesheet';
 import Player from '../components/Player';
 import Enemy from '../components/Enemy';
 import Pickups from './Pickups';
-import { setLevel } from '../actions'
+import { setLevel, setPlayArea } from '../actions'
 
 import difficultyAdapter from '../adapters/difficulty';
 import { updateEnemyPos, updatePlayerLevelStatus, incrementWaveCount, removeEnemy } from '../actions';
@@ -13,6 +13,8 @@ import goArrow from '../goArrow.png';
 
 class Level extends Component {
   state = {
+    playAreaHeight: 183,
+    playAreaWidth: 402,
     doors: null,
   }
 
@@ -36,11 +38,16 @@ class Level extends Component {
   }
   setBounds = () => {
     const playArea = document.querySelector('.level');
-    const bottom = playArea.offsetHeight;
-    const right = playArea.offsetWidth;
+    const scale = playArea.offsetHeight/402; // Current Width/1:1 width
+    const bottom = playArea.offsetHeight - (24 * scale); // accomodates for player height at scale
+    const right = playArea.offsetWidth - (24 * scale);
     const bounds = {top: 0, bottom, left: 0, right};
 
     this.props.dispatch( setLevel({...this.props.level, bounds}) );
+    this.props.dispatch( setPlayArea({
+      height: playArea.offsetHeight,
+      width: playArea.offsetWidth
+    }) );
   }
   incrementWave = () => {
     if (this.props.wave < 3) {
@@ -136,11 +143,13 @@ class Level extends Component {
 
     return (
       <div className='level'>
-        {openDoors}
-        {levelExits}
-        <Pickups />
-        <Player />
-        {Enemies}
+        <div className="game-entities">
+          {openDoors}
+          {levelExits}
+          <Pickups />
+          <Player />
+          {Enemies}
+        </div>
 
         <div id='go-arrow'>
           {goArrow}

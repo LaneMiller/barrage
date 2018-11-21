@@ -48,10 +48,10 @@ class Player extends React.Component {
   }
 
   movementLogic = () => {
-    const { top, bottom, left, right } = this.props.levelBounds
+    const { top, bottom, left, right } = this.props.levelBounds;
     const oldX = this.props.positioning.x,
-          oldY = this.props.positioning.y
-    let { x, y, rotation, walking } = this.props.positioning
+          oldY = this.props.positioning.y;
+    let { x, y, rotation, walking } = this.props.positioning;
     const movespeed = 4;
 
     if (oldX >= 1184) {
@@ -293,19 +293,25 @@ class Player extends React.Component {
   }
 
   render() {
-    const { x, y, rotation, walking } = this.props.positioning
+    const { x, y, rotation, walking } = this.props.positioning;
+
+    const playAreaHeight = this.props.playArea.height;
+    const playAreaWidth = this.props.playArea.width;
+    const scale = playAreaWidth/402; // Current Width/1:1 width
+
     const spriteStyle = {
-              left:`${x}px`,
               top:`${y}px`,
-              transform:`rotate(${rotation}deg)`
+              left:`${x}px`,
+              height: `24px`,
+              width: `17px`,
+              transform:`rotate(${rotation}deg) scale(${scale})`,
             }
     const player = this.renderPlayer()
     const bullets = this.renderBullets()
 
     return (
-      <div>
-
-        <div className="bullets">
+      <div className="player-container">
+        <div className="bullets" style={{transform: `scale(${scale})`}}>
           {bullets}
         </div>
         <div className="player" style={spriteStyle}>
@@ -323,6 +329,7 @@ const mapStateToProps = (state) => {
     gun: state.player.gun,
     positioning: state.player.positioning,
     levelId: state.level.levelId,
+    playArea: state.playArea,
     levelBounds: state.level.bounds,
     levelStatus: state.player.levelStatus,
   }
