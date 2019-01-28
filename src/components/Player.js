@@ -28,6 +28,19 @@ class Player extends React.Component {
     clearInterval(this.bulletInterval);
   }
   componentDidUpdate(prevProps) {
+    if (this.props.levelBounds.bottom !== prevProps.levelBounds.bottom) {
+      // Updates Player position relative to new window size
+      const { x, y } = this.props.positioning;
+
+      const xPercentage = x/prevProps.levelBounds.right;
+      const yPercentage = y/prevProps.levelBounds.bottom;
+
+      const newX = xPercentage * this.props.levelBounds.right;
+      const newY = yPercentage * this.props.levelBounds.bottom;
+
+      this.props.dispatch(updatePlayerPos({x: newX, y: newY}));
+    }
+
     if (this.props.gun.type !== prevProps.gun.type) {
       clearInterval(this.fireInterval);
       this.fireInterval = setInterval(this.fireGun, this.props.gun.rate);

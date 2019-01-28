@@ -36,6 +36,8 @@ class Level extends Component {
   }
   setBounds = () => {
     const playArea = document.querySelector('.level');
+    // console.log(playArea.offsetWidth);
+    // console.log(playArea.offsetHeight);
     const scale = playArea.offsetHeight/402; // Current Width/1:1 width
     const bottom = playArea.offsetHeight - (24 * scale); // accomodates for player height at scale
     const right = playArea.offsetWidth - (24 * scale);

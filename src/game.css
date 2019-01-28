@@ -17,6 +17,7 @@
   color: white;
   width: auto;
   height: 100vh;
+  min-height: 655px;
   background: hsl(0, 1%, 23%);
   overflow-x: hidden;
   overflow-y: hidden;
@@ -97,6 +98,7 @@
   place-self: center;
   height: 71%;
   width: 141vh;
+  min-width: 925px;
   z-index: 1;
 }
 
@@ -110,14 +112,15 @@
 }
 
 .player {
-  position: absolute;
-  /* height: 24px;
-  width: 17px; */
-  transform: scale(2);
-  image-rendering: pixelated;
+  position: relative;
+  height: 48px;
+  width: 34px;
+  /* transform: scale(2);
+  image-rendering: pixelated; */
 }
 
 .player > div {
+  background-size: cover;
   /* transform: scale(2); */
 }
 
