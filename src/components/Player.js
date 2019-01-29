@@ -65,7 +65,7 @@ class Player extends React.Component {
     const oldX = this.props.positioning.x,
           oldY = this.props.positioning.y;
     let { x, y, rotation, walking } = this.props.positioning;
-    const movespeed = 4;
+    const movespeed = 7;
 
     if (oldX >= 1184) {
       this.props.dispatch(
@@ -324,7 +324,7 @@ class Player extends React.Component {
 
     return (
       <div className="player-container">
-        <div className="bullets" style={{transform: `scale(${scale})`}}>
+        <div className="bullets">
           {bullets}
         </div>
         <div className="player" style={spriteStyle}>

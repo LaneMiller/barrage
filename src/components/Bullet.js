@@ -7,11 +7,14 @@ class Bullet extends Component {
     this.interval = setInterval(this.checkCollision, 100);
   }
   componentWillUnmount() {
+    console.log('unmount');
     clearInterval(this.interval);
   }
 
   checkCollision = () => {
-    const { x, y, angle } = this.props;
+    const { /*x, y,*/ angle } = this.props;
+    const [x, y] = this.bulletOffsets();
+    console.log(this.props.enemies, x, y);
     for (let key in this.props.enemies) {
       const enemy = this.props.enemies[key];
       let xBounds, yBounds;
@@ -33,7 +36,7 @@ class Bullet extends Component {
           yBounds = ((y+10) >= (enemy.y+5) && (y+10) <= (enemy.y+5) + enemy.width);
         }
       }
-
+      console.log(xBounds, yBounds);
       if (xBounds && yBounds) {
         this.props.removeBullet(this.props.bulletKey);
         const newHealth = enemy.health - this.props.gun.damage;
@@ -48,62 +51,64 @@ class Bullet extends Component {
     let { x, y, angle } = this.props;
     //downward
     if (angle >= -10 && angle <= 10) {
-      x -= .25;
-      y += 12;
+      x += 6;
+      y += 22;
     }
     //SW-ward
     if (angle >= 35 && angle <= 55) {
-      x -= 8;
-      y += 10;
+      x -= 7;
+      y += 17;
     }
     //leftward
     if (angle >= 80 && angle <= 100) {
-      x -= 10;
+      x -= 13;
       y += 3;
     }
     //NW-ward
     if (angle >= 125 && angle <= 145) {
-      x -= 7;
-      y -= 3;
+      x -= 9;
+      y -= 12;
     }
     //upward
     if (angle >= 170 && angle <= 190) {
-      x -= .25;
-      y -= 6;
+      x += 6;
+      y -= 17;
     }
     //NE-ward
     if (angle >= 215 && angle <= 235) {
-      x += 6;
-      y -= 4;
+      x += 21;
+      y -= 12;
     }
     //rightward
     if (angle >= 260 && angle <= 280) {
-      x += 8;
+      x += 26;
       y += 3;
     }
     //SE-ward
     if (angle >= 305 && angle <= 325) {
-      x += 6;
-      y += 10;
+      x += 22;
+      y += 19;
     }
 
     return [x,y];
   }
 
   render() {
-    // const xy = this.bulletOffsets();
-    let { x, y, angle } = this.props; //original positions
+    const xy = this.bulletOffsets();
+    // let { x, y, angle } = this.props; //original positions
+    const playAreaWidth = this.props.playArea.width;
+    const scale = playAreaWidth/402;
+
     const bulletStyle = {
-      // marginLeft: `${xy[0]}px`,
-      // marginTop: `${xy[1]}px`,
-      marginLeft: `${x}px`,
-      marginTop: `${y}px`,
-      transform: `rotate(${this.props.angle}deg)`,
+      left: `${xy[0]}px`,
+      top: `${xy[1]}px`,
+      transform: `rotate(${this.props.angle}deg) scale(${scale})`,
     };
+
     return (
       <div>
         <div className='bullet' style={bulletStyle}>.</div>
-        <div style={{backgroundColor: 'red', position: 'absolute', marginLeft: `${this.x}px`, marginTop: `${this.y}px`, height: `${this.height}px`, width: `${this.width}px`}}></div>
+        <div style={{backgroundColor: 'red', position: 'absolute', left: `${xy[0]}px`, top: `${xy[1]}px`, height: `${2}px`, width: `${2}px`, transform: `rotate(${this.props.angle}deg) scale(${scale})`}}></div>
       </div>
     );
   }
@@ -113,6 +118,7 @@ const mapStateToProps = (state) => {
   return {
     gun: state.player.gun,
     enemies: state.level.enemies,
+    playArea: state.playArea,
   };
 }
 

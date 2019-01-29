@@ -192,16 +192,16 @@
 .health {
   grid-area: health;
   display: grid;
+  grid-template-columns: 34px auto;
   grid-template-rows: 5fr 2fr 1fr;
-  grid-template-areas: "." "health-bar" ".";
 }
 
 #player-health {
   /* height: 11px; */
   image-rendering: pixelated;
-  grid-area: health-bar;
+  grid-area: 2 / 1 / 2 / 2;
   /* place-self: end; */
-  justify-self: end;
+  /* justify-self: end; */
   align-self: center;
   /* padding-bottom: 1%; */
   /* position: absolute;
@@ -211,11 +211,12 @@
 
 #player-health-bar {
   background-color: red;
-  margin-right: 3px;
+  /* margin-right: 3px; */
+  /* margin-left: 50px; */
   /* height: 5px; */
   /* grid-area: health; */
-  grid-area: health-bar;
-  justify-self: end;
+  grid-area: 2 / 2;
+  /* justify-self: start; */
   align-self: center;
   /* position: absolute;
   margin-top: -10px;
@@ -266,8 +267,8 @@
 
 .bullets {
   font-family: sans-serif;
-  margin-top: -10px;
-  margin-left: 6.5px;
+  /* margin-top: -10px;
+  margin-left: 6.5px; */
 }
 
 .bullet {

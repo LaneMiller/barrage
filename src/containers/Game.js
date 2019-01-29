@@ -48,7 +48,8 @@ class Game extends Component {
   }
 
   fetchLevel = () => {
-      fetch(`http://localhost:3000/api/v1/levels/${this.props.currentLevel}`).then(res => res.json()).then(this.setLevel);
+      fetch(`http://localhost:3000/api/v1/levels/${this.props.currentLevel}`)
+        .then(res => res.json()).then(this.setLevel);
   }
 
   autosave = () => {
@@ -68,10 +69,18 @@ class Game extends Component {
     }
 
     for (let e of data.enemies) {
-      level.enemies[e.id] = {mobId: e.id, ...enemyTypes[e.enemy_type]}
+      const spawnXY = this.randomSpawnPoints();
+
+      level.enemies[e.id] = {mobId: e.id, ...enemyTypes[e.enemy_type], x: spawnXY[0], y: spawnXY[1]}
     }
 
     this.props.dispatch( setLevel(level) )
+  }
+
+  randomSpawnPoints = () => {
+    // top x3, right x3, bottom x3, left x3 (to prevent stacking)
+    let spawnsXY = [[950, 20], [952, 20], [954, 20], [1150, 110], [1150, 112], [1150, 114], [950, 197], [952, 197], [954, 197], [753, 110], [753, 112], [753, 114]]
+    return spawnsXY[Math.floor(Math.random() * spawnsXY.length)];
   }
 
   renderGameState = () => {
@@ -110,10 +119,10 @@ class Game extends Component {
     } else {
       const hudHeight = document.querySelector(".game").clientHeight * 0.1
       const { currentLevel } = this.props;
-      const healthBar = 87 * (health/100);
       const currentGun = this.renderCurrentGun();
       const ammoCount = this.props.player.gun.ammo ? ` x${this.props.player.gun.ammo}` : null;
       const healthWidth = document.querySelector(".game").clientWidth * 0.195
+      const healthBar = (healthWidth * (health/100)) * 0.875 - 3;
       const tileMap = currentLevel !== 4 ? <img src={require(`../level${currentLevel}.png`)}/> : <img src={require("../bossLevel.png")}/>
 
       return (
@@ -124,7 +133,7 @@ class Game extends Component {
             <h1 id="level-display" style={{fontSize: `${hudHeight}px`}}> Level {this.props.currentLevel}</h1>
             <div className="health">
               <div id="player-health-bar"
-                style={{height: `${hudHeight/8}px`, width: `${(healthWidth * 0.875)-3}px`}}>
+                style={{height: `${hudHeight/8}px`, width: `${healthBar}px`}}>
               </div>
               <img id="player-health" src={HealthBar} width={`${healthWidth}px`}/>
             </div>

@@ -123,7 +123,9 @@ class Enemy extends Component {
       }
     }
 
-    this.props.dispatch( updateEnemyPos({[this.props.mobId]: {...this.props, x, y, rotation}}) );
+    this.props.dispatch(
+      updateEnemyPos({[this.props.mobId]: {...this.props, x, y, rotation}})
+    );
   }
 
   checkIfDead = () => {
@@ -157,20 +159,27 @@ class Enemy extends Component {
     const enemy = this.renderEnemy();
     const { height, width, x, y, rotation } = this.props;
     const healthBar = this.props.width * (this.props.health/this.state.maxHealth);
+
+    const playAreaWidth = this.props.playArea.width;
+    const scale = playAreaWidth/402; // Current Width/1:1 width
+
     const healthStyle = { width: `${healthBar}px` };
     const spriteStyle = {
       height: `${height}px`,
       width: `${width}px`,
       left: `${x}px`,
-      marginTop: `${y}px`,
-      transform: `rotate(${rotation}deg)`,
+      top: `${y}px`,
+      transform: `rotate(${rotation}deg) scale(${scale})`,
     };
 
     return (
+      <React.Fragment>
+        <div style={{backgroundColor: 'red', position: 'absolute', ...spriteStyle}}></div>
       <div className="enemy" style={spriteStyle}>
         <div className='health-bar' style={healthStyle}></div>
         {enemy}
       </div>
+      </React.Fragment>
     )
   }
 }
@@ -178,6 +187,7 @@ class Enemy extends Component {
 const mapStateToProps = (state) => {
   return {
     enemies: state.level.enemies,
+    playArea: state.playArea,
     levelBounds: state.level.bounds,
     playerHealth: state.player.health,
     playerLives: state.player.lives,
