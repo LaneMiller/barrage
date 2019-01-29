@@ -15,8 +15,8 @@ class HealthPickup extends Component {
   checkCollision = () => {
     const x = this.props.x;
     const y = this.props.y;
-    const xBounds = ((this.props.playerX + 17/2) >= x && this.props.playerX <= (x + 23));
-    const yBounds = ((this.props.playerY + 24/2) >= y && this.props.playerY <= (y + 20));
+    const xBounds = (this.props.playerX + 17/2 >= x && this.props.playerX + 17/2 <= x + 40);
+    const yBounds = (this.props.playerY + 24/2 >= y && this.props.playerY + 24/2 <= y + 35);
 
     if (xBounds && yBounds) {
       this.props.pickupHealth(this, 'health');
@@ -32,8 +32,8 @@ class HealthPickup extends Component {
 
   render() {
     const spriteStyle = {
-      marginLeft: `${this.props.x}px`,
-      marginTop: `${this.props.y}px`,
+      left: `${this.props.x}px`,
+      top: `${this.props.y}px`,
     }
     const pickup = this.renderPickup();
 

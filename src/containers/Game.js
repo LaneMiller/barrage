@@ -128,7 +128,7 @@ class Game extends Component {
       return (
         <React.Fragment>
           <div className='hud-items'>
-            <h1 id="score" style={{fontSize: `${hudHeight}px`}}>Score: {score}</h1>
+            <h1 id="score" style={{fontSize: `${hudHeight}px`}}>{score} pts</h1>
 
             <h1 id="level-display" style={{fontSize: `${hudHeight}px`}}> Level {this.props.currentLevel}</h1>
             <div className="health">
@@ -149,13 +149,12 @@ class Game extends Component {
 
           </div>
 
+          {tileMap}
           <Level
             difficulty={this.state.difficulty}
             levelId={this.props.level.levelId}
             enemies={this.props.level.enemies}
             />
-
-          {tileMap}
         </React.Fragment>
       )
     }

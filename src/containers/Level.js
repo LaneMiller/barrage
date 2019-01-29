@@ -52,6 +52,8 @@ class Level extends Component {
   incrementWave = () => {
     if (this.props.wave < 3) {
       this.props.dispatch( incrementWaveCount() );
+      const playAreaWidth = this.props.playArea.width;
+      const scale = playAreaWidth/402; // Current Width/1:1 width
       this.setState({
         doors: <img src={require("../openLevelMinimal.png")}/>
       });
@@ -123,8 +125,8 @@ class Level extends Component {
       };
       i++
     };
-    return map[0]
-    // return map;
+    // return map[0]
+    return map;
   }
 
   renderExits = () => {
@@ -144,19 +146,21 @@ class Level extends Component {
     const levelBounds = this.props.levelBounds;
 
     return (
-      <div className='level'>
-        <div className="game-entities">
-          {openDoors}
-          {levelExits}
-          <Pickups />
-          <Player />
-          {Enemies}
-        </div>
+      <React.Fragment>
+        {openDoors}
+        {levelExits}
+        <div className='level'>
+          <div className="game-entities">
+            <Pickups />
+            <Player />
+            {Enemies}
+          </div>
 
-        <div id='go-arrow'>
-          {goArrow}
+          <div id='go-arrow'>
+            {goArrow}
+          </div>
         </div>
-      </div>
+      </React.Fragment>
     )
   }
 }
@@ -166,6 +170,7 @@ const mapStateToProps = (state) => {
     level: state.level,
     wave: state.level.wave,
     waveSize: state.level.waveSize,
+    playArea: state.playArea,
     levelBounds: state.level.bounds,
     dead: state.level.killedEnemies,
   }

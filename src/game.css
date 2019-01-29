@@ -91,37 +91,12 @@
   transform: scale(0.5);
 }
 
-.level {
-  position: relative;
-  border: 1px solid red;
-  grid-area: main-game;
-  place-self: center;
-  height: 71%;
-  width: 141vh;
-  min-width: 925px;
-  z-index: 1;
-}
-
-.level > img {
-  /* positions doorways */
-  position: absolute;
-  left: 856px;
-  top: 69px;
-  transform: scale(2.25);
-  image-rendering: pixelated;
-}
-
 .player {
   position: relative;
-  height: 48px;
-  width: 34px;
+  /* height: 48px;
+  width: 34px; */
   /* transform: scale(2);
   image-rendering: pixelated; */
-}
-
-.player > div {
-  background-size: cover;
-  /* transform: scale(2); */
 }
 
 .hud-items {
@@ -134,9 +109,11 @@
 }
 
 #score {
-  font-size: 70px;
-  grid-area: score;
+  /* font-size: 70px; */
+  /* grid-area: score; */
   margin: auto;
+  /* margin-left: -5px; */
+  /* justify-self: start; */
   place-self: stretch;
   /* position: absolute;
   top: -37px;
@@ -230,7 +207,7 @@
   place-self: center;
   height: 71%;
   width: 141vh;
-  image-rendering: pixelated;
+  min-width: 925px;
   z-index: 1;
 }
 
@@ -238,31 +215,9 @@
   image-rendering: pixelated;
 }
 
-.level > img {
-  /* Update to .game-entities > img */
-  /* positions doorways */
-  position: absolute;
-  left: 856px;
-  top: 69px;
-  transform: scale(2.25);
-  image-rendering: pixelated;
-}
-
 .player-container {
   /* transform: scale(2);
   image-rendering: pixelated; */
-}
-
-.player {
-  position: absolute;
-  /* height: 11.5vh;
-  width: 8vh; */
-  /* transform: scale(2.25);
-  image-rendering: pixelated; */
-}
-
-.player > div {
-  /* background-size: cover; */
 }
 
 .bullets {
@@ -275,7 +230,11 @@
   position: absolute;
 }
 
-.gun-pickup {
+#pickups > div {
+  position: absolute;
+}
+
+/* .gun-pickup {
   position: absolute;
   transform: scale(0.3);
   image-rendering: pixelated;
@@ -285,7 +244,7 @@
   position: absolute;
   transform: scale(0.35);
   image-rendering: pixelated;
-}
+} */
 
 .enemy {
   position: absolute;
@@ -301,9 +260,9 @@
 
 #go-arrow {
   position: absolute;
-  margin-top: 75px;
-  margin-left: 1088px;
-  transform: scale(0.5);
+  top: 0px;
+  right: 10px;
+  transform: scale(2);
 }
 
 #win-screen > h1 {

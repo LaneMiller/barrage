@@ -13,10 +13,10 @@ class GunPickup extends Component {
   }
 
   checkCollision = () => {
-    const x = this.props.x + 35;
-    const y = this.props.y + 7;
-    const xBounds = ((this.props.playerX + 17/2) >= x && this.props.playerX <= (x + 29.4));
-    const yBounds = ((this.props.playerY + 24/2) >= y && this.props.playerY <= (y + 6.6));
+    const x = this.props.x //+ 35;
+    const y = this.props.y //+ 7;
+    const xBounds = (this.props.playerX + 17/2 >= x && this.props.playerX + 17/2 <= x + 98);
+    const yBounds = (this.props.playerY + 24/2 >= y && this.props.playerY + 24/2 <= y + 22);
 
     if (xBounds && yBounds) {
       this.props.pickupGun(this, 'gun');
@@ -31,9 +31,10 @@ class GunPickup extends Component {
   }
 
   render() {
+    console.log(this.props);
     const spriteStyle = {
-      marginLeft: `${this.props.x}px`,
-      marginTop: `${this.props.y}px`,
+      left: `${this.props.x}px`,
+      top: `${this.props.y}px`,
     }
     const pickup = this.renderPickup();
 

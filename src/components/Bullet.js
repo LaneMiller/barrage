@@ -35,7 +35,7 @@ class Bullet extends Component {
           yBounds = ((y+10) >= (enemy.y+5) && (y+10) <= (enemy.y+5) + enemy.width);
         }
       }
-      
+
       if (xBounds && yBounds) {
         this.props.removeBullet(this.props.bulletKey);
         const newHealth = enemy.health - this.props.gun.damage;
@@ -107,7 +107,6 @@ class Bullet extends Component {
     return (
       <div>
         <div className='bullet' style={bulletStyle}>.</div>
-        <div style={{backgroundColor: 'red', position: 'absolute', left: `${xy[0]}px`, top: `${xy[1]}px`, height: `${2}px`, width: `${2}px`, transform: `rotate(${this.props.angle}deg) scale(${scale})`}}></div>
       </div>
     );
   }
