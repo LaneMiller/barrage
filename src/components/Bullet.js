@@ -7,14 +7,13 @@ class Bullet extends Component {
     this.interval = setInterval(this.checkCollision, 100);
   }
   componentWillUnmount() {
-    console.log('unmount');
     clearInterval(this.interval);
   }
 
   checkCollision = () => {
     const { /*x, y,*/ angle } = this.props;
     const [x, y] = this.bulletOffsets();
-    console.log(this.props.enemies, x, y);
+
     for (let key in this.props.enemies) {
       const enemy = this.props.enemies[key];
       let xBounds, yBounds;
@@ -36,7 +35,7 @@ class Bullet extends Component {
           yBounds = ((y+10) >= (enemy.y+5) && (y+10) <= (enemy.y+5) + enemy.width);
         }
       }
-      console.log(xBounds, yBounds);
+      
       if (xBounds && yBounds) {
         this.props.removeBullet(this.props.bulletKey);
         const newHealth = enemy.health - this.props.gun.damage;

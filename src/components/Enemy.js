@@ -162,7 +162,7 @@ class Enemy extends Component {
 
     const playAreaWidth = this.props.playArea.width;
     const scale = playAreaWidth/402; // Current Width/1:1 width
-
+    console.log(rotation);
     const healthStyle = { width: `${healthBar}px` };
     const spriteStyle = {
       height: `${height}px`,
@@ -173,13 +173,10 @@ class Enemy extends Component {
     };
 
     return (
-      <React.Fragment>
-        <div style={{backgroundColor: 'red', position: 'absolute', ...spriteStyle}}></div>
       <div className="enemy" style={spriteStyle}>
         <div className='health-bar' style={healthStyle}></div>
         {enemy}
       </div>
-      </React.Fragment>
     )
   }
 }
