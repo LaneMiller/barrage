@@ -10,8 +10,8 @@ class Player extends React.Component {
   constructor(props) {
     super(props)
     this.keyState = {};
-    this.bullets = {};
-    this.bulletKey = 0;
+    this.bullets = [];
+    this.bulletId = 0;
   }
   componentDidMount() {
     window.addEventListener("keydown", this.handleKeyPress);
@@ -25,7 +25,7 @@ class Player extends React.Component {
     window.removeEventListener("keyup", this.stopKeyPress);
     clearInterval(this.playerLoopInterval);
     clearInterval(this.fireInterval);
-    clearInterval(this.bulletInterval);
+    clearInterval(this.bulletLogicInterval);
   }
   componentDidUpdate(prevProps) {
     if (this.props.levelBounds.bottom !== prevProps.levelBounds.bottom) {
@@ -45,7 +45,7 @@ class Player extends React.Component {
       clearInterval(this.fireInterval);
       this.fireInterval = setInterval(this.fireGun, this.props.gun.rate);
     } else if (this.props.levelId !== prevProps.levelId) {
-      this.bullets = {};
+      this.bullets = [];
     }
   }
 
@@ -177,37 +177,42 @@ class Player extends React.Component {
     const { x, y, rotation } = this.props.positioning;
 
     if (this.keyState[' ']) {
+      if (this.bullets.length >= 30) {
+        this.bullets.length = 30;
+      }
+
       if (this.props.gun.ammo || this.props.gun.ammo === 0) {
         let ammo = this.props.gun.ammo;
         if (ammo > 0) {
           if (this.props.gun.type === 'shotgun') {
             this.shotgun();
           } else {
-            this.bullets[++this.bulletKey] = {bulletKey: this.bulletKey, angle: rotation, x, y};
+            this.bullets.unshift({id: ++this.bulletId, angle: rotation, x, y})
           }
           this.props.dispatch( changeAmmoValue(--ammo) );
         } else {
           this.props.dispatch( changePlayerGun({type: 'pistol', damage: 5, rate: 300}) );
         };
       } else {
-        this.bullets[++this.bulletKey] = {bulletKey: this.bulletKey, angle: rotation, x, y};
+        this.bullets.unshift({id: ++this.bulletId, angle: rotation, x, y})
       };
     };
   }
 
   shotgun = () => {
     const { x, y, rotation } = this.props.positioning;
-    this.bullets[++this.bulletKey] = {bulletKey: this.bulletKey, angle: rotation-10, x, y};
-    this.bullets[++this.bulletKey] = {bulletKey: this.bulletKey, angle: rotation, x, y};
-    this.bullets[++this.bulletKey] = {bulletKey: this.bulletKey, angle: rotation+10, x, y};
+    this.bullets.unshift({id: ++this.bulletId, angle: rotation-10, x, y});
+    this.bullets.unshift({id: ++this.bulletId, angle: rotation, x, y});
+    this.bullets.unshift({id: ++this.bulletId, angle: rotation+10, x, y});
   }
 
   bulletLogic = () => {
     const { top, bottom, left, right } = this.props.levelBounds
+    const outOfBoundsIds = [];
 
-    for (let key in this.bullets) {
-      const bullet = this.bullets[key]
-      const angle = this.bullets[key].angle
+    for (let i in this.bullets) {
+      const bullet = this.bullets[i]
+      const angle = bullet.angle
       const bulletSpeed = 5;
 
       if (angle > 180 && angle < 360) {
@@ -255,17 +260,17 @@ class Player extends React.Component {
       }
 
       // remove out of bounds bullets
-      if (bullet.x < (left-10) || bullet.x > (right+12)) {
-        this.removeBullet(key)
-      }
-      if (bullet.y < (top-10) || bullet.y > (bottom+10)) {
-        this.removeBullet(key)
+      const xBounds = bullet.x < (left-10) || bullet.x > (right+10)
+      const yBounds = bullet.y < (top-10) || bullet.y > (bottom+10)
+      if (xBounds || yBounds) {
+        outOfBoundsIds.push(bullet.id)
       }
     }
+    outOfBoundsIds.forEach(id => this.removeBullet(id))
   }
 
-  removeBullet = (key) => {
-    delete this.bullets[key];
+  removeBullet = (id) => {
+    this.bullets = this.bullets.filter(b => b.id !== id)
   }
 
   renderPlayer = () => {
@@ -296,15 +301,13 @@ class Player extends React.Component {
   }
 
   renderBullets = () => {
-    let bullets = []
-    for (let key in this.bullets) {
-      bullets.push(
-        <Bullet key={key} removeBullet={this.removeBullet} {...this.bullets[key]} />
-      )
-    }
-    if (bullets.length > 30) {
-      bullets.length = 30;
-    }
+    let bullets = this.bullets.map( bullet => (
+      <Bullet key={bullet.id} removeBullet={this.removeBullet} {...bullet} />
+    ))
+
+    // if (bullets.length > 30) {
+    //   bullets.length = 30;
+    // }
     return bullets;
   }
 

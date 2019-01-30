@@ -46,7 +46,7 @@ class Pickups extends Component {
 
     const guns = [
       {type: 'shotgun', damage: 10, ammo: 20, rate: 300},
-      {type: 'particle', damage: 5, ammo: 100, rate: 50},
+      {type: 'particle', damage: 5, ammo: 100, rate: 100},
     ]
     const i = Math.floor(Math.random() * (guns.length))
 

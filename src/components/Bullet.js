@@ -37,7 +37,7 @@ class Bullet extends Component {
       }
 
       if (xBounds && yBounds) {
-        this.props.removeBullet(this.props.bulletKey);
+        this.props.removeBullet(this.props.id);
         const newHealth = enemy.health - this.props.gun.damage;
         this.props.dispatch(
           damageEnemy( {[key]: {...enemy, health: newHealth}} )
