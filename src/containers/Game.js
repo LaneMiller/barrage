@@ -22,8 +22,12 @@ class Game extends Component {
   }
 
   componentDidMount() {
+    if (window.screen.availHeight < 700) {
+      alert("It seems that your screen resolution is too low.\nIn order to play, try zooming out in your browser or increasing your monitor's resolution.")
+    }
+
     window.addEventListener('keydown', this.chooseDifficulty);
-    this.fetchLevel()
+    this.fetchLevel();
   }
   chooseDifficulty = (e) => {
     this.setState({ status: 'difficulty screen' });
@@ -85,7 +89,7 @@ class Game extends Component {
     const { health, lives, score } = this.props.player
     if (this.state.status === 'title') {
       return (
-        <div className="title-screen" style={{position: 'absolute', top: '300px', left: '39%'}}>
+        <div className="title-screen">
           <h1 id='title' style={{fontSize: '200px'}}>BARRAGE</h1>
           <p style={{fontSize: '60px'}}>press any key to start</p>
         </div>
@@ -97,10 +101,7 @@ class Game extends Component {
     } else if (this.state.status === 'directions') {
       return (
         <div id='directions'>
-          <img src={require('../Directions.png')} />
-          <h1 id='wasd'>Move</h1>
-          <h1 id='arrows'>Aim</h1>
-          <h1 id='space'>Fire!</h1>
+          <img src={require('../directions.png')} />
         </div>
       )
     } else if (health <= 0 && lives === 0) {
@@ -109,10 +110,10 @@ class Game extends Component {
       )
     } else if (this.state.status === 'win') {
       return (
-        <div id='win-screen'>
-          <h1>You Win!</h1>
+        <React.Fragment>
+          <h1 className='win-header'>You Win!</h1>
           <ScoreCard />
-        </div>
+        </React.Fragment>
       )
     } else {
       const hudHeight = document.querySelector(".game").clientHeight * 0.1
