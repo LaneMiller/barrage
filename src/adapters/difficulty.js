@@ -1,6 +1,6 @@
 const difficultyAdapter = {
-  Easy: 10000,
-  Medium: 8000,
-  Hard: 5000,
+  Easy: 8000,
+  Medium: 5000,
+  Hard: 3000,
 }
  export default difficultyAdapter;

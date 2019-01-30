@@ -57,9 +57,10 @@ class Game extends Component {
   }
 
   setLevel = (data) => {
+    const bounds = this.props.level ? this.props.level.bounds : {top: 0, bottom: 900, left: 0, right: 900}
     const level = {
       levelId: data.id,
-      bounds: {top: 0, bottom: 900, left: 0, right: 900},
+      bounds: bounds,
       exits: [],
       pickups: [],
       waveSize: data.wave_size,
@@ -69,18 +70,11 @@ class Game extends Component {
     }
 
     for (let e of data.enemies) {
-      const spawnXY = this.randomSpawnPoints();
 
-      level.enemies[e.id] = {mobId: e.id, ...enemyTypes[e.enemy_type], x: spawnXY[0], y: spawnXY[1]}
+      level.enemies[e.id] = {mobId: e.id, ...enemyTypes[e.enemy_type]}
     }
 
     this.props.dispatch( setLevel(level) )
-  }
-
-  randomSpawnPoints = () => {
-    // top x3, right x3, bottom x3, left x3 (to prevent stacking)
-    let spawnsXY = [[950, 20], [952, 20], [954, 20], [1150, 110], [1150, 112], [1150, 114], [950, 197], [952, 197], [954, 197], [753, 110], [753, 112], [753, 114]]
-    return spawnsXY[Math.floor(Math.random() * spawnsXY.length)];
   }
 
   renderGameState = () => {
@@ -109,7 +103,7 @@ class Game extends Component {
       return (
         <ScoreCard />
       )
-    } else if (Object.keys(this.props.level.enemies).length === 0 && this.props.currentLevel === 3) {
+    } else if (Object.keys(this.props.level.enemies).length === 0 && this.props.level.id === 3) {
       return (
         <div id='win-screen'>
           <h1>You Win!</h1>

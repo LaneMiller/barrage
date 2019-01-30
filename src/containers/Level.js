@@ -5,7 +5,7 @@ import { AnimatedSpriteSheet } from 'react-spritesheet';
 import Player from '../components/Player';
 import Enemy from '../components/Enemy';
 import Pickups from './Pickups';
-import { setLevel, setPlayArea } from '../actions'
+import { setLevel, setPlayArea, setEntrances } from '../actions'
 
 import difficultyAdapter from '../adapters/difficulty';
 import { updateEnemyPos, updatePlayerLevelStatus, incrementWaveCount, removeEnemy } from '../actions';
@@ -18,42 +18,61 @@ class Level extends Component {
 
   componentDidMount() {
     const delay = difficultyAdapter[this.props.difficulty];
+    const entrances = this.updateBounds();
+    this.setSpawnPoints(entrances);
     this.spawnRate = setInterval(this.incrementWave, delay);
 
-    // this.setSpawnPoints();
-    this.incrementWave();
-    this.setBounds();
-    window.addEventListener("resize", this.setBounds);
+    // this.incrementWave();
+    window.addEventListener("resize", this.updateBounds);
   }
   componentWillUnmount() {
     clearInterval(this.spawnRate);
-    window.removeEventListener("resize", this.setBounds);
+    window.removeEventListener("resize", this.updateBounds);
   }
-  // componentDidUpdate(prevProps) {
-  //   if (this.props.levelId !== prevProps.levelId) {
-  //     this.setSpawnPoints();
-  //   }
-  // }
-  setBounds = () => {
+  componentDidUpdate(prevProps) {
+    if (this.props.levelId !== prevProps.levelId) {
+      // this.updateBounds();
+      this.setSpawnPoints(this.props.entrances);
+    }
+  }
+  updateBounds = () => {
+    const playArea = this.setPlayArea();
+    const bounds = this.setBounds(playArea);
+    const entryPoints = this.setEntrances(bounds);
+    //return entrances for enemy spawn point generation
+    return entryPoints;
+  }
+  setPlayArea = () => {
     const playArea = document.querySelector('.level');
-    // console.log(playArea.offsetWidth);
-    // console.log(playArea.offsetHeight);
+    this.props.dispatch( setPlayArea({
+      height: playArea.offsetHeight,
+      width: playArea.offsetWidth
+    }) );
+    return playArea;
+  }
+  setBounds = (playArea) => {
     const scale = playArea.offsetHeight/402; // Current Width/1:1 width
     const bottom = playArea.offsetHeight - (24 * scale); // accomodates for player height at scale
     const right = playArea.offsetWidth - (24 * scale);
     const bounds = {top: 0, bottom, left: 0, right};
 
     this.props.dispatch( setLevel({...this.props.level, bounds}) );
-    this.props.dispatch( setPlayArea({
-      height: playArea.offsetHeight,
-      width: playArea.offsetWidth
-    }) );
+    return bounds;
+  }
+  setEntrances = (bounds) => {
+    const entryPoints = {
+      top: [bounds.right/2, -1],
+      left: [-1, bounds.bottom/2],
+      bottom: [bounds.right/2, bounds.bottom+1],
+      right: [bounds.right+1, bounds.bottom/2],
+    }
+
+    this.props.dispatch( setEntrances(entryPoints) );
+    return entryPoints;
   }
   incrementWave = () => {
     if (this.props.wave < 3) {
       this.props.dispatch( incrementWaveCount() );
-      const playAreaWidth = this.props.playArea.width;
-      const scale = playAreaWidth/402; // Current Width/1:1 width
       this.setState({
         doors: <img src={require("../openLevelMinimal.png")}/>
       });
@@ -65,22 +84,28 @@ class Level extends Component {
     this.setState({ doors: null })
   }
 
-  // randomSpawnPoints = () => {
-  //   // top x3, right x3, bottom x3, left x3 (to prevent stacking)
-  //   let spawnsXY = [[950, 20], [952, 20], [954, 20], [1150, 110], [1150, 112], [1150, 114], [950, 197], [952, 197], [954, 197], [753, 110], [753, 112], [753, 114]]
-  //   return spawnsXY[Math.floor(Math.random() * spawnsXY.length)];
-  // }
-  //
-  // setSpawnPoints = () => {
-  //   for (let key in this.props.enemies) {
-  //     // set inital location for enemies
-  //     const spawnXY = this.randomSpawnPoints();
-  //
-  //     this.props.dispatch( updateEnemyPos({
-  //       [key]: {...this.props.enemies[key], x: spawnXY[0], y: spawnXY[1], rotation: 0}
-  //     }) );
-  //   }
-  // }
+  randomSpawnPoints = (entrances) => {
+    // top x3, bottom x3, left x3, right x3 (to prevent stacking)
+    let spawnsXY = [
+      ...new Array(3).fill(entrances.top),
+      ...new Array(3).fill(entrances.bottom),
+      ...new Array(3).fill(entrances.left),
+      ...new Array(3).fill(entrances.right),
+    ]
+
+    return spawnsXY[Math.floor(Math.random() * spawnsXY.length)];
+  }
+
+  setSpawnPoints = (entrances) => {
+    for (let key in this.props.enemies) {
+      // set inital location for enemies
+      const spawnXY = this.randomSpawnPoints(entrances);
+
+      this.props.dispatch( updateEnemyPos({
+        [key]: {...this.props.enemies[key], x: spawnXY[0], y: spawnXY[1], rotation: 0}
+      }) );
+    }
+  }
 
   removeEnemy = (id) => {
     const remaining = {...this.props.enemies};
@@ -108,10 +133,8 @@ class Level extends Component {
 
   renderEnemies = () => {
     const { waveSize, dead } = this.props;
-    // const { top, bottom, left, right } = this.props.levelBounds;
-    const { top, bottom, left, right } = this.levelBounds || {top: null, bottom: null, left: null, right: null};
-    const map = [];
 
+    const map = [];
     let i = 0;
 
     for (let key in this.props.enemies) {
@@ -125,7 +148,7 @@ class Level extends Component {
       };
       i++
     };
-    // return map[0]
+
     return map;
   }
 
@@ -172,6 +195,7 @@ const mapStateToProps = (state) => {
     waveSize: state.level.waveSize,
     playArea: state.playArea,
     levelBounds: state.level.bounds,
+    entrances: state.entrances,
     dead: state.level.killedEnemies,
   }
 }

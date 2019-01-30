@@ -62,14 +62,17 @@ class Player extends React.Component {
 
   movementLogic = () => {
     const { top, bottom, left, right } = this.props.levelBounds;
+    const entranceXY = this.props.entrances.left;
+    const exitXY = this.props.entrances.right;
+
     const oldX = this.props.positioning.x,
           oldY = this.props.positioning.y;
     let { x, y, rotation, walking } = this.props.positioning;
     const movespeed = 7;
 
-    if (oldX >= 1184) {
+    if (oldX > exitXY[0]) {
       this.props.dispatch(
-        readyNextLevel({levelId: this.props.levelId + 1, startingX: 753, startingY: 111})
+        readyNextLevel({levelId: this.props.levelId + 1, startingX: entranceXY[0], startingY: entranceXY[1]})
       );
       this.props.dispatch( updatePlayerLevelStatus('active') );
     } else {
@@ -105,7 +108,7 @@ class Player extends React.Component {
         this.props.dispatch(updatePlayerWalking(true))
         rotation = 270;
         // Allows player exit on level clear
-        if (oldX >= right && this.props.levelStatus !== 'clear') {
+        if (x + movespeed >= right && this.props.levelStatus !== 'clear') {
           x = right;
         } else {
           x += movespeed;
@@ -113,8 +116,8 @@ class Player extends React.Component {
       }
 
       // Prevents wall clipping on player exit
-      if (x > right && (y < 103 || y > 118)) {
-        y = oldY;
+      if (x > right && (y < exitXY[1] - 20 || y > exitXY[1] + 20)) {
+        // y = oldY;
         x = oldX;
       }
 
@@ -302,7 +305,7 @@ class Player extends React.Component {
     if (bullets.length > 30) {
       bullets.length = 30;
     }
-    return bullets
+    return bullets;
   }
 
   render() {
@@ -343,6 +346,7 @@ const mapStateToProps = (state) => {
     positioning: state.player.positioning,
     levelId: state.level.levelId,
     playArea: state.playArea,
+    entrances: state.entrances,
     levelBounds: state.level.bounds,
     levelStatus: state.player.levelStatus,
   }

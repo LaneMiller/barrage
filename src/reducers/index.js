@@ -5,6 +5,12 @@ const initialState = {
     width: 402,
     height: 183,
   },
+  entrances: {
+    top: [402/2, -1],
+    left: [-1, 183/2],
+    bottom: [402/2, 183+1],
+    right: [402+1, 183/2],
+  },
   currentLevel: 1,
   // level: {
   //   levelId: 1,
@@ -57,6 +63,9 @@ const reducer = (state = initialState, action) => {
 
     case 'SET_PLAY_AREA':
       return {...state, playArea: action.payload}
+
+    case 'SET_ENTRANCES':
+      return {...state, entrances: action.payload}
 
     case 'UPDATE_PLAYER_POS':
       return {...state, player:{...state.player, positioning:{...state.player.positioning, ...action.payload}}};

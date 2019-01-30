@@ -6,6 +6,10 @@ export function setPlayArea(dimensions) {
   return {type: 'SET_PLAY_AREA', payload: dimensions};
 }
 
+export function setEntrances(entryPoints) {
+  return {type: 'SET_ENTRANCES', payload: entryPoints};
+}
+
 export function updatePlayerPos(pos) {
   return {type: 'UPDATE_PLAYER_POS', payload: pos};
 }

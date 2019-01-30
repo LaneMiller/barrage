@@ -23,6 +23,21 @@ class Enemy extends Component {
     clearInterval(this.deathInterval);
   }
   componentDidUpdate(prevProps) {
+    if (this.props.levelBounds.bottom !== prevProps.levelBounds.bottom) {
+      // Updates Enemy position relative to new window size
+      const { mobId, x, y } = this.props;
+
+      const xPercentage = x/prevProps.levelBounds.right;
+      const yPercentage = y/prevProps.levelBounds.bottom;
+
+      const newX = xPercentage * this.props.levelBounds.right;
+      const newY = yPercentage * this.props.levelBounds.bottom;
+
+      this.props.dispatch(
+        updateEnemyPos({[mobId]: {...this.props, x: newX, y: newY}})
+      );
+    }
+
     if (prevProps.playerLives !== this.props.playerLives) {
       clearInterval(this.collisionInterval);
       const restartCollision = () => {
@@ -162,7 +177,7 @@ class Enemy extends Component {
 
     const playAreaWidth = this.props.playArea.width;
     const scale = playAreaWidth/402; // Current Width/1:1 width
-    console.log(rotation);
+
     const healthStyle = { width: `${healthBar}px` };
     const spriteStyle = {
       height: `${height}px`,

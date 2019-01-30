@@ -31,7 +31,6 @@ class GunPickup extends Component {
   }
 
   render() {
-    console.log(this.props);
     const spriteStyle = {
       left: `${this.props.x}px`,
       top: `${this.props.y}px`,
