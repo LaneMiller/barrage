@@ -20,9 +20,8 @@ class Level extends Component {
     const delay = difficultyAdapter[this.props.difficulty];
     const entrances = this.updateBounds();
     this.setSpawnPoints(entrances);
-    this.spawnRate = setInterval(this.incrementWave, delay);
 
-    // this.incrementWave();
+    this.spawnRate = setInterval(this.incrementWave, delay);
     window.addEventListener("resize", this.updateBounds);
   }
   componentWillUnmount() {
@@ -31,7 +30,7 @@ class Level extends Component {
   }
   componentDidUpdate(prevProps) {
     if (this.props.levelId !== prevProps.levelId) {
-      // this.updateBounds();
+      this.setState({ doors: null })
       this.setSpawnPoints(this.props.entrances);
     }
   }
@@ -73,12 +72,15 @@ class Level extends Component {
   incrementWave = () => {
     if (this.props.wave < 3) {
       this.props.dispatch( incrementWaveCount() );
-      this.setState({
-        doors: <img src={require("../openLevelMinimal.png")}/>
-      });
+      this.openDoors();
 
       setTimeout(this.closeDoors, 1000);
     }
+  }
+  openDoors = (exitDoor) => {
+    const doors = exitDoor ? exitDoor : <img src={require("../openLevelMinimal.png")}/>
+
+    this.setState({ doors });
   }
   closeDoors = () => {
     this.setState({ doors: null })
@@ -111,6 +113,11 @@ class Level extends Component {
     const remaining = {...this.props.enemies};
     delete remaining[id];
     this.props.dispatch( removeEnemy(remaining) );
+    // Check if the level is clear and open exits
+    if (Object.keys(this.props.enemies).length === 0) {
+      this.props.dispatch( updatePlayerLevelStatus('clear') )
+      this.openDoors(<img src={require("../exitRight.png")}/>)
+    }
   }
 
   renderGoArrow = () => {
@@ -152,26 +159,15 @@ class Level extends Component {
     return map;
   }
 
-  renderExits = () => {
-    if (Object.keys(this.props.enemies).length === 0) {
-      this.props.dispatch( updatePlayerLevelStatus('clear') )
-      return <img src={require("../exitRight.png")}/>
-    } else {
-      return null;
-    }
-  }
-
   render() {
     const Enemies = this.renderEnemies();
     const openDoors = this.state.doors !== null ? this.state.doors : null;
-    const levelExits = this.renderExits();
     const goArrow = this.renderGoArrow();
     const levelBounds = this.props.levelBounds;
 
     return (
       <React.Fragment>
         {openDoors}
-        {levelExits}
         <div className='level'>
           <div className="game-entities">
             <Pickups />
