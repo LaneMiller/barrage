@@ -42,7 +42,11 @@ class Game extends Component {
   }
   componentDidUpdate(prevProps) {
     if (this.props.currentLevel !== prevProps.currentLevel) {
-      this.fetchLevel()
+      if (this.props.currentLevel === 4) {
+        this.setState({ status: 'win' })
+      } else {
+        this.fetchLevel()
+      }
       //this.autosave()
     }
   }
@@ -103,7 +107,7 @@ class Game extends Component {
       return (
         <ScoreCard />
       )
-    } else if (Object.keys(this.props.level.enemies).length === 0 && this.props.level.id === 3) {
+    } else if (this.state.status === 'win') {
       return (
         <div id='win-screen'>
           <h1>You Win!</h1>

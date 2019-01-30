@@ -70,7 +70,7 @@ class Player extends React.Component {
     let { x, y, rotation, walking } = this.props.positioning;
     const movespeed = 7;
 
-    if (oldX > exitXY[0]) {
+    if (oldX > exitXY[0]+50) {
       this.props.dispatch(
         readyNextLevel({levelId: this.props.levelId + 1, startingX: entranceXY[0], startingY: entranceXY[1]})
       );
