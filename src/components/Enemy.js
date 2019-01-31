@@ -13,31 +13,18 @@ class Enemy extends Component {
   componentDidMount() {
     // These are seperate so that only collision can be disabled
     // on player respawn.
+    window.addEventListener("resize", this.adjustPosition);
     this.collisionInterval = setInterval(this.checkCollision, 100)
     this.movementInterval = setInterval(this.movementLogic, 100)
     this.deathInterval = setInterval(this.checkIfDead, 50)
   }
   componentWillUnmount() {
+    window.removeEventListener("resize", this.adjustPosition);
     clearInterval(this.collisionInterval);
     clearInterval(this.movementInterval);
     clearInterval(this.deathInterval);
   }
   componentDidUpdate(prevProps) {
-    if (this.props.levelBounds.bottom !== prevProps.levelBounds.bottom) {
-      // Updates Enemy position relative to new window size
-      const { mobId, x, y } = this.props;
-
-      const xPercentage = x/prevProps.levelBounds.right;
-      const yPercentage = y/prevProps.levelBounds.bottom;
-
-      const newX = xPercentage * this.props.levelBounds.right;
-      const newY = yPercentage * this.props.levelBounds.bottom;
-
-      this.props.dispatch(
-        updateEnemyPos({[mobId]: {...this.props, x: newX, y: newY}})
-      );
-    }
-
     if (prevProps.playerLives !== this.props.playerLives) {
       clearInterval(this.collisionInterval);
       const restartCollision = () => {
@@ -45,6 +32,21 @@ class Enemy extends Component {
       }
       setTimeout(restartCollision, 1000);
     }
+  }
+
+  adjustPosition = () => {
+    // Updates Enemy position relative to new window size
+    const { mobId, x, y } = this.props;
+
+    const xPercentage = x/prevProps.levelBounds.right;
+    const yPercentage = y/prevProps.levelBounds.bottom;
+
+    const newX = xPercentage * this.props.levelBounds.right;
+    const newY = yPercentage * this.props.levelBounds.bottom;
+
+    this.props.dispatch(
+      updateEnemyPos({[mobId]: {...this.props, x: newX, y: newY}})
+    );
   }
 
   checkCollision = () => {

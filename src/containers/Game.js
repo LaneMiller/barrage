@@ -3,10 +3,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { SpriteSheet } from 'react-spritesheet';
 // Components and Containers
+import TitleScreen from '../components/TitleScreen';
+import DifficultyScreen from '../components/DifficultyScreen';
+import PassphraseForm from '../components/PassphraseForm';
 import Level from './Level';
 import ScoreCard from '../components/ScoreCard';
 import HealthBar from '../HealthBar.png';
-import DifficultyScreen from '../components/DifficultyScreen';
 // Actions
 import { createLevelSelect, setLevel, setPlayer, updatePlayerValue } from '../actions';
 // Styling and Assets
@@ -14,6 +16,7 @@ import '../game.css';
 import enemyTypes from '../dependencies/enemyTypes';
 import Gun_Icons from '../Gun_Icons.png';
 import gunSprites from '../adapters/gunSpriteConfig';
+import fetchAdapter from '../adapters/fetchAdapter'
 
 class Game extends Component {
   state = {

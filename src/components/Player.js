@@ -4,7 +4,7 @@ import Walk_Anim from "../Walk_Anim_bright.png";
 import { connect } from 'react-redux';
 import { updatePlayerPos, updatePlayerWalking, changeAmmoValue, changePlayerGun, readyNextLevel, updatePlayerLevelStatus } from '../actions';
 import Bullet from './Bullet';
-// import levelSelect from '../dependencies/levelSelect';
+import fetchAdapter from '../adapters/fetchAdapter'
 
 class Player extends React.Component {
   constructor(props) {
@@ -14,6 +14,7 @@ class Player extends React.Component {
     this.bulletId = 0;
   }
   componentDidMount() {
+    window.addEventListener("resize", this.adjustPosition);
     window.addEventListener("keydown", this.handleKeyPress);
     window.addEventListener("keyup", this.stopKeyPress);
     this.playerLoopInterval = setInterval(this.movementLogic, 30);
@@ -21,6 +22,7 @@ class Player extends React.Component {
     this.bulletLogicInterval = setInterval(this.bulletLogic, 30);
   }
   componentWillUnmount() {
+    window.removeEventListener("resize", this.adjustPosition);
     window.removeEventListener("keydown", this.handleKeyPress);
     window.removeEventListener("keyup", this.stopKeyPress);
     clearInterval(this.playerLoopInterval);
@@ -28,25 +30,30 @@ class Player extends React.Component {
     clearInterval(this.bulletLogicInterval);
   }
   componentDidUpdate(prevProps) {
-    if (this.props.levelBounds.bottom !== prevProps.levelBounds.bottom) {
-      // Updates Player position relative to new window size
-      const { x, y } = this.props.positioning;
-
-      const xPercentage = x/prevProps.levelBounds.right;
-      const yPercentage = y/prevProps.levelBounds.bottom;
-
-      const newX = xPercentage * this.props.levelBounds.right;
-      const newY = yPercentage * this.props.levelBounds.bottom;
-
-      this.props.dispatch(updatePlayerPos({x: newX, y: newY}));
-    }
-
     if (this.props.gun.type !== prevProps.gun.type) {
       clearInterval(this.fireInterval);
       this.fireInterval = setInterval(this.fireGun, this.props.gun.rate);
     } else if (this.props.levelId !== prevProps.levelId) {
       this.bullets = [];
+      this.autosave();
     }
+  }
+
+  adjustPosition = () => {
+    // Updates Player position relative to new window size
+    const { x, y } = this.props.positioning;
+
+    const xPercentage = x/prevProps.levelBounds.right;
+    const yPercentage = y/prevProps.levelBounds.bottom;
+
+    const newX = xPercentage * this.props.levelBounds.right;
+    const newY = yPercentage * this.props.levelBounds.bottom;
+
+    this.props.dispatch(updatePlayerPos({x: newX, y: newY}));
+  }
+
+  autosave = () => {
+    fetchAdapter.savePlayer(this.props.player, this.props.levelId)
   }
 
   handleKeyPress = (e) => {
@@ -71,8 +78,14 @@ class Player extends React.Component {
     const movespeed = 7;
 
     if (oldX > exitXY[0]+50) {
+      const nextLevelId = this.props.levelId + 1
       this.props.dispatch(
-        readyNextLevel({levelId: this.props.levelId + 1, startingX: entranceXY[0], startingY: entranceXY[1]})
+        readyNextLevel({
+          levelId: nextLevelId,
+          level: {...this.props.levelSelect[nextLevelId]},
+          startingX: entranceXY[0],
+          startingY: entranceXY[1],
+        })
       );
       this.props.dispatch( updatePlayerLevelStatus('active') );
     } else {
@@ -347,6 +360,7 @@ const mapStateToProps = (state) => {
     lives: state.player.lives,
     gun: state.player.gun,
     positioning: state.player.positioning,
+    levelSelect: state.levelSelect,
     levelId: state.level.levelId,
     playArea: state.playArea,
     entrances: state.entrances,
