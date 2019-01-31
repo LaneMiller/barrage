@@ -31,7 +31,7 @@ class Game extends Component {
     }
 
     window.addEventListener('keydown', this.chooseDifficulty);
-    this.fetchLevel();
+    this.fetchLevels();
   }
   createOrLoadPlayer = (choice) => {
     if (choice === 'New Game') {
@@ -132,6 +132,7 @@ class Game extends Component {
     }
 
     this.props.dispatch( createLevelSelect(levelSelect) )
+    this.setLevel();
   }
   setLevel = () => {
     const { levelSelect } = this.props;
@@ -175,7 +176,7 @@ class Game extends Component {
     } else if (this.state.status === 'directions') {
       return (
         <div id='directions'>
-          <img src={require('../directions.png')} />
+          <img src={require('../Directions.png')} />
         </div>
       )
     } else if (health <= 0 && lives === 0) {
@@ -203,7 +204,10 @@ class Game extends Component {
           <div className='hud-items'>
             <h1 id="score" style={{fontSize: `${hudHeight}px`}}>{score} pts</h1>
 
-            <h1 id="level-display" style={{fontSize: `${hudHeight}px`}}> Level {this.props.currentLevel}</h1>
+            <h1 id="level-display"
+              style={{fontSize: `${hudHeight}px`}}>
+              Level {this.props.currentLevel}
+            </h1>
             <div className="health">
               <div id="player-health-bar"
                 style={{height: `${hudHeight/8}px`, width: `${healthBar}px`}}>
@@ -227,7 +231,7 @@ class Game extends Component {
             difficulty={this.state.difficulty}
             levelId={this.props.level.levelId}
             enemies={this.props.level.enemies}
-            />
+          />
         </React.Fragment>
       )
     }

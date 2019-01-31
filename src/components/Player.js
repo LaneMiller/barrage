@@ -37,14 +37,18 @@ class Player extends React.Component {
       this.bullets = [];
       this.autosave();
     }
+
+    if (this.props.levelBounds.bottom !== prevProps.levelBounds.bottom) {
+      this.adjustPosition(prevProps.levelBounds)
+    }
   }
 
-  adjustPosition = () => {
+  adjustPosition = (prevBounds) => {
     // Updates Player position relative to new window size
     const { x, y } = this.props.positioning;
 
-    const xPercentage = x/prevProps.levelBounds.right;
-    const yPercentage = y/prevProps.levelBounds.bottom;
+    const xPercentage = x/prevBounds.right;
+    const yPercentage = y/prevBounds.bottom;
 
     const newX = xPercentage * this.props.levelBounds.right;
     const newY = yPercentage * this.props.levelBounds.bottom;
