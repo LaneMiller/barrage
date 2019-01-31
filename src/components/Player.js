@@ -83,6 +83,7 @@ class Player extends React.Component {
 
     if (oldX > exitXY[0]+50) {
       const nextLevelId = this.props.levelId + 1
+      console.log(this.props.levelSelect[nextLevelId]);
       this.props.dispatch(
         readyNextLevel({
           levelId: nextLevelId,

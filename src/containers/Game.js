@@ -30,11 +30,11 @@ class Game extends Component {
       alert("It seems that your screen resolution is too low.\nIn order to play, try zooming out in your browser or increasing your monitor's resolution.")
     }
 
-    window.addEventListener('keydown', this.chooseDifficulty);
     this.fetchLevels();
   }
   createOrLoadPlayer = (choice) => {
     if (choice === 'New Game') {
+      this.setLevel();
       this.createPlayer();
       this.showPassphrase()
     } else {
@@ -132,7 +132,6 @@ class Game extends Component {
     }
 
     this.props.dispatch( createLevelSelect(levelSelect) )
-    this.setLevel();
   }
   setLevel = () => {
     const { levelSelect } = this.props;
@@ -190,7 +189,7 @@ class Game extends Component {
           <ScoreCard />
         </React.Fragment>
       )
-    } else {
+    } else if (this.state.status === 'game') {
       const hudHeight = document.querySelector(".game").clientHeight * 0.1
       const { currentLevel } = this.props;
       const currentGun = this.renderCurrentGun();
@@ -227,6 +226,7 @@ class Game extends Component {
           </div>
 
           {tileMap}
+          {console.log(this.props.level)}
           <Level
             difficulty={this.state.difficulty}
             levelId={this.props.level.levelId}

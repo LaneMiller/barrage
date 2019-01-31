@@ -74,6 +74,6 @@ export function incrementWaveCount() {
   return {type: 'INCREMENT_WAVE'}
 }
 
-export function readyNextLevel({levelId, startingX, startingY}) {
-  return {type: 'READY_NEXT_LEVEL', payload: {levelId, startingX, startingY}}
+export function readyNextLevel(nextLevelData) {
+  return {type: 'READY_NEXT_LEVEL', payload: nextLevelData}
 }
