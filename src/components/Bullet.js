@@ -4,15 +4,15 @@ import { damageEnemy } from '../actions';
 
 class Bullet extends Component {
   componentDidMount() {
-    this.interval = setInterval(this.checkCollision, 100);
+    this.interval = setInterval(this.checkCollision, 50);
   }
   componentWillUnmount() {
     clearInterval(this.interval);
   }
 
   checkCollision = () => {
-    const { /*x, y,*/ angle } = this.props;
-    const [x, y] = this.bulletOffsets();
+    const { x, y, angle } = this.props;
+    // const [x, y] = this.bulletOffsets();
 
     for (let key in this.props.enemies) {
       const enemy = this.props.enemies[key];
