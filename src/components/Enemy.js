@@ -68,24 +68,31 @@ class Enemy extends Component {
 
   movementLogic = () => {
     const { top, bottom, left, right } = this.props.levelBounds;
-    const { playerX, playerY } = this.props;
-    let x = this.props.x,
-        y = this.props.y,
-        rotation = this.props.rotation;
-    const movespeed = this.props.speed;
 
+    const playerX = Math.floor(this.props.playerX),
+          playerY = Math.floor(this.props.playerY);
+
+    let x = Math.floor(this.props.x),
+        y = Math.floor(this.props.y),
+        rotation = this.props.rotation;
+
+    const movespeed = this.props.speed;
+    // if monster's x !== player's x,
+    // either move towards player at movespeed, or make up difference
     if (x !== playerX) {
+      const difference = Math.abs(x - playerX)
       if (x < playerX) {
-        x += movespeed;
+        x = movespeed < difference ? x + movespeed : x + difference;
       } else {
-        x -= movespeed;
+        x = movespeed < difference ? x - movespeed : x - difference;
       }
     }
     if (y !== playerY) {
+      const difference = Math.abs(y - playerY)
       if (y < playerY) {
-        y += movespeed;
+        y = movespeed < difference ? y + movespeed : y + difference;
       } else {
-        y -= movespeed;
+        y = movespeed < difference ? y - movespeed : y - difference;
       }
     }
 
@@ -100,43 +107,59 @@ class Enemy extends Component {
       y = bottom;
     }
 
+
+    // if moving horizontally
     if (x !== this.props.x) {
+      // if moving right
       if (x > this.props.x) {
         rotation = 270;
+      // if moving left
       } else {
         rotation = 90;
       }
     }
+    // if moving vertically
     if (y !== this.props.y) {
+      // if moving down
       if (y > this.props.y) {
         rotation = 0;
+      // if moving up
       } else {
         rotation = 180;
       }
     }
+
     // determine diagonal rotations
-    if ((x !== this.props.x && y !== this.props.y) && y !== playerY) {
+    // if moving both horizontally && vertically
+    if (x !== this.props.x && y !== this.props.y) {
+      // if moving right && up
       if (x > this.props.x && y < this.props.y) {
         rotation = 225;
       }
-      if (x > this.props.x && y > this.props.y) {
+      // if moving right && down
+      else if (x > this.props.x && y > this.props.y) {
         rotation = 315;
       }
-      if (x < this.props.x && y < this.props.y) {
+      // if moving left && up
+      else if (x < this.props.x && y < this.props.y) {
         rotation = 135;
       }
-      if (x < this.props.x && y > this.props.y) {
+      // if moving left && down
+      else if (x < this.props.x && y > this.props.y) {
         rotation = 45;
       }
     }
 
-    if (Math.abs(this.props.rotation - rotation) === 90) {
-      if (this.props.rotation > rotation) {
-        rotation += 45;
-      } else {
-        rotation -= 45;
-      }
-    }
+    // // if rotation has changed by 90 degrees
+    // if (Math.abs(this.props.rotation - rotation) === 90) {
+    //   // if rotation has over decreased, adjust clockwise
+    //   if (this.props.rotation > rotation) {
+    //     rotation += 45;
+    //   // otherwise adjust counter-cloackwise
+    //   } else {
+    //     rotation -= 45;
+    //   }
+    // }
 
     this.props.dispatch(
       updateEnemyPos({[this.props.mobId]: {...this.props, x, y, rotation}})
