@@ -49,6 +49,7 @@ const initialState = {
       rotation: 0,
       walking: false,
     },
+    level_id: 1,
     levelStatus: 'active',
   },
   enemy: {
@@ -58,14 +59,32 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'CREATE_LEVEL_SELECT':
+      return {...state, levelSelect: action.payload};
+
     case 'SET_LEVEL':
-      return {...state, level: action.payload}
+      return {...state, currentLevel: action.payload.levelId, level: action.payload};
+
+    case 'READY_NEXT_LEVEL':
+      return {...state,
+        currentLevel: action.payload.levelId,
+        level: action.payload.level,
+        player: {...state.player,
+          level_id: action.payload.levelId,
+          positioning: {...state.player.positioning,
+            x: action.payload.startingX,
+            y: action.payload.startingY}
+          }
+        };
 
     case 'SET_PLAY_AREA':
       return {...state, playArea: action.payload}
 
     case 'SET_ENTRANCES':
       return {...state, entrances: action.payload}
+
+    case 'SET_PLAYER':
+      return {...state, player: action.payload};
 
     case 'UPDATE_PLAYER_POS':
       return {...state, player:{...state.player, positioning:{...state.player.positioning, ...action.payload}}};
@@ -108,16 +127,6 @@ const reducer = (state = initialState, action) => {
 
     case 'INCREMENT_WAVE':
       return {...state, level: {...state.level, wave: state.level.wave + 1}}
-
-    case 'READY_NEXT_LEVEL':
-      return {...state,
-        currentLevel: action.payload.levelId,
-        player: {...state.player,
-          positioning: {...state.player.positioning,
-            x: action.payload.startingX,
-            y: action.payload.startingY}
-          }
-        };
 
     default:
       console.log("Returned state, no changes")

@@ -8,10 +8,10 @@ import ScoreCard from '../components/ScoreCard';
 import HealthBar from '../HealthBar.png';
 import DifficultyScreen from '../components/DifficultyScreen';
 // Actions
-import { setLevel } from '../actions'
+import { createLevelSelect, setLevel, setPlayer, updatePlayerValue } from '../actions';
 // Styling and Assets
 import '../game.css';
-import enemyTypes from '../dependencies/enemyTypes'
+import enemyTypes from '../dependencies/enemyTypes';
 import Gun_Icons from '../Gun_Icons.png';
 import gunSprites from '../adapters/gunSpriteConfig';
 
@@ -19,6 +19,7 @@ class Game extends Component {
   state = {
     status: 'title',
     difficulty: 'Easy',
+    errorMsg: null,
   }
 
   componentDidMount() {
@@ -29,16 +30,62 @@ class Game extends Component {
     window.addEventListener('keydown', this.chooseDifficulty);
     this.fetchLevel();
   }
+  createOrLoadPlayer = (choice) => {
+    if (choice === 'New Game') {
+      this.createPlayer();
+      this.showPassphrase()
+    } else {
+      this.loadGameState();
+    }
+  }
+  createPlayer = () => {
+    return fetchAdapter.createPlayer()
+      .then(this.updatePlayer)
+  }
+  loadGameState = () => {
+    this.setState({ status: 'load game' })
+  }
+  loadPlayer = (choice, passphrase) => {
+    if (choice === 'Enter') {
+      const updateDifficultyCB = (player) => {this.updateDifficulty(player.difficulty)}
+
+      fetchAdapter.loadPlayer(passphrase)
+        .then(this.updatePlayer)
+        .then(updateDifficultyCB)
+        .then(this.setDifficulty)
+        .catch(this.handleLoadFailure)
+    } else {
+      this.setState({ status: 'title' })
+    }
+  }
+  handleLoadFailure = (errorMsg) => {
+    this.setState({ errorMsg })
+  }
+  updatePlayer = (playerData) => {
+    this.props.dispatch( setPlayer(playerData) );
+    this.setLevel();
+    return playerData;
+  }
+  showPassphrase = () => {
+    this.setState({ status: 'passphrase screen' })
+    window.addEventListener('keydown', this.chooseDifficulty);
+  }
   chooseDifficulty = (e) => {
     this.setState({ status: 'difficulty screen' });
     window.removeEventListener('keydown', this.chooseDifficulty);
   }
   updateDifficulty = (difficulty) => {
-    this.setState({ difficulty });
+    if (difficulty) {
+      this.setState({ difficulty });
+    }
   }
   setDifficulty = () => {
-    window.addEventListener('keydown', this.startGame);
+    this.props.dispatch(
+      updatePlayerValue({ difficulty: this.state.difficulty })
+    )
+
     this.setState({ status: 'directions' });
+    window.addEventListener('keydown', this.startGame);
   }
   startGame = () => {
     this.setState({ status: 'game' });
@@ -48,55 +95,79 @@ class Game extends Component {
     if (this.props.currentLevel !== prevProps.currentLevel) {
       if (this.props.currentLevel === 4) {
         this.setState({ status: 'win' })
-      } else {
-        this.fetchLevel()
       }
       //this.autosave()
     }
   }
-
-  fetchLevel = () => {
-      fetch(`http://localhost:3000/api/v1/levels/${this.props.currentLevel}`)
-        .then(res => res.json()).then(this.setLevel);
-  }
-
   autosave = () => {
     // fetch(`http://localhost:3000/api/v1/users`, )
   }
 
-  setLevel = (data) => {
-    const bounds = this.props.level ? this.props.level.bounds : {top: 0, bottom: 900, left: 0, right: 900}
-    const level = {
-      levelId: data.id,
-      bounds: bounds,
-      exits: [],
-      pickups: [],
-      waveSize: data.wave_size,
-      wave: 0,
-      killedEnemies: 0,
-      enemies: {}
+  fetchLevels = () => {
+    fetchAdapter.fetchLevels().then(this.createLevelSelect)
+  }
+  createLevelSelect = (levels) => {
+    const levelSelect = {}
+
+    for (let l of levels) {
+      const bounds = this.props.level ? this.props.level.bounds : {top: l.top_bound, bottom: l.bottom_bound, left: l.left_bound, right: l.right_bound}
+
+      levelSelect[l.id] = {
+        levelId: l.id,
+        bounds,
+        exits: [],
+        pickups: [],
+        waveSize: l.wave_size,
+        wave: 0,
+        killedEnemies: 0,
+        enemies: {}
+      }
+
+      for (let e of l.enemies) {
+        levelSelect[l.id].enemies[e.id] = {mobId: e.id, ...enemyTypes[e.enemy_type]}
+      }
     }
 
-    for (let e of data.enemies) {
+    this.props.dispatch( createLevelSelect(levelSelect) )
+  }
+  setLevel = () => {
+    const { levelSelect } = this.props;
+    const currentLevel = this.props.player.level_id ? this.props.player.level_id : this.props.currentLevel;
 
-      level.enemies[e.id] = {mobId: e.id, ...enemyTypes[e.enemy_type]}
-    }
-
-    this.props.dispatch( setLevel(level) )
+    this.props.dispatch( setLevel(levelSelect[currentLevel]) )
   }
 
   renderGameState = () => {
-    const { health, lives, score } = this.props.player
+    const { health, lives, score } = this.props.player;
+
     if (this.state.status === 'title') {
       return (
-        <div className="title-screen">
-          <h1 id='title' style={{fontSize: '200px'}}>BARRAGE</h1>
-          <p style={{fontSize: '60px'}}>press any key to start</p>
-        </div>
+        <TitleScreen
+          createOrLoadPlayer={this.createOrLoadPlayer}
+        />
+      )
+    } else if (this.state.status === 'load game') {
+      return (
+        <React.Fragment>
+          <h1 id='error-message'>{this.state.errorMsg}</h1>
+          <PassphraseForm loadPlayer={this.loadPlayer} errorMsg={this.state.errorMsg}/>
+        </React.Fragment>
       )
     } else if (this.state.status === 'difficulty screen') {
       return (
-        <DifficultyScreen updateDifficulty={this.updateDifficulty} setDifficulty={this.setDifficulty} difficulty={this.state.difficulty}/>
+        <DifficultyScreen
+          updateDifficulty={this.updateDifficulty}
+          setDifficulty={this.setDifficulty}
+          difficulty={this.state.difficulty}
+        />
+      )
+    } else if (this.state.status === 'passphrase screen') {
+      const passphrase = this.props.player.passphrase;
+      return (
+        <div id='passphrase-screen'>
+          <h1>Here's your Password:</h1>
+          <h2>{passphrase}</h2>
+        </div>
       )
     } else if (this.state.status === 'directions') {
       return (
@@ -179,6 +250,7 @@ class Game extends Component {
 const mapStateToProps = (state) => {
   return {
     currentLevel: state.currentLevel,
+    levelSelect: state.levelSelect,
     level: state.level,
     player: state.player,
   }

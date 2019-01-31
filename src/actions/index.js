@@ -1,3 +1,7 @@
+export function createLevelSelect(levelSelect) {
+  return {type: 'CREATE_LEVEL_SELECT', payload: levelSelect};
+}
+
 export function setLevel(levelData) {
   return {type: 'SET_LEVEL', payload: levelData};
 }
@@ -8,6 +12,10 @@ export function setPlayArea(dimensions) {
 
 export function setEntrances(entryPoints) {
   return {type: 'SET_ENTRANCES', payload: entryPoints};
+}
+
+export function setPlayer(playerData) {
+  return {type: 'SET_PLAYER', payload: playerData};
 }
 
 export function updatePlayerPos(pos) {
