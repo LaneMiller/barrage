@@ -78,7 +78,7 @@ class Level extends Component {
     }
   }
   openDoors = (exitDoor) => {
-    const doors = exitDoor ? exitDoor : <img src={require("../openLevelMinimal.png")}/>
+    const doors = exitDoor ? exitDoor : <img src={require(`../openLevel${this.props.levelId}.png`)}/>
 
     this.setState({ doors });
   }
@@ -116,7 +116,7 @@ class Level extends Component {
     // Check if the level is clear and open exits
     if (Object.keys(this.props.enemies).length === 0) {
       this.props.dispatch( updatePlayerLevelStatus('clear') )
-      this.openDoors(<img src={require("../exitRight.png")}/>)
+      this.openDoors(<img src={require(`../exitRight${this.props.levelId}.png`)}/>)
     }
   }
 
