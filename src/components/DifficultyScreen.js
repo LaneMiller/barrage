@@ -26,7 +26,7 @@ class DifficultyScreen extends Component {
   }
 
   renderChoices = () => {
-    const arrow = <img src={Selection_Arrow}/>
+    const arrow = <img alt='choice seletion' src={Selection_Arrow}/>
 
     return this.choices.map(choice => {
       if (choice === this.props.difficulty) {

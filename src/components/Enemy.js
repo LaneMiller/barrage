@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { damagePlayer, updatePlayerValue, updateEnemyPos, increaseKillScore } from '../actions'
-import {SpriteSheet, AnimatedSpriteSheet} from 'react-spritesheet'
+import {AnimatedSpriteSheet} from 'react-spritesheet'
 import Zombie_Anim from '../Zombie_Anim.png'
 import Zombie_Anim_Purple from '../Zombie_Anim_Purple.png'
 

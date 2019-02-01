@@ -160,7 +160,7 @@ class Game extends Component {
     } else if (this.props.status === 'directions') {
       return (
         <div id='directions'>
-          <img src={require('../Directions.png')} />
+          <img alt='game directions' src={require('../Directions.png')} />
         </div>
       )
     } else if (health <= 0 && lives === 0) {
@@ -181,7 +181,7 @@ class Game extends Component {
       const ammoCount = this.props.player.gun.ammo ? ` x${this.props.player.gun.ammo}` : null;
       const healthWidth = document.querySelector(".game").clientWidth * 0.195
       const healthBar = (healthWidth * (health/100)) * 0.875 - 3;
-      const tileMap = currentLevel !== 4 ? <img src={require(`../level${currentLevel}.png`)}/> : <img src={require("../bossLevel.png")}/>
+      const tileMap = currentLevel !== 4 ? <img alt='game tilemap' src={require(`../level${currentLevel}.png`)}/> : <img alt='game tilemap' src={require("../bossLevel.png")}/>
 
       return (
         <React.Fragment>
@@ -196,7 +196,8 @@ class Game extends Component {
               <div id="player-health-bar"
                 style={{height: `${hudHeight/8}px`, width: `${healthBar}px`}}>
               </div>
-              <img id="player-health" src={HealthBar} width={`${healthWidth}px`}/>
+              <img  alt='player health bar' id="player-health"
+                src={HealthBar} width={`${healthWidth}px`}/>
             </div>
 
             <div id='lives-counter' style={{fontSize: `${hudHeight}px`}}>

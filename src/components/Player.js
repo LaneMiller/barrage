@@ -74,7 +74,7 @@ class Player extends React.Component {
 
     const oldX = this.props.positioning.x,
           oldY = this.props.positioning.y;
-    let { x, y, rotation, walking } = this.props.positioning;
+    let { x, y, rotation } = this.props.positioning;
     const movespeed = 7;
 
     if (oldX > exitXY[0]+50) {
@@ -331,9 +331,8 @@ class Player extends React.Component {
   }
 
   render() {
-    const { x, y, rotation, walking } = this.props.positioning;
+    const { x, y, rotation } = this.props.positioning;
 
-    const playAreaHeight = this.props.playArea.height;
     const playAreaWidth = this.props.playArea.width;
     const scale = playAreaWidth/402; // Current Width/1:1 width
 

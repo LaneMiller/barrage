@@ -75,9 +75,6 @@
   font-size: 100px;
   border-radius: 10px;
   outline: none;
-  /* margin-left: 100px;
-  margin-top: -3px;
-  margin-bottom: 50px; */
 }
 
 #difficulty-screen > h1 {
@@ -107,14 +104,9 @@
 
 .player {
   position: relative;
-  /* height: 48px;
-  width: 34px; */
-  /* transform: scale(2);
-  image-rendering: pixelated; */
 }
 
 .hud-items {
-  /* transform: scale(4); */
   grid-area: hud;
   display: grid;
   grid-template-columns: 2fr 2fr 2fr 1fr 2fr 1fr;
@@ -123,25 +115,14 @@
 }
 
 #score {
-  /* font-size: 70px; */
-  /* grid-area: score; */
   margin: auto;
-  /* margin-left: -5px; */
-  /* justify-self: start; */
   place-self: stretch;
-  /* position: absolute;
-  top: -37px;
-  left: 755px; */
 }
 
 #level-display {
-  /* font-size: 25px !important; */
   font-size: 70px;
   grid-area: level;
   place-self: center;
-  /* position: absolute;
-  top: -41px;
-  left: 933px; */
 }
 
 #lives-counter {
@@ -153,21 +134,11 @@
 #current-gun {
   grid-area: weapon;
   margin-top: 1%;
-  /* place-self: center; */
   justify-self: center;
-  /* height: 100%; */
-  /* margin: 0 auto; */
   width: 50%;
   border: 2px solid hsla(105, 63%, 40%, 0.86);
   border-radius: 2px;
   background-color: black;
-  /* padding-top: 15px;
-  padding-left: 10px; */
-  /* transform: scale(0.3); */
-  /* image-rendering: pixelated; */
-  /* position: absolute;
-  top: -57px;
-  left: 985px; */
 }
 
 #current-gun div {
@@ -188,30 +159,15 @@
 }
 
 #player-health {
-  /* height: 11px; */
   image-rendering: pixelated;
   grid-area: 2 / 1 / 2 / 2;
-  /* place-self: end; */
-  /* justify-self: end; */
   align-self: center;
-  /* padding-bottom: 1%; */
-  /* position: absolute;
-  top: -3px;
-  left: -11px; */
 }
 
 #player-health-bar {
   background-color: red;
-  /* margin-right: 3px; */
-  /* margin-left: 50px; */
-  /* height: 5px; */
-  /* grid-area: health; */
   grid-area: 2 / 2;
-  /* justify-self: start; */
   align-self: center;
-  /* position: absolute;
-  margin-top: -10px;
-  left: 56%; */
 }
 
 .level {
@@ -228,15 +184,8 @@
   image-rendering: pixelated;
 }
 
-.player-container {
-  /* transform: scale(2);
-  image-rendering: pixelated; */
-}
-
 .bullets {
   font-family: sans-serif;
-  /* margin-top: -10px;
-  margin-left: 6.5px; */
 }
 
 .bullet {
@@ -246,18 +195,6 @@
 #pickups > div {
   position: absolute;
 }
-
-/* .gun-pickup {
-  position: absolute;
-  transform: scale(0.3);
-  image-rendering: pixelated;
-}
-
-.pickup {
-  position: absolute;
-  transform: scale(0.35);
-  image-rendering: pixelated;
-} */
 
 .enemy {
   position: absolute;

@@ -1,15 +1,17 @@
+// third-party
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { AnimatedSpriteSheet } from 'react-spritesheet';
-
+// components
 import Player from '../components/Player';
 import Enemy from '../components/Enemy';
 import Pickups from './Pickups';
 import { updateLevelSelect, setPlayArea, setEntrances } from '../actions'
-
+// dependencies
 import difficultyAdapter from '../adapters/difficulty';
-import { updateEnemyPos, updatePlayerLevelStatus, incrementWaveCount, removeEnemy } from '../actions';
 import goArrow from '../goArrow.png';
+// redux
+import { updateEnemyPos, updatePlayerLevelStatus, incrementWaveCount, removeEnemy } from '../actions';
 
 class Level extends Component {
   state = {
@@ -88,7 +90,7 @@ class Level extends Component {
     }
   }
   openDoors = (exitDoor) => {
-    const doors = exitDoor ? exitDoor : <img src={require(`../openLevel${this.props.levelId}.png`)}/>
+    const doors = exitDoor ? exitDoor : <img alt='level spawn doors' src={require(`../openLevel${this.props.levelId}.png`)}/>
 
     this.setState({ doors });
   }
@@ -126,7 +128,7 @@ class Level extends Component {
     // Check if the level is clear and open exits
     if (Object.keys(this.props.enemies).length === 0) {
       this.props.dispatch( updatePlayerLevelStatus('clear') )
-      this.openDoors(<img src={require(`../exitRight${this.props.levelId}.png`)}/>)
+      this.openDoors(<img alt ='level exit door' src={require(`../exitRight${this.props.levelId}.png`)}/>)
     }
   }
 
@@ -173,7 +175,6 @@ class Level extends Component {
     const Enemies = this.renderEnemies();
     const openDoors = this.state.doors !== null ? this.state.doors : null;
     const goArrow = this.renderGoArrow();
-    const levelBounds = this.props.levelBounds;
 
     return (
       <React.Fragment>
@@ -201,7 +202,6 @@ const mapStateToProps = (state) => {
     wave: state.level.wave,
     waveSize: state.level.waveSize,
     playArea: state.playArea,
-    levelBounds: state.level.bounds,
     entrances: state.entrances,
     dead: state.level.killedEnemies,
   }

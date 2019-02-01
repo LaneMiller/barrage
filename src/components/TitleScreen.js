@@ -30,7 +30,7 @@ class TitleScreen extends Component {
   }
 
   renderChoices = () => {
-    const arrow = <img src={Selection_Arrow}/>
+    const arrow = <img alt='choice selection' src={Selection_Arrow}/>
 
     return this.choices.map(choice => {
       if (choice === this.state.selected) {
