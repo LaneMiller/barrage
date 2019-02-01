@@ -38,6 +38,50 @@
 
 #title {
   font-family: 'Harmonic';
+  margin-bottom: 100px;
+}
+
+.choice {
+  font-size: 50px;
+}
+
+#passphrase-screen {
+  margin-top: calc(60vh - 300px);
+  font-size: 50px;
+}
+
+#passphrase-screen > h2 {
+  user-select: text;
+  font-size: 110px;
+}
+
+#passphrase-form > h3 {
+  margin-top: calc(60vh - 400px);
+  margin-bottom: 50px;
+  font-size: 80px;
+}
+
+#error-message {
+  height:70px;
+  font-size: 70px;
+  margin: 0px;
+}
+
+#passphrase-input {
+  height: 100px;
+  width: 350px;
+  text-align: center;
+  font-family: '1980';
+  font-size: 100px;
+  border-radius: 10px;
+  outline: none;
+  /* margin-left: 100px;
+  margin-top: -3px;
+  margin-bottom: 50px; */
+}
+
+#difficulty-screen > h1 {
+  margin-top: calc(60vh - 350px);
 }
 
 .difficulty-choice {
@@ -50,25 +94,9 @@
 }
 
 #directions > img {
-  transform: scale(1);
+  transform: scale(1.3);
   image-rendering: pixelated;
 }
-
-/* #wasd {
-  position: absolute;
-  margin-top: -5%;
-  margin-left: 32.5%;
-}
-
-#arrows {
-  position: absolute;
-  margin-top: -5%;
-  margin-left: 57.5%;
-}
-
-#space {
-  margin-top: 9%;
-} */
 
 #go-arrow {
   position: absolute;

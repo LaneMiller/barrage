@@ -56,6 +56,7 @@ class Game extends Component {
         .then(this.setDifficulty)
         .catch(this.handleLoadFailure)
     } else {
+      this.setState({ errorMsg: null })
       this.props.dispatch( changeGameStatus('title') )
     }
   }
@@ -100,8 +101,8 @@ class Game extends Component {
     const levelSelect = {}
 
     for (let l of levels) {
-      levelSelect[l.id] = {
-        levelId: l.id,
+      levelSelect[l.level_id] = {
+        levelId: l.level_id,
         bounds: {top: 0, bottom: 1000, left: 0, right: 1000},
         exits: [],
         pickups: [],
@@ -112,7 +113,7 @@ class Game extends Component {
       }
 
       for (let e of l.enemies) {
-        levelSelect[l.id].enemies[e.id] = {mobId: e.id, ...enemyTypes[e.enemy_type]}
+        levelSelect[l.level_id].enemies[e.id] = {mobId: e.id, ...enemyTypes[e.enemy_type]}
       }
     }
 
@@ -137,7 +138,6 @@ class Game extends Component {
     } else if (this.props.status === 'load game') {
       return (
         <React.Fragment>
-          <h1 id='error-message'>{this.state.errorMsg}</h1>
           <PassphraseForm loadPlayer={this.loadPlayer} errorMsg={this.state.errorMsg}/>
         </React.Fragment>
       )

@@ -44,9 +44,9 @@ class PassphraseForm extends Component {
 
     return this.choices.map(choice => {
       if (choice === this.state.selected) {
-        return <h4 key={choice} className='load-choice'>{arrow}{choice}</h4>
+        return <h4 key={choice} className='choice'>{arrow}{choice}</h4>
       } else {
-        return <h4 key={choice} className='load-choice'>{choice}</h4>
+        return <h4 key={choice} className='choice'>{choice}</h4>
       }
     })
   }
@@ -56,10 +56,14 @@ class PassphraseForm extends Component {
 
     return (
       <div id='passphrase-form'>
+        <p id='error-message'>{this.props.errorMsg}</p>
         <h3>Enter Password:</h3>
-        <input id='passphrase-input' type='text'
-          autoFocus spellCheck='false'
-          value={this.state.input} onChange={this.updateInput}/>
+
+        <form autocomplete="off" onSubmit={e => e.preventDefault()}>
+          <input id='passphrase-input' type='text'
+            autoFocus spellCheck='false'
+            value={this.state.input} onChange={this.updateInput}/>
+        </form>
         { choices }
       </div>
     )

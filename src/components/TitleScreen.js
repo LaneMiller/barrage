@@ -34,9 +34,9 @@ class TitleScreen extends Component {
 
     return this.choices.map(choice => {
       if (choice === this.state.selected) {
-        return <h4 key={choice} className='title-choice'>{arrow}{choice}</h4>
+        return <p key={choice} className='choice'>{arrow}{choice}</p>
       } else {
-        return <h4 key={choice} className='title-choice'>{choice}</h4>
+        return <p key={choice} className='choice'>{choice}</p>
       }
     })
   }
