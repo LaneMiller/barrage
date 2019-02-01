@@ -51,7 +51,6 @@ const fetchAdapter = {
     })
       .then(res => res.json())
       .then(this.formatPlayer)
-      .then(()=>{console.log('autosave successful');})
   },
 
   formatPlayer: function (data) {
@@ -63,8 +62,8 @@ const fetchAdapter = {
         bonus: 0,
         gun: {type: 'pistol', damage: 5, rate: 300},
         positioning: {
-          x: 952,
-          y: 111,
+          x: 505,
+          y: 500,
           rotation: 0,
           walking: false,
         },

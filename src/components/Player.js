@@ -2,7 +2,7 @@ import React from 'react';
 import {SpriteSheet, AnimatedSpriteSheet} from 'react-spritesheet';
 import Walk_Anim from "../Walk_Anim_bright.png";
 import { connect } from 'react-redux';
-import { updatePlayerPos, updatePlayerWalking, changeAmmoValue, changePlayerGun, readyNextLevel, updatePlayerLevelStatus } from '../actions';
+import { changeGameStatus, updatePlayerPos, updatePlayerWalking, changeAmmoValue, changePlayerGun, readyNextLevel, updatePlayerLevelStatus } from '../actions';
 import Bullet from './Bullet';
 import fetchAdapter from '../adapters/fetchAdapter'
 
@@ -39,21 +39,17 @@ class Player extends React.Component {
     }
 
     if (this.props.levelBounds.bottom !== prevProps.levelBounds.bottom) {
-      this.adjustPosition(prevProps.levelBounds)
+      // Updates Player position relative to new window size
+      const { x, y } = this.props.positioning;
+
+      const xPercentage = x/prevProps.levelBounds.right;
+      const yPercentage = y/prevProps.levelBounds.bottom;
+
+      const newX = xPercentage * this.props.levelBounds.right;
+      const newY = yPercentage * this.props.levelBounds.bottom;
+
+      this.props.dispatch(updatePlayerPos({x: newX, y: newY}));
     }
-  }
-
-  adjustPosition = (prevBounds) => {
-    // Updates Player position relative to new window size
-    const { x, y } = this.props.positioning;
-
-    const xPercentage = x/prevBounds.right;
-    const yPercentage = y/prevBounds.bottom;
-
-    const newX = xPercentage * this.props.levelBounds.right;
-    const newY = yPercentage * this.props.levelBounds.bottom;
-
-    this.props.dispatch(updatePlayerPos({x: newX, y: newY}));
   }
 
   autosave = () => {
@@ -83,16 +79,20 @@ class Player extends React.Component {
 
     if (oldX > exitXY[0]+50) {
       const nextLevelId = this.props.levelId + 1
-      console.log(this.props.levelSelect[nextLevelId]);
-      this.props.dispatch(
-        readyNextLevel({
-          levelId: nextLevelId,
-          level: {...this.props.levelSelect[nextLevelId]},
-          startingX: entranceXY[0],
-          startingY: entranceXY[1],
-        })
-      );
-      this.props.dispatch( updatePlayerLevelStatus('active') );
+
+      if (!this.props.levelSelect[nextLevelId]) {
+        this.props.dispatch( changeGameStatus('win') );
+      } else {
+        this.props.dispatch(
+          readyNextLevel({
+            levelId: nextLevelId,
+            level: {...this.props.levelSelect[nextLevelId]},
+            startingX: entranceXY[0],
+            startingY: entranceXY[1],
+          })
+        );
+        this.props.dispatch( updatePlayerLevelStatus('active') );
+      }
     } else {
       //determine direction rotation and speed
       if (this.keyState['w']) {
@@ -292,6 +292,7 @@ class Player extends React.Component {
   }
 
   renderPlayer = () => {
+    const { health, lives } = this.props.player;
     const idleSprite = {
       idle: {
         x: 0,
@@ -301,7 +302,7 @@ class Player extends React.Component {
       }
     }
 
-    if (this.props.health <= 0 && this.props.lives === 0) {
+    if (health <= 0 && lives === 0) {
       window.removeEventListener('keydown', this.handleKeyPress)
     } else if (this.props.positioning.walking) {
       return <AnimatedSpriteSheet
@@ -361,8 +362,7 @@ class Player extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    health: state.player.health,
-    lives: state.player.lives,
+    player: state.player,
     gun: state.player.gun,
     positioning: state.player.positioning,
     levelSelect: state.levelSelect,

@@ -1,9 +1,21 @@
+export function changeGameStatus(status) {
+  return {type: 'CHANGE_GAME_STATUS', payload: status};
+}
+
 export function createLevelSelect(levelSelect) {
   return {type: 'CREATE_LEVEL_SELECT', payload: levelSelect};
 }
 
 export function setLevel(levelData) {
   return {type: 'SET_LEVEL', payload: levelData};
+}
+
+export function updateLevelSelect(levelSelectData) {
+  return {type: 'UPDATE_LEVEL_SELECT', payload: levelSelectData};
+}
+
+export function readyNextLevel(nextLevelData) {
+  return {type: 'READY_NEXT_LEVEL', payload: nextLevelData}
 }
 
 export function setPlayArea(dimensions) {
@@ -72,8 +84,4 @@ export function updatePlayerLevelStatus(status) {
 
 export function incrementWaveCount() {
   return {type: 'INCREMENT_WAVE'}
-}
-
-export function readyNextLevel(nextLevelData) {
-  return {type: 'READY_NEXT_LEVEL', payload: nextLevelData}
 }

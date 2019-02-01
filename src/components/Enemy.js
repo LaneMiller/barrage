@@ -34,23 +34,19 @@ class Enemy extends Component {
     }
 
     if (this.props.levelBounds.bottom !== prevProps.levelBounds.bottom) {
-      this.adjustPosition(prevProps.levelBounds)
+      // Updates Enemy position relative to new window size
+      const { mobId, x, y } = this.props;
+
+      const xPercentage = x/prevProps.levelBounds.right;
+      const yPercentage = y/prevProps.levelBounds.bottom;
+
+      const newX = xPercentage * this.props.levelBounds.right;
+      const newY = yPercentage * this.props.levelBounds.bottom;
+
+      this.props.dispatch(
+        updateEnemyPos({[mobId]: {...this.props, x: newX, y: newY}})
+      );
     }
-  }
-
-  adjustPosition = (prevBounds) => {
-    // Updates Enemy position relative to new window size
-    const { mobId, x, y } = this.props;
-
-    const xPercentage = x/prevBounds.right;
-    const yPercentage = y/prevBounds.bottom;
-
-    const newX = xPercentage * this.props.levelBounds.right;
-    const newY = yPercentage * this.props.levelBounds.bottom;
-
-    this.props.dispatch(
-      updateEnemyPos({[mobId]: {...this.props, x: newX, y: newY}})
-    );
   }
 
   checkCollision = () => {

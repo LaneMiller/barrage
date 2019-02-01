@@ -10,7 +10,7 @@ import Level from './Level';
 import ScoreCard from '../components/ScoreCard';
 import HealthBar from '../HealthBar.png';
 // Actions
-import { createLevelSelect, setLevel, setPlayer, updatePlayerValue } from '../actions';
+import { changeGameStatus, createLevelSelect, setLevel, setPlayer, updatePlayerValue } from '../actions';
 // Styling and Assets
 import '../game.css';
 import enemyTypes from '../dependencies/enemyTypes';
@@ -20,7 +20,6 @@ import fetchAdapter from '../adapters/fetchAdapter'
 
 class Game extends Component {
   state = {
-    status: 'title',
     difficulty: 'Easy',
     errorMsg: null,
   }
@@ -34,7 +33,6 @@ class Game extends Component {
   }
   createOrLoadPlayer = (choice) => {
     if (choice === 'New Game') {
-      this.setLevel();
       this.createPlayer();
       this.showPassphrase()
     } else {
@@ -46,7 +44,7 @@ class Game extends Component {
       .then(this.updatePlayer)
   }
   loadGameState = () => {
-    this.setState({ status: 'load game' })
+    this.props.dispatch( changeGameStatus('load game') )
   }
   loadPlayer = (choice, passphrase) => {
     if (choice === 'Enter') {
@@ -58,7 +56,7 @@ class Game extends Component {
         .then(this.setDifficulty)
         .catch(this.handleLoadFailure)
     } else {
-      this.setState({ status: 'title' })
+      this.props.dispatch( changeGameStatus('title') )
     }
   }
   handleLoadFailure = (errorMsg) => {
@@ -70,11 +68,11 @@ class Game extends Component {
     return playerData;
   }
   showPassphrase = () => {
-    this.setState({ status: 'passphrase screen' })
+    this.props.dispatch( changeGameStatus('passphrase screen') )
     window.addEventListener('keydown', this.chooseDifficulty);
   }
   chooseDifficulty = (e) => {
-    this.setState({ status: 'difficulty screen' });
+    this.props.dispatch( changeGameStatus('difficulty screen') );
     window.removeEventListener('keydown', this.chooseDifficulty);
   }
   updateDifficulty = (difficulty) => {
@@ -87,23 +85,12 @@ class Game extends Component {
       updatePlayerValue({ difficulty: this.state.difficulty })
     )
 
-    this.setState({ status: 'directions' });
+    this.props.dispatch( changeGameStatus('directions') );
     window.addEventListener('keydown', this.startGame);
   }
   startGame = () => {
-    this.setState({ status: 'game' });
+    this.props.dispatch( changeGameStatus('game') );
     window.removeEventListener('keydown', this.startGame);
-  }
-  componentDidUpdate(prevProps) {
-    if (this.props.currentLevel !== prevProps.currentLevel) {
-      if (this.props.currentLevel === 4) {
-        this.setState({ status: 'win' })
-      }
-      //this.autosave()
-    }
-  }
-  autosave = () => {
-    // fetch(`http://localhost:3000/api/v1/users`, )
   }
 
   fetchLevels = () => {
@@ -113,11 +100,9 @@ class Game extends Component {
     const levelSelect = {}
 
     for (let l of levels) {
-      const bounds = this.props.level ? this.props.level.bounds : {top: l.top_bound, bottom: l.bottom_bound, left: l.left_bound, right: l.right_bound}
-
       levelSelect[l.id] = {
         levelId: l.id,
-        bounds,
+        bounds: {top: 0, bottom: 1000, left: 0, right: 1000},
         exits: [],
         pickups: [],
         waveSize: l.wave_size,
@@ -143,20 +128,20 @@ class Game extends Component {
   renderGameState = () => {
     const { health, lives, score } = this.props.player;
 
-    if (this.state.status === 'title') {
+    if (this.props.status === 'title') {
       return (
         <TitleScreen
           createOrLoadPlayer={this.createOrLoadPlayer}
         />
       )
-    } else if (this.state.status === 'load game') {
+    } else if (this.props.status === 'load game') {
       return (
         <React.Fragment>
           <h1 id='error-message'>{this.state.errorMsg}</h1>
           <PassphraseForm loadPlayer={this.loadPlayer} errorMsg={this.state.errorMsg}/>
         </React.Fragment>
       )
-    } else if (this.state.status === 'difficulty screen') {
+    } else if (this.props.status === 'difficulty screen') {
       return (
         <DifficultyScreen
           updateDifficulty={this.updateDifficulty}
@@ -164,7 +149,7 @@ class Game extends Component {
           difficulty={this.state.difficulty}
         />
       )
-    } else if (this.state.status === 'passphrase screen') {
+    } else if (this.props.status === 'passphrase screen') {
       const passphrase = this.props.player.passphrase;
       return (
         <div id='passphrase-screen'>
@@ -172,7 +157,7 @@ class Game extends Component {
           <h2>{passphrase}</h2>
         </div>
       )
-    } else if (this.state.status === 'directions') {
+    } else if (this.props.status === 'directions') {
       return (
         <div id='directions'>
           <img src={require('../Directions.png')} />
@@ -182,14 +167,14 @@ class Game extends Component {
       return (
         <ScoreCard />
       )
-    } else if (this.state.status === 'win') {
+    } else if (this.props.status === 'win') {
       return (
         <React.Fragment>
           <h1 className='win-header'>You Win!</h1>
           <ScoreCard />
         </React.Fragment>
       )
-    } else if (this.state.status === 'game') {
+    } else if (this.props.status === 'game') {
       const hudHeight = document.querySelector(".game").clientHeight * 0.1
       const { currentLevel } = this.props;
       const currentGun = this.renderCurrentGun();
@@ -226,7 +211,6 @@ class Game extends Component {
           </div>
 
           {tileMap}
-          {console.log(this.props.level)}
           <Level
             difficulty={this.state.difficulty}
             levelId={this.props.level.levelId}
@@ -256,6 +240,7 @@ class Game extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    status: state.status,
     currentLevel: state.currentLevel,
     levelSelect: state.levelSelect,
     level: state.level,

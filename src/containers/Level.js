@@ -5,7 +5,7 @@ import { AnimatedSpriteSheet } from 'react-spritesheet';
 import Player from '../components/Player';
 import Enemy from '../components/Enemy';
 import Pickups from './Pickups';
-import { setLevel, setPlayArea, setEntrances } from '../actions'
+import { updateLevelSelect, setPlayArea, setEntrances } from '../actions'
 
 import difficultyAdapter from '../adapters/difficulty';
 import { updateEnemyPos, updatePlayerLevelStatus, incrementWaveCount, removeEnemy } from '../actions';
@@ -50,12 +50,22 @@ class Level extends Component {
     return playArea;
   }
   setBounds = (playArea) => {
-    const scale = playArea.offsetHeight/402; // Current Width/1:1 width
-    const bottom = playArea.offsetHeight - (24 * scale); // accomodates for player height at scale
+    // current Width/1:1 width = current scale
+    const scale = playArea.offsetHeight/402;
+
+    // sets level boundries, accomodating for
+    // player div height at scale
+    const bottom = playArea.offsetHeight - (24 * scale);
     const right = playArea.offsetWidth - (24 * scale);
+
     const bounds = {top: 0, bottom, left: 0, right};
 
-    this.props.dispatch( setLevel({...this.props.level, bounds}) );
+    const levelSelect = {...this.props.levelSelect}
+    for (let key in levelSelect) {
+      levelSelect[key].bounds = bounds
+    }
+    this.props.dispatch( updateLevelSelect(levelSelect) );
+
     return bounds;
   }
   setEntrances = (bounds) => {
@@ -186,6 +196,7 @@ class Level extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    levelSelect: state.levelSelect,
     level: state.level,
     wave: state.level.wave,
     waveSize: state.level.waveSize,
