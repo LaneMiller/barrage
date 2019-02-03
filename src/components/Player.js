@@ -165,28 +165,28 @@ class Player extends React.Component {
   }
 
   aimingLogic = (rotation) => {
-    if (this.keyState['ArrowUp'] && this.keyState['ArrowLeft']){
+    if (this.keyState['arrowup'] && this.keyState['arrowleft']){
       rotation = 135;
     }
-    else if (this.keyState['ArrowUp'] && this.keyState['ArrowRight']){
+    else if (this.keyState['arrowup'] && this.keyState['arrowright']){
       rotation = 225;
     }
-    else if (this.keyState['ArrowDown'] && this.keyState['ArrowLeft']){
+    else if (this.keyState['arrowdown'] && this.keyState['arrowleft']){
       rotation = 45;
     }
-    else if (this.keyState['ArrowDown'] && this.keyState['ArrowRight']){
+    else if (this.keyState['arrowdown'] && this.keyState['arrowright']){
       rotation = 315;
     }
-    else if (this.keyState['ArrowUp']) {
+    else if (this.keyState['arrowup']) {
       rotation = 180;
     }
-    else if (this.keyState['ArrowDown']) {
+    else if (this.keyState['arrowdown']) {
       rotation = 0;
     }
-    else if (this.keyState['ArrowLeft']) {
+    else if (this.keyState['arrowleft']) {
       rotation = 90;
     }
-    else if (this.keyState['ArrowRight']) {
+    else if (this.keyState['arrowright']) {
       rotation = 270;
     }
 
