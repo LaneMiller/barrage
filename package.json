@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "ajv": "^6.5.1",
-    "phaser": "^3.10.1",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-game-kit": "^1.0.6",
