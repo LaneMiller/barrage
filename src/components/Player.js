@@ -57,10 +57,12 @@ class Player extends React.Component {
   }
 
   handleKeyPress = (e) => {
-    this.keyState[e.key] = true;
+    const key = e.key.toLowerCase();
+    this.keyState[key] = true;
   }
   stopKeyPress = (e) => {
-    this.keyState[e.key] = false;
+    const key = e.key.toLowerCase();
+    this.keyState[key] = false;
     this.stopSprite()
   }
   stopSprite = () => {
