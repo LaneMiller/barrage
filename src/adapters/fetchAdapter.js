@@ -1,13 +1,13 @@
 const fetchAdapter = {
   fetchLevels: function () {
-    return fetch(`http://localhost:3000/api/v1/levels`)
+    return fetch(`https://barrage-backend.herokuapp.com/api/v1/levels`)
       .then(res => res.json())
   },
 
   createPlayer: function () {
     const passphrase = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 6);
 
-    return fetch(`http://localhost:3000/api/v1/users`, {
+    return fetch(`https://barrage-backend.herokuapp.com/api/v1/users`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -26,7 +26,7 @@ const fetchAdapter = {
   },
 
   loadPlayer: function (passphrase) {
-    return fetch(`http://localhost:3000/api/v1/users/load/${passphrase}`)
+    return fetch(`https://barrage-backend.herokuapp.com/api/v1/users/load/${passphrase}`)
       .then(res => res.json())
       .then(this.formatPlayer)
   },
@@ -34,7 +34,7 @@ const fetchAdapter = {
   savePlayer: function (player, level_id) {
     const { id, health, lives, score, kills, passphrase, difficulty } = player;
 
-    return fetch(`http://localhost:3000/api/v1/users/${id}`, {
+    return fetch(`https://barrage-backend.herokuapp.com/api/v1/users/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json"

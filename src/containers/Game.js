@@ -8,13 +8,13 @@ import DifficultyScreen from '../components/DifficultyScreen';
 import PassphraseForm from '../components/PassphraseForm';
 import Level from './Level';
 import ScoreCard from '../components/ScoreCard';
-import HealthBar from '../HealthBar.png';
 // Actions
 import { changeGameStatus, createLevelSelect, setLevel, setPlayer, updatePlayerValue } from '../actions';
 // Styling and Assets
 import '../game.css';
 import enemyTypes from '../dependencies/enemyTypes';
-import Gun_Icons from '../Gun_Icons.png';
+import HealthBar from '../dependencies/imgs/HealthBar.png';
+import Gun_Icons from '../dependencies/imgs/Gun_Icons.png';
 import gunSprites from '../adapters/gunSpriteConfig';
 import fetchAdapter from '../adapters/fetchAdapter'
 
@@ -160,7 +160,7 @@ class Game extends Component {
     } else if (this.props.status === 'directions') {
       return (
         <div id='directions'>
-          <img alt='game directions' src={require('../Directions.png')} />
+          <img alt='game directions' src={require('../dependencies/imgs/Directions.png')} />
         </div>
       )
     } else if (health <= 0 && lives === 0) {
@@ -181,7 +181,7 @@ class Game extends Component {
       const ammoCount = this.props.player.gun.ammo ? ` x${this.props.player.gun.ammo}` : null;
       const healthWidth = document.querySelector(".game").clientWidth * 0.195
       const healthBar = (healthWidth * (health/100)) * 0.875 - 3;
-      const tileMap = currentLevel !== 4 ? <img alt='game tilemap' src={require(`../level${currentLevel}.png`)}/> : <img alt='game tilemap' src={require("../bossLevel.png")}/>
+      const tileMap = <img alt='game tilemap' src={require(`../dependencies/imgs/level${currentLevel}.png`)}/>
 
       return (
         <React.Fragment>

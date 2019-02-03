@@ -1,6 +1,6 @@
 import React from 'react';
 import {SpriteSheet, AnimatedSpriteSheet} from 'react-spritesheet';
-import Walk_Anim from "../Walk_Anim_bright.png";
+import Walk_Anim from "../dependencies/imgs/Walk_Anim_bright.png";
 import { connect } from 'react-redux';
 import { changeGameStatus, updatePlayerPos, updatePlayerWalking, changeAmmoValue, changePlayerGun, readyNextLevel, updatePlayerLevelStatus } from '../actions';
 import Bullet from './Bullet';

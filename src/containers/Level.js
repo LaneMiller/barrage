@@ -9,7 +9,7 @@ import Pickups from './Pickups';
 import { updateLevelSelect, setPlayArea, setEntrances } from '../actions'
 // dependencies
 import difficultyAdapter from '../adapters/difficulty';
-import goArrow from '../goArrow.png';
+import goArrow from '../dependencies/imgs/goArrow.png';
 // redux
 import { updateEnemyPos, updatePlayerLevelStatus, incrementWaveCount, removeEnemy } from '../actions';
 
@@ -90,7 +90,7 @@ class Level extends Component {
     }
   }
   openDoors = (exitDoor) => {
-    const doors = exitDoor ? exitDoor : <img alt='level spawn doors' src={require(`../openLevel${this.props.levelId}.png`)}/>
+    const doors = exitDoor ? exitDoor : <img alt='level spawn doors' src={require(`../dependencies/imgs/openLevel${this.props.levelId}.png`)}/>
 
     this.setState({ doors });
   }
@@ -128,7 +128,7 @@ class Level extends Component {
     // Check if the level is clear and open exits
     if (Object.keys(this.props.enemies).length === 0) {
       this.props.dispatch( updatePlayerLevelStatus('clear') )
-      this.openDoors(<img alt ='level exit door' src={require(`../exitRight${this.props.levelId}.png`)}/>)
+      this.openDoors(<img alt ='level exit door' src={require(`../dependencies/imgs/exitRight${this.props.levelId}.png`)}/>)
     }
   }
 

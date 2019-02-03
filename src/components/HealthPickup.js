@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { SpriteSheet } from 'react-spritesheet';
-import Pickups from '../Pickups.png'
+import Pickups from '../dependencies/imgs/Pickups.png'
 import pickupSprites from '../adapters/pickupSpriteConfig'
 
 class HealthPickup extends Component {

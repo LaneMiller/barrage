@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Selection_Arrow from '../Selection_Arrow.png'
+import Selection_Arrow from '../dependencies/imgs/Selection_Arrow.png'
 
 class PassphraseForm extends Component {
   constructor(props) {

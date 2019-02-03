@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { SpriteSheet } from 'react-spritesheet';
-import Gun_Icons from '../Gun_Icons.png';
+import Gun_Icons from '../dependencies/imgs/Gun_Icons.png';
 import gunSprites from '../adapters/gunSpriteConfig'
 
 class GunPickup extends Component {
