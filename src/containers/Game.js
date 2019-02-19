@@ -150,7 +150,7 @@ class Game extends Component {
         />
       )
     } else if (this.props.status === 'passphrase screen') {
-      const passphrase = this.props.player.passphrase;
+      const passphrase = this.props.player.passphrase || 'generating...';
       return (
         <div id='passphrase-screen'>
           <h1>Here's your Password:</h1>
