@@ -1,5 +1,16 @@
+import { combineReducers } from 'redux';
+
+// const rootReducer = combineReducers({
+//   status,
+//   currentLevel,
+//   playArea,
+//   entrances,
+//   player
+// })
+
 const initialState = {
   status: 'title',
+  currentLevel: 1,
   playArea: {
     width: 402,
     height: 183,
@@ -10,7 +21,6 @@ const initialState = {
     bottom: [402/2, 183+1],
     right: [402+1, 183/2],
   },
-  currentLevel: 1,
   player: {
     health: 100,
     lives: 1,
