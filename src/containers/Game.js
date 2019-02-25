@@ -31,6 +31,8 @@ class Game extends Component {
 
     this.fetchLevels();
   }
+
+  // Player persistance functions
   createOrLoadPlayer = (choice) => {
     if (choice === 'New Game') {
       this.createPlayer();
@@ -39,13 +41,16 @@ class Game extends Component {
       this.loadGameState();
     }
   }
+
   createPlayer = () => {
     return fetchAdapter.createPlayer()
       .then(this.updatePlayer)
   }
+
   loadGameState = () => {
     this.props.dispatch( changeGameStatus('load game') )
   }
+
   loadPlayer = (choice, passphrase) => {
     if (choice === 'Enter') {
       const updateDifficultyCB = (player) => {this.updateDifficulty(player.difficulty)}
@@ -60,27 +65,34 @@ class Game extends Component {
       this.props.dispatch( changeGameStatus('title') )
     }
   }
+
   handleLoadFailure = (errorMsg) => {
     this.setState({ errorMsg })
   }
+
   updatePlayer = (playerData) => {
     this.props.dispatch( setPlayer(playerData) );
     this.setLevel();
     return playerData;
   }
+
+  // Menu navigation and choice handling funcitons
   showPassphrase = () => {
     this.props.dispatch( changeGameStatus('passphrase screen') )
     window.addEventListener('keydown', this.chooseDifficulty);
   }
+
   chooseDifficulty = (e) => {
     this.props.dispatch( changeGameStatus('difficulty screen') );
     window.removeEventListener('keydown', this.chooseDifficulty);
   }
+
   updateDifficulty = (difficulty) => {
     if (difficulty) {
       this.setState({ difficulty });
     }
   }
+
   setDifficulty = () => {
     this.props.dispatch(
       updatePlayerValue({ difficulty: this.state.difficulty })
@@ -89,11 +101,13 @@ class Game extends Component {
     this.props.dispatch( changeGameStatus('directions') );
     window.addEventListener('keydown', this.startGame);
   }
+
   startGame = () => {
     this.props.dispatch( changeGameStatus('game') );
     window.removeEventListener('keydown', this.startGame);
   }
 
+  // Level data functions
   fetchLevels = () => {
     fetchAdapter.fetchLevels().then(this.createLevelSelect)
   }
@@ -119,6 +133,7 @@ class Game extends Component {
 
     this.props.dispatch( createLevelSelect(levelSelect) )
   }
+
   setLevel = () => {
     const { levelSelect } = this.props;
     const currentLevel = this.props.player.level_id ? this.props.player.level_id : this.props.currentLevel;
@@ -126,6 +141,7 @@ class Game extends Component {
     this.props.dispatch( setLevel(levelSelect[currentLevel]) )
   }
 
+  // Main render functions
   renderGameState = () => {
     const { health, lives, score } = this.props.player;
 
