@@ -59,7 +59,7 @@ class PassphraseForm extends Component {
         <p id='error-message'>{this.props.errorMsg}</p>
         <h3>Enter Password:</h3>
 
-        <form autocomplete="off" onSubmit={e => e.preventDefault()}>
+        <form autoComplete="off" onSubmit={e => e.preventDefault()}>
           <input id='passphrase-input' type='text'
             autoFocus spellCheck='false'
             value={this.state.input} onChange={this.updateInput}/>
