@@ -36,6 +36,7 @@ class Level extends Component {
       this.setSpawnPoints(this.props.entrances);
     }
   }
+
   updateBounds = () => {
     const playArea = this.setPlayArea();
     const bounds = this.setBounds(playArea);
@@ -43,6 +44,7 @@ class Level extends Component {
     //return entrances for enemy spawn point generation
     return entryPoints;
   }
+
   setPlayArea = () => {
     const playArea = document.querySelector('.level');
     this.props.dispatch( setPlayArea({
@@ -51,6 +53,7 @@ class Level extends Component {
     }) );
     return playArea;
   }
+
   setBounds = (playArea) => {
     // current Width/1:1 width = current scale
     const scale = playArea.offsetHeight/402;
@@ -70,6 +73,7 @@ class Level extends Component {
 
     return bounds;
   }
+
   setEntrances = (bounds) => {
     const entryPoints = {
       top: [bounds.right/2, -1],
@@ -81,6 +85,7 @@ class Level extends Component {
     this.props.dispatch( setEntrances(entryPoints) );
     return entryPoints;
   }
+
   incrementWave = () => {
     if (this.props.wave < 3) {
       this.props.dispatch( incrementWaveCount() );
@@ -89,6 +94,7 @@ class Level extends Component {
       setTimeout(this.closeDoors, 1000);
     }
   }
+  
   openDoors = (exitDoor) => {
     const doors = exitDoor ? exitDoor : <img alt='level spawn doors' src={require(`../dependencies/imgs/openLevel${this.props.levelId}.png`)}/>
 

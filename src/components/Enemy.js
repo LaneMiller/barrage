@@ -152,17 +152,6 @@ class Enemy extends Component {
       }
     }
 
-    // // if rotation has changed by 90 degrees
-    // if (Math.abs(this.props.rotation - rotation) === 90) {
-    //   // if rotation has over decreased, adjust clockwise
-    //   if (this.props.rotation > rotation) {
-    //     rotation += 45;
-    //   // otherwise adjust counter-cloackwise
-    //   } else {
-    //     rotation -= 45;
-    //   }
-    // }
-
     this.props.dispatch(
       updateEnemyPos({[this.props.mobId]: {...this.props, x, y, rotation}})
     );

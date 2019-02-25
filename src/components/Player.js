@@ -60,11 +60,13 @@ class Player extends React.Component {
     const key = e.key.toLowerCase();
     this.keyState[key] = true;
   }
+
   stopKeyPress = (e) => {
     const key = e.key.toLowerCase();
     this.keyState[key] = false;
     this.stopSprite()
   }
+  
   stopSprite = () => {
     this.props.dispatch(updatePlayerWalking(false))
   }
