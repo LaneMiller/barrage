@@ -1,5 +1,5 @@
-// const API_URL = `https://barrage-backend.herokuapp.com/api/v1`;
-const API_URL = `http://localhost:3000/api/v1`;
+// const API_URL = `http://localhost:3000/api/v1`; // development
+const API_URL = `https://barrage-backend.herokuapp.com/api/v1`; // deployment
 
 const fetchAdapter = {
   fetchLevels: function () {
