@@ -1,6 +1,8 @@
 import { SET_LEVEL, READY_NEXT_LEVEL } from '../actions/types';
 
-export default function currentLevelReducer(state = 1, action) {
+const INIT_STATE = 1;
+
+export default function currentLevelReducer(state = INIT_STATE, action) {
   switch (action.type) {
     // currentLevel => Integer
     case SET_LEVEL:

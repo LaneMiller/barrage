@@ -1,6 +1,8 @@
 import { CHANGE_GAME_STATUS } from '../actions/types';
 
-export default function statusReducer(state = 'title', action) {
+const INIT_STATE = 'title';
+
+export default function statusReducer(state = INIT_STATE, action) {
   switch (action.type) {
     // status => String
     case CHANGE_GAME_STATUS:
