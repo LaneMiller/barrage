@@ -16,7 +16,7 @@ class Enemy extends Component {
     window.addEventListener("resize", this.adjustPosition);
     this.collisionInterval = setInterval(this.checkCollision, 100)
     this.movementInterval = setInterval(this.movementLogic, 100)
-    this.deathInterval = setInterval(this.checkIfDead, 50)
+    this.deathInterval = setInterval(this.checkIfDead, 100)
   }
   componentWillUnmount() {
     window.removeEventListener("resize", this.adjustPosition);

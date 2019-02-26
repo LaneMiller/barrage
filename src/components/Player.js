@@ -66,7 +66,7 @@ class Player extends React.Component {
     this.keyState[key] = false;
     this.stopSprite()
   }
-  
+
   stopSprite = () => {
     this.props.dispatch(updatePlayerWalking(false))
   }
@@ -328,9 +328,6 @@ class Player extends React.Component {
       <Bullet key={bullet.id} removeBullet={this.removeBullet} {...bullet} />
     ))
 
-    // if (bullets.length > 30) {
-    //   bullets.length = 30;
-    // }
     return bullets;
   }
 
