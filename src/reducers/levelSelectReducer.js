@@ -1,6 +1,8 @@
 import { CREATE_LEVEL_SELECT, UPDATE_LEVEL_SELECT } from '../actions/types';
 
-export default function levelSelectReducer(state = {}, action) {
+const INIT_STATE = {}
+
+export default function levelSelectReducer(state = INIT_STATE, action) {
   switch (action.type) {
     // levelSelect => {...levelSelect}
     case CREATE_LEVEL_SELECT:

@@ -1,6 +1,8 @@
 import { SET_PLAY_AREA } from '../actions/types';
 
-export default function playAreaReducer(state = { width: 402, height: 183 }, action) {
+const INIT_STATE = { width: 402, height: 183 };
+
+export default function playAreaReducer(state = INIT_STATE, action) {
   switch (action.type) {
     // playArea => { width: Integer, height: Integer}
     case SET_PLAY_AREA:

@@ -1,6 +1,6 @@
 import { READY_NEXT_LEVEL, SET_PLAYER, UPDATE_PLAYER_POS, UPDATE_PLAYER_WALKING, DAMAGE_PLAYER, INCREASE_SCORE, INCREASE_KILL_SCORE, CHANGE_AMMO_VALUE, CHANGE_GUN, UPDATE_PLAYER_VALUE, UPDATE_PLAYER_LEVEL_STATUS } from '../actions/types';
 
-const INITIAL_STATE = {
+const INIT_STATE = {
                         health: 100,
                         lives: 1,
                         score: 0,
@@ -17,53 +17,53 @@ const INITIAL_STATE = {
                         levelStatus: 'active',
                       }
 
-export default function playerReducer(state = INITIAL_STATE, action) {
+export default function playerReducer(state = INIT_STATE, action) {
   switch (action.type) {
     // player => {...player}
     case READY_NEXT_LEVEL:
-      return {...state.player,
+      return {...state,
                 level_id: action.payload.levelId,
-                positioning: {...state.player.positioning,
+                positioning: {...state.positioning,
                 x: action.payload.startingX,
                 y: action.payload.startingY},
               };
     case SET_PLAYER:
       return action.payload;
     case UPDATE_PLAYER_POS:
-      return {...state.player,
-                positioning: {...state.player.positioning, ...action.payload},
+      return {...state,
+                positioning: {...state.positioning, ...action.payload},
               };
     case UPDATE_PLAYER_WALKING:
-      return {...state.player,
-                positioning: {...state.player.positioning, ...action.payload},
+      return {...state,
+                positioning: {...state.positioning, ...action.payload},
               };
     case DAMAGE_PLAYER:
-      return {...state.player,
-                health: state.player.health - action.payload,
+      return {...state,
+                health: state.health - action.payload,
               };
     case INCREASE_SCORE:
-      return {...state.player,
-                score: state.player.score + action.payload,
+      return {...state,
+                score: state.score + action.payload,
               };
     case INCREASE_KILL_SCORE:
-      return {...state.player,
-                score: state.player.score + action.payload,
-                kills: state.player.kills + 1,
+      return {...state,
+                score: state.score + action.payload,
+                kills: state.kills + 1,
               };
     case CHANGE_AMMO_VALUE:
-      return {...state.player,
-                gun: {...state.player.gun, ammo: action.payload},
+      return {...state,
+                gun: {...state.gun, ammo: action.payload},
               };
     case CHANGE_GUN:
-      return {...state.player,
+      return {...state,
                 gun: action.payload,
               };
     case UPDATE_PLAYER_VALUE:
-      return {...state.player,
+      return {...state,
                 ...action.payload,
               };
     case UPDATE_PLAYER_LEVEL_STATUS:
-      return {...state.player,
+      return {...state,
                 levelStatus: action.payload
               };
 
