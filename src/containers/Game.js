@@ -239,6 +239,7 @@ class Game extends Component {
   }
 
   renderCurrentGun = () => {
+    console.log(this.props.player);
     return <SpriteSheet filename={Gun_Icons}
                         data={gunSprites}
                         sprite={this.props.player.gun.type}

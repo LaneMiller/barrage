@@ -7,7 +7,7 @@ const INIT_STATE = {
                       right: [402+1, 183/2],
                     }
 
-export default entrancesReducer(state = INIT_STATE, action) {
+export default function entrancesReducer(state = INIT_STATE, action) {
   switch (action.type) {
     // entrances => { top: [], bottom: [], left: [], right: [] }
     case SET_ENTRANCES:

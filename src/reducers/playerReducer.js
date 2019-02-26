@@ -1,4 +1,4 @@
-import { READY_NEXT_LEVEL, UPDATE_PLAYER_POS, UPDATE_PLAYER_WALKING, DAMAGE_PLAYER, INCREASE_SCORE, INCREASE_KILL_SCORE, CHANGE_AMMO_VALUE, CHANGE_GUN, UPDATE_PLAYER_VALUE, UPDATE_PLAYER_LEVEL_STATUS } from '../actions/types';
+import { READY_NEXT_LEVEL, SET_PLAYER, UPDATE_PLAYER_POS, UPDATE_PLAYER_WALKING, DAMAGE_PLAYER, INCREASE_SCORE, INCREASE_KILL_SCORE, CHANGE_AMMO_VALUE, CHANGE_GUN, UPDATE_PLAYER_VALUE, UPDATE_PLAYER_LEVEL_STATUS } from '../actions/types';
 
 const INITIAL_STATE = {
                         health: 100,
@@ -17,7 +17,7 @@ const INITIAL_STATE = {
                         levelStatus: 'active',
                       }
 
-export default playerReducer(state = INITIAL_STATE, action) {
+export default function playerReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     // player => {...player}
     case READY_NEXT_LEVEL:
