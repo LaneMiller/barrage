@@ -6,12 +6,13 @@
 ### Description:
   Frontend for Barrage: A classic 80's arcade top-down arcade game.
 
-  Clear each room of enemies before they overcome you! Grab randomly spawning pickups such as weapons and items in order to even the odds.
+  Clear each room of enemies before they overcome you!
+  Grab randomly spawning pickups such as weapons and items in order to even the odds.
 
 ### Controls:
-  use WASD keys to move up, left, down, and right, respectively;
-  use the arrow keys to aim as you move;
-  use the Space Bar to fire! (tip: hold Space down for continuous fire, rather than hitting it repetitively.)
+  Use WASD keys to move up, left, down, and right, respectively  
+  Use the arrow keys to aim as you move  
+  Use the Space Bar to fire! (tip: hold Space down for continuous fire, rather than hitting it repetitively.)
 
 ### Dependencies:
   [barrage-backend repo](https://github.com/LaneMiller/barrage-backend)
@@ -40,7 +41,7 @@
       # to run the app on another port (:3000 will be taken)
 
 
-  Barrage should open in your default browser automatically, but if it does not
+  Barrage should open in your default browser automatically, but if it does not,  
   navigate to localhost:3001, or whatever port `npm start` started on.
 
 ## Credits:
