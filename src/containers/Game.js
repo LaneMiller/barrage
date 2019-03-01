@@ -71,9 +71,15 @@ class Game extends Component {
   }
 
   updatePlayer = (playerData) => {
-    this.props.dispatch( setPlayer(playerData) );
-    this.setLevel();
-    return playerData;
+    if (playerData instanceof Error) {
+      console.log('setting game status to: error');
+      this.props.dispatch( changeGameStatus('error') )
+    }
+    else {
+      this.props.dispatch( setPlayer(playerData) );
+      this.setLevel();
+      return playerData;
+    }
   }
 
   // Menu navigation and choice handling funcitons
