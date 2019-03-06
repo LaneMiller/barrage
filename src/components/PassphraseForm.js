@@ -28,7 +28,7 @@ class PassphraseForm extends Component {
   selectLoadOption = (e) => {
     const choices = this.choices,
           selected = this.state.selected;
-    let i = choices.indexOf(selected);
+    const i = choices.indexOf(selected);
 
     if (e.key === 'ArrowDown' && selected !== choices[choices.length-1]){
       this.setState({ selected: choices[i+1] });

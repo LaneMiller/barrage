@@ -5,6 +5,7 @@ import { SpriteSheet } from 'react-spritesheet';
 // Components and Containers
 import ErrorScreen from '../components/ErrorScreen';
 import TitleScreen from '../components/TitleScreen';
+import About from '../components/About';
 import DifficultyScreen from '../components/DifficultyScreen';
 import PassphraseForm from '../components/PassphraseForm';
 import Level from './Level';
@@ -35,6 +36,10 @@ class Game extends Component {
 
   handleServerError = () => {
     this.props.changeGameStatus('error');
+  }
+
+  backToMainMenu = () => {
+    this.props.changeGameStatus('title');
   }
 
   // Player persistance functions
@@ -187,6 +192,10 @@ class Game extends Component {
         <TitleScreen
           createOrLoadPlayer={this.createOrLoadPlayer}
         />
+      )
+    } else if (this.props.status === 'about') {
+      return (
+        <About backToMainMenu={this.backToMainMenu}/>
       )
     } else if (this.props.status === 'load game') {
       return (

@@ -13,6 +13,9 @@ class TitleScreen extends Component {
   componentDidMount() {
     window.addEventListener("keydown", this.selectGameOption)
   }
+  componentWillUnmount() {
+    window.removeEventListener("keydown", this.selectGameOption)
+  }
 
   selectGameOption = (e) => {
     const choices = this.choices,
@@ -29,7 +32,6 @@ class TitleScreen extends Component {
       } else {
         this.props.changeGameStatus('about')
       }
-      window.removeEventListener("keydown", this.selectGameOption)
     }
   }
 

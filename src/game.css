@@ -44,11 +44,45 @@
 
 #title {
   font-family: 'Harmonic';
-  margin-bottom: 100px;
+  margin-bottom: 0;
+}
+
+#title-screen p:first-of-type {
+  margin-top: 0px;
 }
 
 .choice {
   font-size: 50px;
+}
+
+.about-page {
+  padding: 0 100px;
+}
+
+.about-page > h1 {
+  font-size: 100px;
+  margin-bottom: 0px;
+}
+
+.about-page > h2 {
+  font-size: 40px;
+  margin: 0;
+}
+
+.about-page p {
+  font-size: 25px;
+  font-family: monospace;
+}
+
+.about-page-links {
+  margin-top: 20px;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+}
+
+.about-page-links a {
+  padding: 0 15px;
 }
 
 #passphrase-screen {
@@ -91,10 +125,6 @@
 
 #difficulty-screen > h1 {
   margin-top: calc(60vh - 350px);
-}
-
-.difficulty-choice {
-  font-size: 50px;
 }
 
 #directions {

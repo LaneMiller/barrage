@@ -30,9 +30,9 @@ class DifficultyScreen extends Component {
 
     return this.choices.map(choice => {
       if (choice === this.props.difficulty) {
-        return <h4 key={choice} className='difficulty-choice'>{arrow}{choice}</h4>
+        return <h4 key={choice} className='choice'>{arrow}{choice}</h4>
       } else {
-        return <h4 key={choice} className='difficulty-choice'>{choice}</h4>
+        return <h4 key={choice} className='choice'>{choice}</h4>
       }
     })
   }
