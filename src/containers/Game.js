@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { SpriteSheet } from 'react-spritesheet';
 // Components and Containers
+import ErrorScreen from '../components/ErrorScreen';
 import TitleScreen from '../components/TitleScreen';
 import DifficultyScreen from '../components/DifficultyScreen';
 import PassphraseForm from '../components/PassphraseForm';
@@ -32,19 +33,20 @@ class Game extends Component {
     this.fetchLevels();
   }
 
+  handleServerError = () => {
+    this.props.dispatch( changeGameStatus('error') );
+  }
+
   // Player persistance functions
   createOrLoadPlayer = (choice) => {
     if (choice === 'New Game') {
-      this.createPlayer();
-      this.showPassphrase()
+      fetchAdapter.createPlayer()
+        .then(this.updatePlayer)
+        .then(this.showPassphrase)
+        .catch(this.handleServerError)
     } else {
       this.loadGameState();
     }
-  }
-
-  createPlayer = () => {
-    return fetchAdapter.createPlayer()
-      .then(this.updatePlayer)
   }
 
   loadGameState = () => {
@@ -59,21 +61,33 @@ class Game extends Component {
         .then(this.updatePlayer)
         .then(updateDifficultyCB)
         .then(this.setDifficulty)
-        .catch(this.handleLoadFailure)
+        .catch((errorMsg) => {
+          if (typeof errorMsg === 'string') {
+            this.handleBadPassword(errorMsg)
+          } else {
+            this.handleServerError()
+          }
+        })
     } else {
       this.setState({ errorMsg: null })
       this.props.dispatch( changeGameStatus('title') )
     }
   }
 
-  handleLoadFailure = (errorMsg) => {
+  handleBadPassword = (errorMsg) => {
     this.setState({ errorMsg })
   }
 
   updatePlayer = (playerData) => {
-    this.props.dispatch( setPlayer(playerData) );
-    this.setLevel();
-    return playerData;
+    // if (playerData instanceof Error) {
+    //   console.log('setting game status to: error');
+    //   this.props.dispatch( changeGameStatus('error') )
+    // }
+    // else {
+      this.props.dispatch( setPlayer(playerData) );
+      this.setLevel();
+      return playerData;
+    // }
   }
 
   // Menu navigation and choice handling funcitons
@@ -145,7 +159,11 @@ class Game extends Component {
   renderGameState = () => {
     const { health, lives, score } = this.props.player;
 
-    if (this.props.status === 'title') {
+    if (this.props.status === 'error') {
+      return (
+        <ErrorScreen />
+      )
+    } else if (this.props.status === 'title') {
       return (
         <TitleScreen
           createOrLoadPlayer={this.createOrLoadPlayer}
