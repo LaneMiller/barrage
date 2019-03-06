@@ -29,6 +29,12 @@
                       "main-game";
 }
 
+.error-screen {
+  text-align: center;
+  font-size: 50px;
+  margin-top: calc(60vh - 400px);
+}
+
 .game > img {
   height: 100%;
   image-rendering: pixelated;

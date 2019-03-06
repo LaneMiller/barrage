@@ -17,7 +17,6 @@ const fetchAdapter = {
         return fetchCB()
           .then(this.handleStatusErrors)
           .then(resolve)
-          .catch(err => err)
       })
   },
 
@@ -56,15 +55,19 @@ const fetchAdapter = {
   },
 
   loadPlayer: function (passphrase) {
-    return fetch(`${API_URL}/users/load/${passphrase}`)
-      .then(res => res.json())
-      .then(this.formatPlayer)
+    const fetchCB = () => ( fetch(`${API_URL}/users/load/${passphrase}`) );
+
+    const resolveCB = res => {
+      return res.json().then(this.formatPlayer);
+    };
+
+    return this.attemptFetch(fetchCB, resolveCB);
   },
 
   savePlayer: function (player, level_id) {
     const { id, health, lives, score, kills, passphrase, difficulty } = player;
 
-    return fetch(`${API_URL}/users/${id}`, {
+    const fetchCB = () => (fetch(`${API_URL}/users/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json"
@@ -78,9 +81,13 @@ const fetchAdapter = {
         difficulty,
         level_id,
         })
-    })
-      .then(res => res.json())
-      .then(this.formatPlayer)
+    }));
+
+    const resolveCB = res => {
+      return res.json().then(this.formatPlayer);
+    };
+
+    return this.attemptFetch(fetchCB, resolveCB);
   },
 
   formatPlayer: function (data) {
