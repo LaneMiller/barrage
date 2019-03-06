@@ -59,6 +59,12 @@
 #passphrase-screen > h2 {
   user-select: text;
   font-size: 110px;
+  margin-bottom: 50px;
+}
+
+.dyno-sleep-msg {
+  font-family: monospace;
+  font-size: 27px;
 }
 
 #passphrase-form > h3 {

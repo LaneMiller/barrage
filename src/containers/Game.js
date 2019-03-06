@@ -149,6 +149,31 @@ class Game extends Component {
     this.props.dispatch( setLevel(levelSelect[currentLevel]) )
   }
 
+  checkDynoSleep = () => {
+    if (!this.state.sleepMsg) {
+      setTimeout(() => {
+        window.removeEventListener('keydown', this.chooseDifficulty);
+        this.setState({ sleepMsg: true })
+      }, 4000)
+    }
+  }
+
+  showSleepMsg = () => {
+    return (
+      <div className='dyno-sleep-msg'>
+        <span>Hmmm... this is taking a while.</span><br></br>
+        <span>The Heroku Dyno is probably sleeping if no one has played in a bit. </span>
+        <span>Please refresh the page, Heroku should have loaded the server by now. </span><br></br>
+        <span>To learn more, visit </span>
+        <a href="https://devcenter.heroku.com/articles/free-dyno-hours#dyno-sleeping"
+          target="_blank" rel="noopener noreferrer"
+          style={{ color: 'LightSkyBlue' }}>
+          the Heroku page on Dyno sleeping.
+        </a>
+      </div>
+    )
+  }
+
   // Main render functions
   renderGameState = () => {
     const { health, lives, score } = this.props.player;
@@ -181,10 +206,13 @@ class Game extends Component {
       )
     } else if (this.props.status === 'passphrase screen') {
       const passphrase = this.props.player.passphrase || 'generating...';
+      passphrase === 'generating...' ? this.checkDynoSleep() : null;
+
       return (
         <div id='passphrase-screen'>
           <h1>Here's your Password:</h1>
           <h2>{passphrase}</h2>
+          {this.state.sleepMsg ? this.showSleepMsg() : null}
         </div>
       )
     } else if (this.props.status === 'directions') {
