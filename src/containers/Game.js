@@ -79,15 +79,9 @@ class Game extends Component {
   }
 
   updatePlayer = (playerData) => {
-    // if (playerData instanceof Error) {
-    //   console.log('setting game status to: error');
-    //   this.props.dispatch( changeGameStatus('error') )
-    // }
-    // else {
-      this.props.dispatch( setPlayer(playerData) );
-      this.setLevel();
-      return playerData;
-    // }
+    this.props.dispatch( setPlayer(playerData) );
+    this.setLevel();
+    return playerData;
   }
 
   // Menu navigation and choice handling funcitons
@@ -159,6 +153,8 @@ class Game extends Component {
   renderGameState = () => {
     const { health, lives, score } = this.props.player;
 
+    // TODO: Consider changing this to a switch statement for legebility;
+    // Would need to refactor 'game over' condition (line 198) to be reflected in status flag.
     if (this.props.status === 'error') {
       return (
         <ErrorScreen />
@@ -197,6 +193,8 @@ class Game extends Component {
           <img alt='game directions' src={require('../dependencies/imgs/Directions.png')} />
         </div>
       )
+    // TODO: Update this condition to this.props.status === 'game over',
+    // set props.status from Player when dead. (See Player.js line 310)
     } else if (health <= 0 && lives === 0) {
       return (
         <ScoreCard />

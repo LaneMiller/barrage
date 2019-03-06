@@ -307,6 +307,7 @@ class Player extends React.Component {
     }
 
     if (health <= 0 && lives === 0) {
+      // TODO: set store 'status' value to 'game over' for Game component switch statement.
       window.removeEventListener('keydown', this.handleKeyPress)
     } else if (this.props.positioning.walking) {
       return <AnimatedSpriteSheet
