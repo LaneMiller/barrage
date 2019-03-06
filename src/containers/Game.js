@@ -10,7 +10,7 @@ import PassphraseForm from '../components/PassphraseForm';
 import Level from './Level';
 import ScoreCard from '../components/ScoreCard';
 // Actions
-import { changeGameStatus, createLevelSelect, setLevel, setPlayer, updatePlayerValue } from '../actions';
+import * as actions from '../actions';
 // Styling and Assets
 import '../game.css';
 import enemyTypes from '../dependencies/enemyTypes';
@@ -34,7 +34,7 @@ class Game extends Component {
   }
 
   handleServerError = () => {
-    this.props.dispatch( changeGameStatus('error') );
+    this.props.changeGameStatus('error');
   }
 
   // Player persistance functions
@@ -50,7 +50,7 @@ class Game extends Component {
   }
 
   loadGameState = () => {
-    this.props.dispatch( changeGameStatus('load game') )
+    this.props.changeGameStatus('load game');
   }
 
   loadPlayer = (choice, passphrase) => {
@@ -70,7 +70,7 @@ class Game extends Component {
         })
     } else {
       this.setState({ errorMsg: null })
-      this.props.dispatch( changeGameStatus('title') )
+      this.props.changeGameStatus('title');
     }
   }
 
@@ -79,19 +79,19 @@ class Game extends Component {
   }
 
   updatePlayer = (playerData) => {
-    this.props.dispatch( setPlayer(playerData) );
+    this.props.setPlayer(playerData);
     this.setLevel();
     return playerData;
   }
 
   // Menu navigation and choice handling funcitons
   showPassphrase = () => {
-    this.props.dispatch( changeGameStatus('passphrase screen') )
+    this.props.changeGameStatus('passphrase screen');
     window.addEventListener('keydown', this.chooseDifficulty);
   }
 
   chooseDifficulty = (e) => {
-    this.props.dispatch( changeGameStatus('difficulty screen') );
+    this.props.changeGameStatus('difficulty screen');
     window.removeEventListener('keydown', this.chooseDifficulty);
   }
 
@@ -102,16 +102,14 @@ class Game extends Component {
   }
 
   setDifficulty = () => {
-    this.props.dispatch(
-      updatePlayerValue({ difficulty: this.state.difficulty })
-    )
+    this.props.updatePlayerValue({ difficulty: this.state.difficulty });
+    this.props.changeGameStatus('directions');
 
-    this.props.dispatch( changeGameStatus('directions') );
     window.addEventListener('keydown', this.startGame);
   }
 
   startGame = () => {
-    this.props.dispatch( changeGameStatus('game') );
+    this.props.changeGameStatus('game');
     window.removeEventListener('keydown', this.startGame);
   }
 
@@ -139,14 +137,14 @@ class Game extends Component {
       }
     }
 
-    this.props.dispatch( createLevelSelect(levelSelect) )
+    this.props.createLevelSelect(levelSelect);
   }
 
   setLevel = () => {
     const { levelSelect } = this.props;
     const currentLevel = this.props.player.level_id ? this.props.player.level_id : this.props.currentLevel;
 
-    this.props.dispatch( setLevel(levelSelect[currentLevel]) )
+    this.props.setLevel(levelSelect[currentLevel]);
   }
 
   checkDynoSleep = () => {
@@ -309,4 +307,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(Game);
+export default connect(mapStateToProps, actions)(Game);

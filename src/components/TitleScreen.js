@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { changeGameStatus  } from '../actions';
 import Selection_Arrow from '../dependencies/imgs/Selection_Arrow.png'
 
 class TitleScreen extends Component {
   constructor(props) {
     super(props)
 
-    this.choices = ['New Game', 'Load Game'];
-    this.state = {
-      selected: 'New Game',
-    }
+    this.choices = ['New Game', 'Load Game', 'About'];
+    this.state = { selected: 'New Game', }
   }
   componentDidMount() {
     window.addEventListener("keydown", this.selectGameOption)
@@ -24,7 +24,11 @@ class TitleScreen extends Component {
     } else if (e.key === 'ArrowUp' && selected !== choices[0]){
       this.setState({ selected: choices[i-1] });
     } else if (e.key === 'Enter') {
-      this.props.createOrLoadPlayer(this.state.selected)
+      if (selected !== 'About') {
+        this.props.createOrLoadPlayer(selected)
+      } else {
+        this.props.changeGameStatus('about')
+      }
       window.removeEventListener("keydown", this.selectGameOption)
     }
   }
@@ -53,4 +57,4 @@ class TitleScreen extends Component {
   }
 }
 
-export default TitleScreen;
+export default connect(null, { changeGameStatus })(TitleScreen);
