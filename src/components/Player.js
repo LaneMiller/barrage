@@ -79,7 +79,7 @@ class Player extends React.Component {
     const oldX = this.props.positioning.x,
           oldY = this.props.positioning.y;
     let { x, y, rotation } = this.props.positioning;
-    const movespeed = 7;
+    const movespeed = 8;
 
     if (oldX > exitXY[0]+50) {
       const nextLevelId = this.props.levelId + 1
