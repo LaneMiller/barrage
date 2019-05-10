@@ -1,7 +1,7 @@
 # Barrage
 
 #### Demo Video:
-[![Barrage Demo Video](./src/gameplay_screenshot.png)](https://www.youtube.com/watch?v=RMI3Ot2mkP0 "Barrage Demo Video")
+[![Barrage Demo Video](./src/gameplay_screenshot.png)](https://youtu.be/DuN4czF9lbQ "Barrage Demo Video")
 
 ### Description:
   Frontend for Barrage: A classic 80's arcade top-down arcade game.
